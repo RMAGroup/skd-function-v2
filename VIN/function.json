@@ -1,0 +1,17 @@
+{
+  "bindings": [
+    {
+      "name": "inBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "vin/{name}"
+    },
+    {
+      "name": "outBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "vin-archive/{name}"
+    }
+  ],
+  "scriptFile": "../dist/VIN/index.js"
+}

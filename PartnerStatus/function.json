@@ -1,0 +1,17 @@
+{
+  "bindings": [
+    {
+      "name": "inBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "partner-status/{name}"
+    },
+    {
+      "name": "archiveBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "partner-status-archive/{name}"
+    }
+  ],
+  "scriptFile": "../dist/PartnerStatus/index.js"
+}

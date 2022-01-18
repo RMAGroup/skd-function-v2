@@ -1,0 +1,41 @@
+{
+  "bindings": [
+    {
+      "name": "inBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "incoming/{name}"
+    },
+    {
+      "name": "bomBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "bom/{name}"
+    },
+    {
+      "name": "shipBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "ship/{name}"
+    },
+    {
+      "name": "vinBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "vin/{name}"
+    },
+    {
+      "name": "partnerStatusAckBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "partner-status-ack/{name}"
+    },
+    {
+      "name": "unknownFileTypeBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "unknown-filetype/{name}"
+    }
+  ],
+  "scriptFile": "../dist/Incoming/index.js"
+}
