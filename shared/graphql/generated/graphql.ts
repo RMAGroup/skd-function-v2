@@ -553,7 +553,7 @@ export type DealersEdge = {
 
 export type Entry = {
   __typename?: 'Entry';
-  txType: PartnerStatus_ChangeStatus;
+  txType: SnapshotChangeStatus;
   currentTimeLineCode: TimeLineEventCode;
   lotNo?: Maybe<Scalars['String']>;
   kitNo?: Maybe<Scalars['String']>;
@@ -879,7 +879,7 @@ export type KitSnapshot = {
   kitSnapshotRun?: Maybe<KitSnapshotRun>;
   kitId: Scalars['UUID'];
   kit?: Maybe<Kit>;
-  changeStatusCode: PartnerStatus_ChangeStatus;
+  changeStatusCode: SnapshotChangeStatus;
   kitTimeLineEventTypeId: Scalars['UUID'];
   kitTimeLineEventType?: Maybe<KitTimelineEventType>;
   vIN?: Maybe<Scalars['String']>;
@@ -903,7 +903,7 @@ export type KitSnapshotFilterInput = {
   kitSnapshotRun?: Maybe<KitSnapshotRunFilterInput>;
   kitId?: Maybe<ComparableGuidOperationFilterInput>;
   kit?: Maybe<KitFilterInput>;
-  changeStatusCode?: Maybe<PartnerStatus_ChangeStatusOperationFilterInput>;
+  changeStatusCode?: Maybe<SnapshotChangeStatusOperationFilterInput>;
   kitTimeLineEventTypeId?: Maybe<ComparableGuidOperationFilterInput>;
   kitTimeLineEventType?: Maybe<KitTimelineEventTypeFilterInput>;
   vIN?: Maybe<StringOperationFilterInput>;
@@ -1809,20 +1809,6 @@ export type PartnerStatusDto = {
   payloadText: Scalars['String'];
 };
 
-export enum PartnerStatus_ChangeStatus {
-  Added = 'ADDED',
-  Changed = 'CHANGED',
-  NoChange = 'NO_CHANGE',
-  Final = 'FINAL'
-}
-
-export type PartnerStatus_ChangeStatusOperationFilterInput = {
-  eq?: Maybe<PartnerStatus_ChangeStatus>;
-  neq?: Maybe<PartnerStatus_ChangeStatus>;
-  in?: Maybe<Array<PartnerStatus_ChangeStatus>>;
-  nin?: Maybe<Array<PartnerStatus_ChangeStatus>>;
-};
-
 /** A connection to a list of items. */
 export type PartsConnection = {
   __typename?: 'PartsConnection';
@@ -2675,6 +2661,20 @@ export type ShipmentsEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node: Shipment;
+};
+
+export enum SnapshotChangeStatus {
+  Added = 'ADDED',
+  Changed = 'CHANGED',
+  NoChange = 'NO_CHANGE',
+  Final = 'FINAL'
+}
+
+export type SnapshotChangeStatusOperationFilterInput = {
+  eq?: Maybe<SnapshotChangeStatus>;
+  neq?: Maybe<SnapshotChangeStatus>;
+  in?: Maybe<Array<SnapshotChangeStatus>>;
+  nin?: Maybe<Array<SnapshotChangeStatus>>;
 };
 
 export type SnapshotDto = {
