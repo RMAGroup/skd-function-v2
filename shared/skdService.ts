@@ -202,7 +202,7 @@ export class skdService {
         sequence
       },
     })
-    return result.data.generateKitVinAcknowledgment
+    return result.data.genVinImportAcknowledgment
   }
 
   getFordInerfaceFileType = async (filename: string) => {

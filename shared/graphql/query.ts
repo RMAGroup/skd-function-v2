@@ -232,7 +232,7 @@ query parseVinFile($text:String!) {
 
 export const GEN_VIN_IMPORT_ACK = gql`
 query genVinImportAck($plantCode: String!, $sequence: Int!) {
-  generateKitVinAcknowledgment(plantCode: $plantCode, sequence: $sequence) {
+  genVinImportAcknowledgment(plantCode: $plantCode, sequence: $sequence) {
     plantCode
     sequence
     filename

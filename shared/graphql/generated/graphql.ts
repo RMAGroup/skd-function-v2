@@ -563,6 +563,7 @@ export type Entry = {
   customReceived?: Maybe<Scalars['DateTime']>;
   originalPlanBuild?: Maybe<Scalars['DateTime']>;
   planBuild?: Maybe<Scalars['DateTime']>;
+  verifyVIN?: Maybe<Scalars['DateTime']>;
   buildCompleted?: Maybe<Scalars['DateTime']>;
   gateRelease?: Maybe<Scalars['DateTime']>;
   wholesale?: Maybe<Scalars['DateTime']>;
@@ -692,16 +693,16 @@ export type HandlingUnitsEdge = {
 
 export type Kit = {
   __typename?: 'Kit';
-  vin?: Maybe<Scalars['String']>;
-  kitNo?: Maybe<Scalars['String']>;
+  vin: Scalars['String'];
+  kitNo: Scalars['String'];
   lotId: Scalars['UUID'];
-  lot?: Maybe<Lot>;
+  lot: Lot;
   dealerId?: Maybe<Scalars['UUID']>;
   dealer?: Maybe<Dealer>;
-  kitComponents?: Maybe<Array<Maybe<KitComponent>>>;
-  timelineEvents?: Maybe<Array<Maybe<KitTimelineEvent>>>;
-  snapshots?: Maybe<Array<Maybe<KitSnapshot>>>;
-  kitVins?: Maybe<Array<Maybe<KitVin>>>;
+  kitComponents: Array<KitComponent>;
+  timelineEvents: Array<KitTimelineEvent>;
+  snapshots: Array<KitSnapshot>;
+  kitVins: Array<KitVin>;
   id: Scalars['UUID'];
   createdAt: Scalars['DateTime'];
   removedAt?: Maybe<Scalars['DateTime']>;
@@ -885,9 +886,10 @@ export type KitSnapshot = {
   vIN?: Maybe<Scalars['String']>;
   dealerCode?: Maybe<Scalars['String']>;
   engineSerialNumber?: Maybe<Scalars['String']>;
+  orginalPlanBuild?: Maybe<Scalars['DateTime']>;
   customReceived?: Maybe<Scalars['DateTime']>;
   planBuild?: Maybe<Scalars['DateTime']>;
-  orginalPlanBuild?: Maybe<Scalars['DateTime']>;
+  verifyVIN?: Maybe<Scalars['DateTime']>;
   buildCompleted?: Maybe<Scalars['DateTime']>;
   gateRelease?: Maybe<Scalars['DateTime']>;
   wholesale?: Maybe<Scalars['DateTime']>;
@@ -909,9 +911,10 @@ export type KitSnapshotFilterInput = {
   vIN?: Maybe<StringOperationFilterInput>;
   dealerCode?: Maybe<StringOperationFilterInput>;
   engineSerialNumber?: Maybe<StringOperationFilterInput>;
+  orginalPlanBuild?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
   customReceived?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
   planBuild?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
-  orginalPlanBuild?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
+  verifyVIN?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
   buildCompleted?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
   gateRelease?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
   wholesale?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
@@ -925,6 +928,7 @@ export type KitSnapshotInput = {
   plantCode: Scalars['String'];
   engineComponentCode: Scalars['String'];
   rejectIfNoChanges: Scalars['Boolean'];
+  allowMultipleSnapshotsPerDay: Scalars['Boolean'];
 };
 
 export type KitSnapshotRun = {
@@ -1003,9 +1007,10 @@ export type KitSnapshotSortInput = {
   vIN?: Maybe<SortEnumType>;
   dealerCode?: Maybe<SortEnumType>;
   engineSerialNumber?: Maybe<SortEnumType>;
+  orginalPlanBuild?: Maybe<SortEnumType>;
   customReceived?: Maybe<SortEnumType>;
   planBuild?: Maybe<SortEnumType>;
-  orginalPlanBuild?: Maybe<SortEnumType>;
+  verifyVIN?: Maybe<SortEnumType>;
   buildCompleted?: Maybe<SortEnumType>;
   gateRelease?: Maybe<SortEnumType>;
   wholesale?: Maybe<SortEnumType>;
@@ -1055,10 +1060,22 @@ export type KitTimelineEventFilterInput = {
 
 export type KitTimelineEventInput = {
   kitNo?: Maybe<Scalars['String']>;
-  eventType: TimeLineEventCode;
+  eventCode: TimeLineEventCode;
   eventDate: Scalars['DateTime'];
   eventNote?: Maybe<Scalars['String']>;
   dealerCode?: Maybe<Scalars['String']>;
+};
+
+export type KitTimelineEventSortInput = {
+  kitTimelineEventTypeId?: Maybe<SortEnumType>;
+  eventType?: Maybe<KitTimelineEventTypeSortInput>;
+  eventDate?: Maybe<SortEnumType>;
+  eventNote?: Maybe<SortEnumType>;
+  kitId?: Maybe<SortEnumType>;
+  kit?: Maybe<KitSortInput>;
+  id?: Maybe<SortEnumType>;
+  createdAt?: Maybe<SortEnumType>;
+  removedAt?: Maybe<SortEnumType>;
 };
 
 export type KitTimelineEventType = {
@@ -1091,6 +1108,26 @@ export type KitTimelineEventTypeSortInput = {
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type KitTimelineEventsConnection = {
+  __typename?: 'KitTimelineEventsConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<KitTimelineEventsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<KitTimelineEvent>>;
+};
+
+/** An edge in a connection. */
+export type KitTimelineEventsEdge = {
+  __typename?: 'KitTimelineEventsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: KitTimelineEvent;
 };
 
 export type KitVin = {
@@ -1492,7 +1529,7 @@ export type LotSortInput = {
 
 export type LotTimelineEventInput = {
   lotNo?: Maybe<Scalars['String']>;
-  eventType: TimeLineEventCode;
+  eventCode: TimeLineEventCode;
   eventDate: Scalars['DateTime'];
   eventNote?: Maybe<Scalars['String']>;
 };
@@ -1990,7 +2027,7 @@ export type Query = {
   parseBomFile: BomFile;
   parseShipFile: ShipFile;
   parseVinFile: VinFile;
-  generateKitVinAcknowledgment: KitVinAckDto;
+  genVinImportAcknowledgment: KitVinAckDto;
   fordInterfaceFileType: FordInterfaceFileType;
   genPartnerStatusFilename: Scalars['String'];
   components?: Maybe<ComponentsConnection>;
@@ -2011,6 +2048,7 @@ export type Query = {
   kitSnapshotRuns?: Maybe<KitSnapshotRunsConnection>;
   kitSnapshos?: Maybe<KitSnapshosConnection>;
   dealers?: Maybe<DealersConnection>;
+  kitTimelineEvents?: Maybe<KitTimelineEventsConnection>;
 };
 
 
@@ -2201,7 +2239,7 @@ export type QueryParseVinFileArgs = {
 };
 
 
-export type QueryGenerateKitVinAcknowledgmentArgs = {
+export type QueryGenVinImportAcknowledgmentArgs = {
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
 };
@@ -2386,6 +2424,16 @@ export type QueryDealersArgs = {
   before?: Maybe<Scalars['String']>;
   where?: Maybe<DealerFilterInput>;
   order?: Maybe<Array<DealerSortInput>>;
+};
+
+
+export type QueryKitTimelineEventsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['String']>;
+  where?: Maybe<KitTimelineEventFilterInput>;
+  order?: Maybe<Array<KitTimelineEventSortInput>>;
 };
 
 export type ReceiveHandlingUnitInput = {
@@ -2721,6 +2769,7 @@ export type StringOperationFilterInput = {
 export enum TimeLineEventCode {
   CustomReceived = 'CUSTOM_RECEIVED',
   PlanBuild = 'PLAN_BUILD',
+  VerifyVin = 'VERIFY_VIN',
   BuildCompleted = 'BUILD_COMPLETED',
   GateReleased = 'GATE_RELEASED',
   WholeSale = 'WHOLE_SALE'
@@ -2998,10 +3047,10 @@ export type ImportVinMutation = (
         & { kit?: Maybe<(
           { __typename?: 'Kit' }
           & Pick<Kit, 'kitNo'>
-          & { lot?: Maybe<(
+          & { lot: (
             { __typename?: 'Lot' }
             & Pick<Lot, 'lotNo'>
-          )> }
+          ) }
         )> }
       )>>> }
     )>, errors: Array<(
@@ -3177,7 +3226,7 @@ export type GenVinImportAckQueryVariables = Exact<{
 
 export type GenVinImportAckQuery = (
   { __typename?: 'Query' }
-  & { generateKitVinAcknowledgment: (
+  & { genVinImportAcknowledgment: (
     { __typename?: 'KitVinAckDTO' }
     & Pick<KitVinAckDto, 'plantCode' | 'sequence' | 'filename' | 'payloadText' | 'errorMessage'>
   ) }
