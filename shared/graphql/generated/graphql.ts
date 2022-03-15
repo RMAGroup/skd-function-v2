@@ -950,6 +950,7 @@ export type KitSnapshotRunDto = {
   plantCode?: Maybe<Scalars['String']>;
   partnerPlantCode?: Maybe<Scalars['String']>;
   partnerPlantType?: Maybe<Scalars['String']>;
+  partnerStatusFilename?: Maybe<Scalars['String']>;
   entries?: Maybe<Array<Maybe<Entry>>>;
 };
 
@@ -1029,6 +1030,14 @@ export type KitSortInput = {
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
+};
+
+export type KitTimelineDto = {
+  __typename?: 'KitTimelineDTO';
+  vin: Scalars['String'];
+  lotNo: Scalars['String'];
+  kitNo: Scalars['String'];
+  timelineItems: Array<TimelineEventDto>;
 };
 
 export type KitTimelineEvent = {
@@ -1993,7 +2002,7 @@ export type Query = {
   handlingUnitInfo?: Maybe<HandlingUnitInfoPayload>;
   kitById?: Maybe<Kit>;
   kitByKitNo?: Maybe<Kit>;
-  kitTimeline?: Maybe<VehicleTimelineDto>;
+  kitTimeline?: Maybe<KitTimelineDto>;
   lotByLotNo?: Maybe<Lot>;
   lotOverview?: Maybe<LotOverviewDto>;
   lotPartsByBom: Array<LotPartDto>;
@@ -2732,6 +2741,7 @@ export type SnapshotDto = {
   plantCode?: Maybe<Scalars['String']>;
   snapshotCount: Scalars['Int'];
   changedCount: Scalars['Int'];
+  removedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export enum SortEnumType {
@@ -2930,14 +2940,6 @@ export type VehicleModelsEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node: VehicleModel;
-};
-
-export type VehicleTimelineDto = {
-  __typename?: 'VehicleTimelineDTO';
-  vin: Scalars['String'];
-  lotNo: Scalars['String'];
-  kitNo: Scalars['String'];
-  timelineItems: Array<TimelineEventDto>;
 };
 
 export type VinFile = {
