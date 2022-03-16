@@ -5,6 +5,7 @@ export interface AppConfig {
     ActivityLogTable: string
     SkdGraphqlURI: string
     EnginComponentCode: string
+    AllowMultipleKitSnapshotsPerDay: boolean
     INCOMING_CONTAINER: ContainerName
     UNKNOWN_FILETYPE_CONTAINER: ContainerName
     BOM_CONTAINER: ContainerName
@@ -22,6 +23,7 @@ export function getAppConfig(): AppConfig {
         ActivityLogTable: process.env.ActivityLogTable || 'ActivityLog',
         SkdGraphqlURI: process.env.SkdGraphqlURI,
         EnginComponentCode: process.env.EnginComponentCode || "EN",
+        AllowMultipleKitSnapshotsPerDay: !!process.env?.AllowMultipleKitSnapshotsPerDay ?? false,
         INCOMING_CONTAINER: 'incoming',
         UNKNOWN_FILETYPE_CONTAINER: 'unknown-fileType',
         BOM_CONTAINER: 'bom',

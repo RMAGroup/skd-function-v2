@@ -5,7 +5,7 @@
       "type": "timerTrigger",
       "direction": "in",
       "schedule": "* * 22 * * *",
-      "runOnStartup": true
+      "runOnStartup": false
     }
   ],
   "scriptFile": "../dist/GenPartnerStatus/index.js"

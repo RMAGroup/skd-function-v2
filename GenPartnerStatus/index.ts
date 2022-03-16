@@ -63,7 +63,7 @@ const timerTrigger: AzureFunction = async function (
             plantCode,
             engineComponentCode: engineComponentCode,
             rejectIfNoChanges: true,
-            allowMultipleSnapshotsPerDay: false
+            allowMultipleSnapshotsPerDay: appConfig.AllowMultipleKitSnapshotsPerDay
         }
 
         // generate a new snapshot.   
