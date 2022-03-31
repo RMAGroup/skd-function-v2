@@ -16,6 +16,16 @@ export type Scalars = {
 
 
 
+export type AppSetting = {
+  __typename?: 'AppSetting';
+  code: Scalars['String'];
+  value: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime'];
+  removedAt?: Maybe<Scalars['DateTime']>;
+};
+
 export type ApplyComponentSerialFormatInput = {
   id: Scalars['UUID'];
 };
@@ -926,7 +936,6 @@ export type KitSnapshotFilterInput = {
 export type KitSnapshotInput = {
   runDate?: Maybe<Scalars['DateTime']>;
   plantCode: Scalars['String'];
-  engineComponentCode: Scalars['String'];
   rejectIfNoChanges: Scalars['Boolean'];
   allowMultipleSnapshotsPerDay: Scalars['Boolean'];
 };
@@ -2039,6 +2048,7 @@ export type Query = {
   genVinImportAcknowledgment: KitVinAckDto;
   fordInterfaceFileType: FordInterfaceFileType;
   genPartnerStatusFilename: Scalars['String'];
+  appSettings: Array<AppSetting>;
   components?: Maybe<ComponentsConnection>;
   parts?: Maybe<PartsConnection>;
   plants: Array<Plant>;

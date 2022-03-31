@@ -4,7 +4,6 @@ export interface AppConfig {
     AzureWebJobsStorage: string
     ActivityLogTable: string
     SkdGraphqlURI: string
-    EnginComponentCode: string
     AllowMultipleKitSnapshotsPerDay: boolean
     INCOMING_CONTAINER: ContainerName
     UNKNOWN_FILETYPE_CONTAINER: ContainerName
@@ -22,7 +21,6 @@ export function getAppConfig(): AppConfig {
         AzureWebJobsStorage: process.env.AzureWebJobsStorage,
         ActivityLogTable: process.env.ActivityLogTable || 'ActivityLog',
         SkdGraphqlURI: process.env.SkdGraphqlURI,
-        EnginComponentCode: process.env.EnginComponentCode || "EN",
         AllowMultipleKitSnapshotsPerDay: !!process.env?.AllowMultipleKitSnapshotsPerDay ?? false,
         INCOMING_CONTAINER: 'incoming',
         UNKNOWN_FILETYPE_CONTAINER: 'unknown-fileType',

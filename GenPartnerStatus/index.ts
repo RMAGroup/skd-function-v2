@@ -16,8 +16,7 @@ const timerTrigger: AzureFunction = async function (
 
     context.log("Gen partner status triggered")
 
-    const appConfig = getAppConfig();
-    const engineComponentCode = appConfig.EnginComponentCode
+    const appConfig = getAppConfig();    
     const blobStorage = new AzureBlobService<ContainerName>(appConfig.AzureWebJobsStorage)
     const service = new skdService(appConfig.SkdGraphqlURI);
     const tableService = new AzureTableService(appConfig.AzureWebJobsStorage)
@@ -61,7 +60,6 @@ const timerTrigger: AzureFunction = async function (
         // generate kit timeline snapshots
         const input: KitSnapshotInput = {
             plantCode,
-            engineComponentCode: engineComponentCode,
             rejectIfNoChanges: true,
             allowMultipleSnapshotsPerDay: appConfig.AllowMultipleKitSnapshotsPerDay
         }
