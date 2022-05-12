@@ -2049,6 +2049,7 @@ export type Query = {
   fordInterfaceFileType: FordInterfaceFileType;
   genPartnerStatusFilename: Scalars['String'];
   appSettings: Array<AppSetting>;
+  kitTimelineEventsByDate: Array<KitTimelineEvent>;
   components?: Maybe<ComponentsConnection>;
   parts?: Maybe<PartsConnection>;
   plants: Array<Plant>;
@@ -2271,6 +2272,14 @@ export type QueryFordInterfaceFileTypeArgs = {
 
 export type QueryGenPartnerStatusFilenameArgs = {
   kitSnapshotRunId: Scalars['UUID'];
+};
+
+
+export type QueryKitTimelineEventsByDateArgs = {
+  plantCode: Scalars['String'];
+  fromDate: Scalars['DateTime'];
+  toDate: Scalars['DateTime'];
+  timelineEventCode?: Maybe<TimeLineEventCode>;
 };
 
 
