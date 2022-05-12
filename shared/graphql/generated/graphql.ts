@@ -446,7 +446,6 @@ export type ComponentsEdge = {
 export type ConfigettingDto = {
   __typename?: 'ConfigettingDTO';
   dcwsServiceAddress: Scalars['String'];
-  planBuildLeadTimeDays?: Maybe<Scalars['Int']>;
 };
 
 
@@ -3103,7 +3102,7 @@ export type GenerateKitSnapshotRunMutation = (
     { __typename?: 'MutationResultOfSnapshotDTO' }
     & { payload?: Maybe<(
       { __typename?: 'SnapshotDTO' }
-      & Pick<SnapshotDto, 'plantCode' | 'runDate' | 'snapshotCount'>
+      & Pick<SnapshotDto, 'plantCode' | 'runDate' | 'snapshotCount' | 'sequence'>
     )>, errors: Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'path' | 'message'>

@@ -24,7 +24,7 @@ const timerTrigger: AzureFunction = async function (
     // For each assembly plant 
     for await (const plant of await service.getPlants()) {
 
-        const snapshot = await getEnsureLatestSnapshot(plant.code)
+        const snapshot = await service.getLatestKitSnaphotRun(plant.code);
 
         if (snapshot && await partnerStatusFileForSnapshotNotFound(snapshot.id)) {
             // get snapshot payload used to generate partner status file
@@ -49,25 +49,6 @@ const timerTrigger: AzureFunction = async function (
             // log result
             context.log("gen parnter status file done file created: ", payload.filename)
         }
-    }
-
-    /** Only generates a snapshot if
-     * 1. There have been timeline status changes since the last snapshot
-     * 2. There is no snapshot for the cucrrent date 
-     */
-    async function getEnsureLatestSnapshot(plantCode: string) {
-
-        // generate kit timeline snapshots
-        const input: KitSnapshotInput = {
-            plantCode,
-            rejectIfNoChanges: true,
-            allowMultipleSnapshotsPerDay: appConfig.AllowMultipleKitSnapshotsPerDay
-        }
-
-        // generate a new snapshot.   
-        // Note: will not genrate more than one per day
-        await service.generateKitSnapshotRun(input)
-        return await service.getLatestKitSnaphotRun(plantCode);
     }
 
     /** Has partner status file already been generated for this snapshot */

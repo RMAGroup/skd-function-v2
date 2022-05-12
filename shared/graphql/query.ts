@@ -85,6 +85,7 @@ mutation generateKitSnapshotRun($input:KitSnapshotInput!) {
       plantCode
       runDate
       snapshotCount
+      sequence
     }
 		errors {
       path
