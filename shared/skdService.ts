@@ -32,7 +32,12 @@ import {
   FordInterfaceFileTypeQuery,
   FordInterfaceFileTypeQueryVariables,
   GenPartnerStatusFilenameQuery,
-  GenPartnerStatusFilenameQueryVariables
+  GenPartnerStatusFilenameQueryVariables,
+  ImportPartnerStatusAckMutation,
+  ImportPartnerStatusAckMutationVariables,
+  PartnerStatusAckDtoInput,
+  ParsePartnerStatusAckQueryVariables,
+  ParsePartnerStatusAckQuery
 } from './graphql/generated/graphql';
 
 import {
@@ -50,6 +55,8 @@ import {
   GEN_VIN_IMPORT_ACK,
   FORD_INTERFACE_FILETYPE,
   GEN_PARTNER_STATUS_FILENAME,
+  IMPORT_PARTNER_STATUS_ACK,
+  PARSE_PARTNER_STATUS_ACK,
 } from './graphql/query';
 
 export class skdService {
@@ -97,6 +104,17 @@ export class skdService {
     })
     return result.data.importVIN
   }
+
+  importPartnerStatusAck = async (input: PartnerStatusAckDtoInput) => {
+    const result = await this.client.mutate<ImportPartnerStatusAckMutation, ImportPartnerStatusAckMutationVariables>({
+      mutation: IMPORT_PARTNER_STATUS_ACK,
+      variables: {
+        input
+      }
+    })
+    return result.data.importPartnerStatusAck
+  }
+
 
   getPlants = async () => {
     let result = await this.client.query<PlantsQuery, PlantsQueryVariables>({
@@ -203,6 +221,16 @@ export class skdService {
       },
     })
     return result.data.genVinImportAcknowledgment
+  }
+
+  parsePartnerStatusAckFile = async (text: string) => {
+    const result = await this.client.query<ParsePartnerStatusAckQuery, ParsePartnerStatusAckQueryVariables>({
+      query: PARSE_PARTNER_STATUS_ACK,
+      variables: {
+        text
+      },
+    })
+    return result.data.parsePartnerStatusAckFile
   }
 
   getFordInerfaceFileType = async (filename: string) => {

@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "inBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "partner-status-ack/{name}",
+      "connection": ""
+    }
+  ],
+  "scriptFile": "../dist/PartnerStatusAck/index.js"
+}

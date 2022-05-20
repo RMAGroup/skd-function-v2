@@ -66,6 +66,32 @@ mutation importVIN($input: VinFileInput!) {
 }
 `
 
+export const IMPORT_PARTNER_STATUS_ACK = gql`
+mutation importPartnerStatusAck($input: PartnerStatusAckDTOInput!) {
+  importPartnerStatusAck(input: $input) {
+    payload {
+      id
+      accepted
+      fileDate
+      totalProcessed
+      totalAccepted
+      totalRejected
+      kitSnapshotRun {
+        plantId
+        plant {
+          code
+        }
+        sequence
+      }
+    }
+    errors {
+      message
+    }
+  }
+}
+
+`
+
 export const PLANTS = gql`
 query plants {
   plants {
@@ -227,6 +253,21 @@ query parseVinFile($text:String!) {
       kitNo
       vin
     }
+  }
+}
+`
+
+export const PARSE_PARTNER_STATUS_ACK = gql`
+query parsePartnerStatusAck($text: String!) {
+  parsePartnerStatusAckFile(text:$text) {
+    plantCode
+    partnerPlantCode
+    sequence
+    accepted
+    totalProcessed
+    totalAccepted
+    totalRejected
+    fileDate
   }
 }
 `

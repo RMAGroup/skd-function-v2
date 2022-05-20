@@ -6,7 +6,10 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
     const blobService = new AzureBlobService(process.env.AzureWebJobsStorage)
     const appConfig = getAppConfig()
     
-    const container = await blobService.getCreateContainer(appConfig.INCOMING_CONTAINER)
+    let container = await blobService.getCreateContainer(appConfig.INCOMING_CONTAINER)
+    context.log(`Found ${container.containerName} exists`)    
+
+    container = await blobService.getCreateContainer(appConfig.PARTNER_STATUS_ACK_CONTAINER)
     context.log(`Found ${container.containerName} exists`)    
 };
 

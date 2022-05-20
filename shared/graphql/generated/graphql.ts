@@ -580,8 +580,8 @@ export type Entry = {
 
 export type Error = {
   __typename?: 'Error';
-  path?: Maybe<Array<Maybe<Scalars['String']>>>;
-  message?: Maybe<Scalars['String']>;
+  path: Array<Scalars['String']>;
+  message: Scalars['String'];
 };
 
 export enum FordInterfaceFileType {
@@ -863,26 +863,6 @@ export type KitListItemDtoSortInput = {
   imported?: Maybe<SortEnumType>;
 };
 
-/** A connection to a list of items. */
-export type KitSnapshosConnection = {
-  __typename?: 'KitSnapshosConnection';
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** A list of edges. */
-  edges?: Maybe<Array<KitSnapshosEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<KitSnapshot>>;
-};
-
-/** An edge in a connection. */
-export type KitSnapshosEdge = {
-  __typename?: 'KitSnapshosEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: KitSnapshot;
-};
-
 export type KitSnapshot = {
   __typename?: 'KitSnapshot';
   kitSnapshotRunId: Scalars['UUID'];
@@ -946,6 +926,7 @@ export type KitSnapshotRun = {
   runDate: Scalars['DateTime'];
   sequence: Scalars['Int'];
   kitSnapshots?: Maybe<Array<Maybe<KitSnapshot>>>;
+  partnerStatusAck?: Maybe<PartnerStatusAck>;
   id: Scalars['UUID'];
   createdAt: Scalars['DateTime'];
   removedAt?: Maybe<Scalars['DateTime']>;
@@ -959,6 +940,7 @@ export type KitSnapshotRunDto = {
   partnerPlantCode?: Maybe<Scalars['String']>;
   partnerPlantType?: Maybe<Scalars['String']>;
   partnerStatusFilename?: Maybe<Scalars['String']>;
+  partnerStatusAck?: Maybe<PartnerStatusAckDto>;
   entries?: Maybe<Array<Maybe<Entry>>>;
 };
 
@@ -970,6 +952,7 @@ export type KitSnapshotRunFilterInput = {
   runDate?: Maybe<ComparableDateTimeOperationFilterInput>;
   sequence?: Maybe<ComparableInt32OperationFilterInput>;
   kitSnapshots?: Maybe<ListFilterInputTypeOfKitSnapshotFilterInput>;
+  partnerStatusAck?: Maybe<PartnerStatusAckFilterInput>;
   id?: Maybe<ComparableGuidOperationFilterInput>;
   createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
   removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
@@ -980,6 +963,7 @@ export type KitSnapshotRunSortInput = {
   plant?: Maybe<PlantSortInput>;
   runDate?: Maybe<SortEnumType>;
   sequence?: Maybe<SortEnumType>;
+  partnerStatusAck?: Maybe<PartnerStatusAckSortInput>;
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
@@ -1026,6 +1010,26 @@ export type KitSnapshotSortInput = {
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type KitSnapshotsConnection = {
+  __typename?: 'KitSnapshotsConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<KitSnapshotsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<KitSnapshot>>;
+};
+
+/** An edge in a connection. */
+export type KitSnapshotsEdge = {
+  __typename?: 'KitSnapshotsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: KitSnapshot;
 };
 
 export type KitSortInput = {
@@ -1076,11 +1080,11 @@ export type KitTimelineEventFilterInput = {
 };
 
 export type KitTimelineEventInput = {
-  kitNo?: Maybe<Scalars['String']>;
+  kitNo: Scalars['String'];
   eventCode: TimeLineEventCode;
   eventDate: Scalars['DateTime'];
-  eventNote?: Maybe<Scalars['String']>;
-  dealerCode?: Maybe<Scalars['String']>;
+  eventNote: Scalars['String'];
+  dealerCode: Scalars['String'];
 };
 
 export type KitTimelineEventSortInput = {
@@ -1545,10 +1549,10 @@ export type LotSortInput = {
 };
 
 export type LotTimelineEventInput = {
-  lotNo?: Maybe<Scalars['String']>;
+  lotNo: Scalars['String'];
   eventCode: TimeLineEventCode;
   eventDate: Scalars['DateTime'];
-  eventNote?: Maybe<Scalars['String']>;
+  eventNote: Scalars['String'];
 };
 
 /** A connection to a list of items. */
@@ -1592,6 +1596,8 @@ export type Mutation = {
   applyComponentSerialFormat: ComponentSerial;
   setLotNote: MutationResultOfLot;
   syncKfitModelComponents: MutationResultOfKit;
+  rollbackKitsnapshots: MutationResultOfListOfKitSnapshot;
+  importPartnerStatusAck: MutationResultOfPartnerStatusAck;
   removeShipment: MutationResultOfString;
   removeBom: MutationResultOfString;
 };
@@ -1692,6 +1698,17 @@ export type MutationSyncKfitModelComponentsArgs = {
 };
 
 
+export type MutationRollbackKitsnapshotsArgs = {
+  kitNo: Scalars['String'];
+  toTimelineEventCode: TimeLineEventCode;
+};
+
+
+export type MutationImportPartnerStatusAckArgs = {
+  input: PartnerStatusAckDtoInput;
+};
+
+
 export type MutationRemoveShipmentArgs = {
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
@@ -1745,6 +1762,12 @@ export type MutationResultOfKitVinImport = {
   errors: Array<Error>;
 };
 
+export type MutationResultOfListOfKitSnapshot = {
+  __typename?: 'MutationResultOfListOfKitSnapshot';
+  payload?: Maybe<Array<Maybe<KitSnapshot>>>;
+  errors: Array<Error>;
+};
+
 export type MutationResultOfLot = {
   __typename?: 'MutationResultOfLot';
   payload?: Maybe<Lot>;
@@ -1754,6 +1777,12 @@ export type MutationResultOfLot = {
 export type MutationResultOfLotPartDto = {
   __typename?: 'MutationResultOfLotPartDTO';
   payload?: Maybe<LotPartDto>;
+  errors: Array<Error>;
+};
+
+export type MutationResultOfPartnerStatusAck = {
+  __typename?: 'MutationResultOfPartnerStatusAck';
+  payload?: Maybe<PartnerStatusAck>;
   errors: Array<Error>;
 };
 
@@ -1848,6 +1877,71 @@ export type PartSortInput = {
   partNo?: Maybe<SortEnumType>;
   partDesc?: Maybe<SortEnumType>;
   originalPartNo?: Maybe<SortEnumType>;
+  id?: Maybe<SortEnumType>;
+  createdAt?: Maybe<SortEnumType>;
+  removedAt?: Maybe<SortEnumType>;
+};
+
+export type PartnerStatusAck = {
+  __typename?: 'PartnerStatusAck';
+  accepted: Scalars['Boolean'];
+  totalProcessed: Scalars['Int'];
+  totalAccepted: Scalars['Int'];
+  totalRejected: Scalars['Int'];
+  fileDate: Scalars['DateTime'];
+  kitSnapshotRunId: Scalars['UUID'];
+  kitSnapshotRun: KitSnapshotRun;
+  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime'];
+  removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PartnerStatusAckDto = {
+  __typename?: 'PartnerStatusAckDTO';
+  plantCode: Scalars['String'];
+  partnerPlantCode: Scalars['String'];
+  sequence: Scalars['Int'];
+  fileDate: Scalars['String'];
+  accepted: Scalars['Boolean'];
+  totalProcessed: Scalars['Int'];
+  totalAccepted: Scalars['Int'];
+  totalRejected: Scalars['Int'];
+};
+
+export type PartnerStatusAckDtoInput = {
+  plantCode: Scalars['String'];
+  partnerPlantCode: Scalars['String'];
+  sequence: Scalars['Int'];
+  fileDate: Scalars['String'];
+  accepted: Scalars['Boolean'];
+  totalProcessed: Scalars['Int'];
+  totalAccepted: Scalars['Int'];
+  totalRejected: Scalars['Int'];
+};
+
+export type PartnerStatusAckFilterInput = {
+  and?: Maybe<Array<PartnerStatusAckFilterInput>>;
+  or?: Maybe<Array<PartnerStatusAckFilterInput>>;
+  accepted?: Maybe<BooleanOperationFilterInput>;
+  totalProcessed?: Maybe<ComparableInt32OperationFilterInput>;
+  totalAccepted?: Maybe<ComparableInt32OperationFilterInput>;
+  totalRejected?: Maybe<ComparableInt32OperationFilterInput>;
+  fileDate?: Maybe<ComparableDateTimeOperationFilterInput>;
+  kitSnapshotRunId?: Maybe<ComparableGuidOperationFilterInput>;
+  kitSnapshotRun?: Maybe<KitSnapshotRunFilterInput>;
+  id?: Maybe<ComparableGuidOperationFilterInput>;
+  createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
+  removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
+};
+
+export type PartnerStatusAckSortInput = {
+  accepted?: Maybe<SortEnumType>;
+  totalProcessed?: Maybe<SortEnumType>;
+  totalAccepted?: Maybe<SortEnumType>;
+  totalRejected?: Maybe<SortEnumType>;
+  fileDate?: Maybe<SortEnumType>;
+  kitSnapshotRunId?: Maybe<SortEnumType>;
+  kitSnapshotRun?: Maybe<KitSnapshotRunSortInput>;
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
@@ -1968,8 +2062,8 @@ export type ProductionStationFilterInput = {
 
 export type ProductionStationInput = {
   id: Scalars['UUID'];
-  code?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  code: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type ProductionStationSortInput = {
@@ -2032,7 +2126,6 @@ export type Query = {
   bomPartsQuantity: Array<PartQuantityDto>;
   kitSnapshotRunByDate?: Maybe<KitSnapshotRunDto>;
   kitSnapshotRun?: Maybe<KitSnapshotRunDto>;
-  recentKitSnapshotRuns: Array<SnapshotDto>;
   lotInfo?: Maybe<LotDto>;
   lotPartInfo?: Maybe<LotPartDto>;
   recentLotPartsReceived: Array<LotParReceivedtDto>;
@@ -2044,6 +2137,7 @@ export type Query = {
   parseBomFile: BomFile;
   parseShipFile: ShipFile;
   parseVinFile: VinFile;
+  parsePartnerStatusAckFile: PartnerStatusAckDto;
   genVinImportAcknowledgment: KitVinAckDto;
   fordInterfaceFileType: FordInterfaceFileType;
   genPartnerStatusFilename: Scalars['String'];
@@ -2065,7 +2159,7 @@ export type Query = {
   handlingUnits?: Maybe<HandlingUnitsConnection>;
   vinImports?: Maybe<VinImportsConnection>;
   kitSnapshotRuns?: Maybe<KitSnapshotRunsConnection>;
-  kitSnapshos?: Maybe<KitSnapshosConnection>;
+  kitSnapshots?: Maybe<KitSnapshotsConnection>;
   dealers?: Maybe<DealersConnection>;
   kitTimelineEvents?: Maybe<KitTimelineEventsConnection>;
 };
@@ -2204,12 +2298,6 @@ export type QueryKitSnapshotRunArgs = {
 };
 
 
-export type QueryRecentKitSnapshotRunsArgs = {
-  plantCode: Scalars['String'];
-  count: Scalars['Int'];
-};
-
-
 export type QueryLotInfoArgs = {
   lotNo: Scalars['String'];
 };
@@ -2254,6 +2342,11 @@ export type QueryParseShipFileArgs = {
 
 
 export type QueryParseVinFileArgs = {
+  text: Scalars['String'];
+};
+
+
+export type QueryParsePartnerStatusAckFileArgs = {
   text: Scalars['String'];
 };
 
@@ -2434,7 +2527,7 @@ export type QueryKitSnapshotRunsArgs = {
 };
 
 
-export type QueryKitSnapshosArgs = {
+export type QueryKitSnapshotsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
   last?: Maybe<Scalars['Int']>;
@@ -3080,6 +3173,33 @@ export type ImportVinMutation = (
   ) }
 );
 
+export type ImportPartnerStatusAckMutationVariables = Exact<{
+  input: PartnerStatusAckDtoInput;
+}>;
+
+
+export type ImportPartnerStatusAckMutation = (
+  { __typename?: 'Mutation' }
+  & { importPartnerStatusAck: (
+    { __typename?: 'MutationResultOfPartnerStatusAck' }
+    & { payload?: Maybe<(
+      { __typename?: 'PartnerStatusAck' }
+      & Pick<PartnerStatusAck, 'id' | 'accepted' | 'fileDate' | 'totalProcessed' | 'totalAccepted' | 'totalRejected'>
+      & { kitSnapshotRun: (
+        { __typename?: 'KitSnapshotRun' }
+        & Pick<KitSnapshotRun, 'plantId' | 'sequence'>
+        & { plant?: Maybe<(
+          { __typename?: 'Plant' }
+          & Pick<Plant, 'code'>
+        )> }
+      ) }
+    )>, errors: Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'message'>
+    )> }
+  ) }
+);
+
 export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3235,6 +3355,19 @@ export type ParseVinFileQuery = (
       { __typename?: 'VinFileKit' }
       & Pick<VinFileKit, 'lotNo' | 'kitNo' | 'vin'>
     )>>> }
+  ) }
+);
+
+export type ParsePartnerStatusAckQueryVariables = Exact<{
+  text: Scalars['String'];
+}>;
+
+
+export type ParsePartnerStatusAckQuery = (
+  { __typename?: 'Query' }
+  & { parsePartnerStatusAckFile: (
+    { __typename?: 'PartnerStatusAckDTO' }
+    & Pick<PartnerStatusAckDto, 'plantCode' | 'partnerPlantCode' | 'sequence' | 'accepted' | 'totalProcessed' | 'totalAccepted' | 'totalRejected' | 'fileDate'>
   ) }
 );
 
