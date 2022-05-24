@@ -19,10 +19,8 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         var errorMessage = result.errors.map(t => t.message).join(", ").trim()
         context.log(errorMessage)
     } else {
-        const accepteReject = result.payload.accepted ? "ACCEPTED" :"REJECTED"
         const plantCode = result.payload.kitSnapshotRun.plant.code
         const sequence = result.payload.kitSnapshotRun.sequence
-        context.log(`Imported partner status acknowledgment   ${plantCode} - ${sequence} : ${accepteReject} `)
     }
 
 };

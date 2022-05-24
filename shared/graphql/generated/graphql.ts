@@ -916,6 +916,7 @@ export type KitSnapshotInput = {
   runDate?: Maybe<Scalars['DateTime']>;
   plantCode: Scalars['String'];
   rejectIfNoChanges: Scalars['Boolean'];
+  rejectIfPriorSnapshotNotAcknowledged: Scalars['Boolean'];
   allowMultipleSnapshotsPerDay: Scalars['Boolean'];
 };
 
@@ -1884,7 +1885,6 @@ export type PartSortInput = {
 
 export type PartnerStatusAck = {
   __typename?: 'PartnerStatusAck';
-  accepted: Scalars['Boolean'];
   totalProcessed: Scalars['Int'];
   totalAccepted: Scalars['Int'];
   totalRejected: Scalars['Int'];
@@ -1902,7 +1902,6 @@ export type PartnerStatusAckDto = {
   partnerPlantCode: Scalars['String'];
   sequence: Scalars['Int'];
   fileDate: Scalars['String'];
-  accepted: Scalars['Boolean'];
   totalProcessed: Scalars['Int'];
   totalAccepted: Scalars['Int'];
   totalRejected: Scalars['Int'];
@@ -1913,7 +1912,6 @@ export type PartnerStatusAckDtoInput = {
   partnerPlantCode: Scalars['String'];
   sequence: Scalars['Int'];
   fileDate: Scalars['String'];
-  accepted: Scalars['Boolean'];
   totalProcessed: Scalars['Int'];
   totalAccepted: Scalars['Int'];
   totalRejected: Scalars['Int'];
@@ -1922,7 +1920,6 @@ export type PartnerStatusAckDtoInput = {
 export type PartnerStatusAckFilterInput = {
   and?: Maybe<Array<PartnerStatusAckFilterInput>>;
   or?: Maybe<Array<PartnerStatusAckFilterInput>>;
-  accepted?: Maybe<BooleanOperationFilterInput>;
   totalProcessed?: Maybe<ComparableInt32OperationFilterInput>;
   totalAccepted?: Maybe<ComparableInt32OperationFilterInput>;
   totalRejected?: Maybe<ComparableInt32OperationFilterInput>;
@@ -1935,7 +1932,6 @@ export type PartnerStatusAckFilterInput = {
 };
 
 export type PartnerStatusAckSortInput = {
-  accepted?: Maybe<SortEnumType>;
   totalProcessed?: Maybe<SortEnumType>;
   totalAccepted?: Maybe<SortEnumType>;
   totalRejected?: Maybe<SortEnumType>;
@@ -3184,7 +3180,7 @@ export type ImportPartnerStatusAckMutation = (
     { __typename?: 'MutationResultOfPartnerStatusAck' }
     & { payload?: Maybe<(
       { __typename?: 'PartnerStatusAck' }
-      & Pick<PartnerStatusAck, 'id' | 'accepted' | 'fileDate' | 'totalProcessed' | 'totalAccepted' | 'totalRejected'>
+      & Pick<PartnerStatusAck, 'id' | 'fileDate' | 'totalProcessed' | 'totalAccepted' | 'totalRejected'>
       & { kitSnapshotRun: (
         { __typename?: 'KitSnapshotRun' }
         & Pick<KitSnapshotRun, 'plantId' | 'sequence'>
@@ -3230,21 +3226,46 @@ export type GenerateKitSnapshotRunMutation = (
   ) }
 );
 
-export type KitSnapshotRunQueryVariables = Exact<{
+export type KitSnapshotRunBySequenceQueryVariables = Exact<{
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
 }>;
 
 
-export type KitSnapshotRunQuery = (
+export type KitSnapshotRunBySequenceQuery = (
   { __typename?: 'Query' }
-  & { kitSnapshotRun?: Maybe<(
-    { __typename?: 'KitSnapshotRunDTO' }
-    & Pick<KitSnapshotRunDto, 'sequence' | 'runDate' | 'plantCode'>
-    & { entries?: Maybe<Array<Maybe<(
-      { __typename?: 'Entry' }
-      & Pick<Entry, 'txType' | 'currentTimeLineCode' | 'lotNo' | 'kitNo' | 'vIN' | 'dealerCode' | 'engineSerialNumber' | 'customReceived' | 'planBuild' | 'buildCompleted' | 'gateRelease' | 'wholesale' | 'originalPlanBuild'>
-    )>>> }
+  & { kitSnapshotRuns?: Maybe<(
+    { __typename?: 'KitSnapshotRunsConnection' }
+    & { nodes?: Maybe<Array<(
+      { __typename?: 'KitSnapshotRun' }
+      & Pick<KitSnapshotRun, 'id' | 'sequence' | 'runDate' | 'createdAt' | 'removedAt'>
+      & { plant?: Maybe<(
+        { __typename?: 'Plant' }
+        & Pick<Plant, 'code' | 'partnerPlantCode' | 'partnerPlantType'>
+      )> }
+    )>> }
+  )> }
+);
+
+export type KitSnapshotRunsQueryVariables = Exact<{
+  plantCode: Scalars['String'];
+  first: Scalars['Int'];
+  sort: SortEnumType;
+}>;
+
+
+export type KitSnapshotRunsQuery = (
+  { __typename?: 'Query' }
+  & { kitSnapshotRuns?: Maybe<(
+    { __typename?: 'KitSnapshotRunsConnection' }
+    & { nodes?: Maybe<Array<(
+      { __typename?: 'KitSnapshotRun' }
+      & Pick<KitSnapshotRun, 'id' | 'sequence' | 'runDate' | 'createdAt' | 'removedAt'>
+      & { plant?: Maybe<(
+        { __typename?: 'Plant' }
+        & Pick<Plant, 'code' | 'partnerPlantCode' | 'partnerPlantType'>
+      )> }
+    )>> }
   )> }
 );
 
@@ -3367,7 +3388,7 @@ export type ParsePartnerStatusAckQuery = (
   { __typename?: 'Query' }
   & { parsePartnerStatusAckFile: (
     { __typename?: 'PartnerStatusAckDTO' }
-    & Pick<PartnerStatusAckDto, 'plantCode' | 'partnerPlantCode' | 'sequence' | 'accepted' | 'totalProcessed' | 'totalAccepted' | 'totalRejected' | 'fileDate'>
+    & Pick<PartnerStatusAckDto, 'plantCode' | 'partnerPlantCode' | 'sequence' | 'totalProcessed' | 'totalAccepted' | 'totalRejected' | 'fileDate'>
   ) }
 );
 

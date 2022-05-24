@@ -2,7 +2,6 @@ import { AzureFunction, Context } from "@azure/functions"
 import { skdService } from "../shared/skdService";
 
 import { AzureBlobService } from "../shared/AzureBlobService";
-import { KitSnapshotInput, Plant } from "../shared/graphql/generated/graphql";
 import { getAppConfig } from "../shared/appConfig";
 import { addActivityLogEntry } from "../shared/activityLog";
 import { AzureTableService } from "../shared/AzureTableService";

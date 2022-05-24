@@ -1,4 +1,4 @@
-import  gql  from 'graphql-tag'
+import gql from 'graphql-tag'
 
 export const IMPORT_BOM = gql`
 mutation importBom($input:BomFileInput!) { 
@@ -71,7 +71,6 @@ mutation importPartnerStatusAck($input: PartnerStatusAckDTOInput!) {
   importPartnerStatusAck(input: $input) {
     payload {
       id
-      accepted
       fileDate
       totalProcessed
       totalAccepted
@@ -121,27 +120,56 @@ mutation generateKitSnapshotRun($input:KitSnapshotInput!) {
 }
 `
 
-export const KIT_SNAPSHOT_RUN = gql`
+export const KIT_SNAPSHOT_RUN_BY_SEQUENCE = gql`
+query kitSnapshotRunBySequence($plantCode: String!, $sequence: Int!){
+  kitSnapshotRuns(first:1
+  where:{
+    plant:{ code:{ eq: $plantCode } }
+    sequence: { eq: $sequence }
+  }
+  ) {
+    nodes {
+      id
+      sequence
+      runDate
+      createdAt
+      removedAt
+      plant {
+        code
+        partnerPlantCode
+        partnerPlantType
+      }
+    }
+  }
+}
 
-query kitSnapshotRun($plantCode: String!, $sequence: Int!) {
-  kitSnapshotRun(plantCode: $plantCode, sequence: $sequence) {
-    sequence
-    runDate
-    plantCode
-    entries {
-      txType
-      currentTimeLineCode
-      lotNo
-      kitNo
-      vIN
-      dealerCode
-      engineSerialNumber
-      customReceived
-      planBuild
-      buildCompleted
-      gateRelease
-      wholesale
-      originalPlanBuild
+`
+
+export let KIT_SNAPSHOT_RUNS = gql`
+query kitSnapshotRuns($plantCode: String!, $first: Int!, $sort: SortEnumType!){
+  kitSnapshotRuns(first: $first,
+  order: {
+    sequence: $sort
+  }
+  where:{
+    plant:{
+      code:{
+        eq: $plantCode
+      }
+    }
+  }
+  ) {
+    nodes {
+      id
+      sequence
+      runDate
+      createdAt
+      removedAt
+      plant {
+        code
+        partnerPlantCode
+        partnerPlantType
+      }
     }
   }
 }
@@ -217,7 +245,7 @@ query parseBomFile($text:String!) {
 }
 `
 
-export const PARSE_SHIP_FILE  = gql`
+export const PARSE_SHIP_FILE = gql`
 query parseShipFile($text: String!) {
   parseShipFile(text: $text) {
     sequence
@@ -263,7 +291,6 @@ query parsePartnerStatusAck($text: String!) {
     plantCode
     partnerPlantCode
     sequence
-    accepted
     totalProcessed
     totalAccepted
     totalRejected

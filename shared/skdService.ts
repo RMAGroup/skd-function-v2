@@ -10,8 +10,6 @@ import {
   KitSnapshotInput,
   PlantsQuery,
   PlantsQueryVariables,
-  KitSnapshotRunQuery,
-  KitSnapshotRunQueryVariables,
   LatestKitSnapshotRunQuery,
   LatestKitSnapshotRunQueryVariables,
   PartnerStatusFilePayloadQuery,
@@ -37,7 +35,12 @@ import {
   ImportPartnerStatusAckMutationVariables,
   PartnerStatusAckDtoInput,
   ParsePartnerStatusAckQueryVariables,
-  ParsePartnerStatusAckQuery
+  ParsePartnerStatusAckQuery,
+  KitSnapshotRunBySequenceQuery,
+  KitSnapshotRunBySequenceQueryVariables,
+  SortEnumType,
+  KitSnapshotRunsQuery,
+  KitSnapshotRunsQueryVariables
 } from './graphql/generated/graphql';
 
 import {
@@ -45,7 +48,6 @@ import {
   IMPORT_VIN,
   GENERATE_KIT_SNAPSHOT_RUN,
   PLANTS,
-  KIT_SNAPSHOT_RUN,
   LATEST_KIT_SNAPSHOT_RUN,
   PARTNER_STATUS_FILE_PAYLOAD,
   PARSE_SHIP_FILE,
@@ -57,6 +59,8 @@ import {
   GEN_PARTNER_STATUS_FILENAME,
   IMPORT_PARTNER_STATUS_ACK,
   PARSE_PARTNER_STATUS_ACK,
+  KIT_SNAPSHOT_RUN_BY_SEQUENCE,
+  KIT_SNAPSHOT_RUNS,
 } from './graphql/query';
 
 export class skdService {
@@ -135,15 +139,33 @@ export class skdService {
     return result.data.generateKitSnapshotRun
   }
 
-  getKitSnapshotRun = async (plantCode: string, sequence: number) => {
-    const result = await this.client.query<KitSnapshotRunQuery, KitSnapshotRunQueryVariables>({
-      query: KIT_SNAPSHOT_RUN,
+  getKitSnapshotBySequence = async (plantCode: string, sequence: number) => {
+    const result = await this.client.query<KitSnapshotRunBySequenceQuery, KitSnapshotRunBySequenceQueryVariables>({
+      query: KIT_SNAPSHOT_RUN_BY_SEQUENCE,
       variables: {
         plantCode,
         sequence
       }
     })
-    return result.data.kitSnapshotRun
+
+    if (result.data.kitSnapshotRuns.nodes.length === 0) {
+      return null;
+    }
+    return result.data.kitSnapshotRuns.nodes[0]
+  }
+
+  getKitSnapshotRuns = async (plantCode: string, sort: SortEnumType, first: number = 5) => {
+    const result = await this.client.query<KitSnapshotRunsQuery, KitSnapshotRunsQueryVariables>({
+      query: KIT_SNAPSHOT_RUNS,
+      variables: {
+        plantCode,
+        first,
+        sort
+      },
+      fetchPolicy: 'network-only'
+    })
+
+    return result.data.kitSnapshotRuns
   }
 
   getLatestKitSnaphotRun = async (plantCode: string) => {

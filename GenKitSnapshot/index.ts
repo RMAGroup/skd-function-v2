@@ -11,24 +11,25 @@ const timerTrigger: AzureFunction = async function (context: Context, genSnapsho
     const service = new skdService(appConfig.SkdGraphqlURI);
 
     for await (const plant of await service.getPlants()) {
-        await getEnsureLatestSnapshot(plant.code)
+        await generatePlantSnapshots(plant.code)
     }
 
     /** Only generates a snapshot if
      * 1. There have been timeline status changes since the last snapshot
      * 2. There is no snapshot for the cucrrent date 
      */
-    async function getEnsureLatestSnapshot(plantCode: string) {
+    async function generatePlantSnapshots(plantCode: string) {
 
-        context.log(`Submitting generate kit snapshot for:  ${plantCode}`)
+        context.log(`Submitting for plant:  ${plantCode}`)
 
         // generate kit timeline snapshots
         const input: KitSnapshotInput = {
             plantCode,
             rejectIfNoChanges: true,
-            allowMultipleSnapshotsPerDay: appConfig.AllowMultipleKitSnapshotsPerDay
+            allowMultipleSnapshotsPerDay: appConfig.AllowMultipleKitSnapshotsPerDay,
+            rejectIfPriorSnapshotNotAcknowledged: appConfig.RejectIfPriorSnapshotNotAcknowledged
         }
-
+        
         // generate a new snapshot.   
         // Note: will not genrate more than one per day
         var result = await service.generateKitSnapshotRun(input)
@@ -37,7 +38,7 @@ const timerTrigger: AzureFunction = async function (context: Context, genSnapsho
             var errorMessage = result.errors.map(t => t.message).join(", ").trim()
             context.log(`${plantCode}:  ${errorMessage}`)
         } else {
-            context.log(`Gen kit snapshot ${result.payload.plantCode}-${result.payload.sequence}`)
+            context.log(`Generated kit snapshot ${result.payload.plantCode}-${result.payload.sequence}`)
         }
     }
 }
