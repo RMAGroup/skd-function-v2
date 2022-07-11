@@ -232,7 +232,7 @@ query parseBomFile($text:String!) {
       lotNo
       kits {
         kitNo
-        modelCode
+        pcvCode
       }
     }
     lotParts {

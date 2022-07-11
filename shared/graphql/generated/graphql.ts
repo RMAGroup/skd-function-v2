@@ -71,12 +71,12 @@ export type BomFileInput = {
 export type BomFileKit = {
   __typename?: 'BomFileKit';
   kitNo: Scalars['String'];
-  modelCode: Scalars['String'];
+  pcvCode: Scalars['String'];
 };
 
 export type BomFileKitInput = {
   kitNo: Scalars['String'];
-  modelCode: Scalars['String'];
+  pcvCode: Scalars['String'];
 };
 
 export type BomFileLot = {
@@ -278,7 +278,7 @@ export type Component = {
   iconURL?: Maybe<Scalars['String']>;
   componentSerialRule: ComponentSerialRule;
   dcwsRequired: Scalars['Boolean'];
-  vehicleModelComponents?: Maybe<Array<Maybe<VehicleModelComponent>>>;
+  pcvComponents?: Maybe<Array<Maybe<PcvComponent>>>;
   kitComponents?: Maybe<Array<Maybe<KitComponent>>>;
   id: Scalars['UUID'];
   createdAt: Scalars['DateTime'];
@@ -293,7 +293,7 @@ export type ComponentFilterInput = {
   iconURL?: Maybe<StringOperationFilterInput>;
   componentSerialRule?: Maybe<ComponentSerialRuleOperationFilterInput>;
   dcwsRequired?: Maybe<BooleanOperationFilterInput>;
-  vehicleModelComponents?: Maybe<ListFilterInputTypeOfVehicleModelComponentFilterInput>;
+  pcvComponents?: Maybe<ListFilterInputTypeOfPcvComponentFilterInput>;
   kitComponents?: Maybe<ListFilterInputTypeOfKitComponentFilterInput>;
   id?: Maybe<ComparableGuidOperationFilterInput>;
   createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
@@ -446,6 +446,7 @@ export type ComponentsEdge = {
 export type ConfigettingDto = {
   __typename?: 'ConfigettingDTO';
   dcwsServiceAddress: Scalars['String'];
+  allowGraphqlIntrospection: Scalars['String'];
 };
 
 
@@ -1346,6 +1347,13 @@ export type ListFilterInputTypeOfLotPartReceivedFilterInput = {
   any?: Maybe<Scalars['Boolean']>;
 };
 
+export type ListFilterInputTypeOfPcvComponentFilterInput = {
+  all?: Maybe<PcvComponentFilterInput>;
+  none?: Maybe<PcvComponentFilterInput>;
+  some?: Maybe<PcvComponentFilterInput>;
+  any?: Maybe<Scalars['Boolean']>;
+};
+
 export type ListFilterInputTypeOfShipmentFilterInput = {
   all?: Maybe<ShipmentFilterInput>;
   none?: Maybe<ShipmentFilterInput>;
@@ -1374,13 +1382,6 @@ export type ListFilterInputTypeOfShipmentPartFilterInput = {
   any?: Maybe<Scalars['Boolean']>;
 };
 
-export type ListFilterInputTypeOfVehicleModelComponentFilterInput = {
-  all?: Maybe<VehicleModelComponentFilterInput>;
-  none?: Maybe<VehicleModelComponentFilterInput>;
-  some?: Maybe<VehicleModelComponentFilterInput>;
-  any?: Maybe<Scalars['Boolean']>;
-};
-
 export type Lot = {
   __typename?: 'Lot';
   lotNo?: Maybe<Scalars['String']>;
@@ -1390,7 +1391,7 @@ export type Lot = {
   bomId: Scalars['UUID'];
   bom?: Maybe<Bom>;
   modelId: Scalars['UUID'];
-  model?: Maybe<VehicleModel>;
+  pcv?: Maybe<Pcv>;
   kits?: Maybe<Array<Maybe<Kit>>>;
   lotParts?: Maybe<Array<Maybe<LotPart>>>;
   shipmentLots?: Maybe<Array<Maybe<ShipmentLot>>>;
@@ -1420,7 +1421,7 @@ export type LotFilterInput = {
   bomId?: Maybe<ComparableGuidOperationFilterInput>;
   bom?: Maybe<BomFilterInput>;
   modelId?: Maybe<ComparableGuidOperationFilterInput>;
-  model?: Maybe<VehicleModelFilterInput>;
+  pcv?: Maybe<PcvFilterInput>;
   kits?: Maybe<ListFilterInputTypeOfKitFilterInput>;
   lotParts?: Maybe<ListFilterInputTypeOfLotPartFilterInput>;
   shipmentLots?: Maybe<ListFilterInputTypeOfShipmentLotFilterInput>;
@@ -1543,7 +1544,7 @@ export type LotSortInput = {
   bomId?: Maybe<SortEnumType>;
   bom?: Maybe<BomSortInput>;
   modelId?: Maybe<SortEnumType>;
-  model?: Maybe<VehicleModelSortInput>;
+  pcv?: Maybe<PcvSortInput>;
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
@@ -1578,8 +1579,8 @@ export type LotsEdge = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  saveVehicleModel: MutationResultOfVehicleModel;
-  createVehicleModelFromExisting: MutationResultOfVehicleModel;
+  savePcv: MutationResultOfPcv;
+  createPcvFromExisting: MutationResultOfPcv;
   createKitTimelineEvent: MutationResultOfKitTimelineEvent;
   createLotTimelineEvent: MutationResultOfLot;
   saveComponent: MutationResultOfComponent;
@@ -1604,13 +1605,13 @@ export type Mutation = {
 };
 
 
-export type MutationSaveVehicleModelArgs = {
-  input: VehicleModelInput;
+export type MutationSavePcvArgs = {
+  input: PcvInput;
 };
 
 
-export type MutationCreateVehicleModelFromExistingArgs = {
-  input: VehicleModelFromExistingInput;
+export type MutationCreatePcvFromExistingArgs = {
+  input: PcvFromExistingInput;
 };
 
 
@@ -1781,6 +1782,12 @@ export type MutationResultOfLotPartDto = {
   errors: Array<Error>;
 };
 
+export type MutationResultOfPcv = {
+  __typename?: 'MutationResultOfPCV';
+  payload?: Maybe<Pcv>;
+  errors: Array<Error>;
+};
+
 export type MutationResultOfPartnerStatusAck = {
   __typename?: 'MutationResultOfPartnerStatusAck';
   payload?: Maybe<PartnerStatusAck>;
@@ -1823,10 +1830,47 @@ export type MutationResultOfString = {
   errors: Array<Error>;
 };
 
-export type MutationResultOfVehicleModel = {
-  __typename?: 'MutationResultOfVehicleModel';
-  payload?: Maybe<VehicleModel>;
-  errors: Array<Error>;
+export type Pcv = {
+  __typename?: 'PCV';
+  pcvComponents: Array<PcvComponent>;
+  code: Scalars['String'];
+  description: Scalars['String'];
+  modelYear: Scalars['String'];
+  model: Scalars['String'];
+  series: Scalars['String'];
+  body: Scalars['String'];
+  lots: Array<Lot>;
+  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime'];
+  removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PcvFilterInput = {
+  and?: Maybe<Array<PcvFilterInput>>;
+  or?: Maybe<Array<PcvFilterInput>>;
+  code?: Maybe<StringOperationFilterInput>;
+  description?: Maybe<StringOperationFilterInput>;
+  modelYear?: Maybe<StringOperationFilterInput>;
+  model?: Maybe<StringOperationFilterInput>;
+  series?: Maybe<StringOperationFilterInput>;
+  body?: Maybe<StringOperationFilterInput>;
+  lots?: Maybe<ListFilterInputTypeOfLotFilterInput>;
+  pcvComponents?: Maybe<ListFilterInputTypeOfPcvComponentFilterInput>;
+  id?: Maybe<ComparableGuidOperationFilterInput>;
+  createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
+  removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
+};
+
+export type PcvSortInput = {
+  code?: Maybe<SortEnumType>;
+  description?: Maybe<SortEnumType>;
+  modelYear?: Maybe<SortEnumType>;
+  model?: Maybe<SortEnumType>;
+  series?: Maybe<SortEnumType>;
+  body?: Maybe<SortEnumType>;
+  id?: Maybe<SortEnumType>;
+  createdAt?: Maybe<SortEnumType>;
+  removedAt?: Maybe<SortEnumType>;
 };
 
 /** Information about pagination in a connection. */
@@ -1973,6 +2017,102 @@ export type PartsEdge = {
   node: Part;
 };
 
+export type PcvComponent = {
+  __typename?: 'PcvComponent';
+  pcvId: Scalars['UUID'];
+  pcv?: Maybe<Pcv>;
+  componentId: Scalars['UUID'];
+  component?: Maybe<Component>;
+  productionStationId: Scalars['UUID'];
+  productionStation?: Maybe<ProductionStation>;
+  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime'];
+  removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PcvComponentFilterInput = {
+  and?: Maybe<Array<PcvComponentFilterInput>>;
+  or?: Maybe<Array<PcvComponentFilterInput>>;
+  pcvId?: Maybe<ComparableGuidOperationFilterInput>;
+  pcv?: Maybe<PcvFilterInput>;
+  componentId?: Maybe<ComparableGuidOperationFilterInput>;
+  component?: Maybe<ComponentFilterInput>;
+  productionStationId?: Maybe<ComparableGuidOperationFilterInput>;
+  productionStation?: Maybe<ProductionStationFilterInput>;
+  id?: Maybe<ComparableGuidOperationFilterInput>;
+  createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
+  removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
+};
+
+export type PcvComponentSortInput = {
+  pcvId?: Maybe<SortEnumType>;
+  pcv?: Maybe<PcvSortInput>;
+  componentId?: Maybe<SortEnumType>;
+  component?: Maybe<ComponentSortInput>;
+  productionStationId?: Maybe<SortEnumType>;
+  productionStation?: Maybe<ProductionStationSortInput>;
+  id?: Maybe<SortEnumType>;
+  createdAt?: Maybe<SortEnumType>;
+  removedAt?: Maybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type PcvComponentsConnection = {
+  __typename?: 'PcvComponentsConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<PcvComponentsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PcvComponent>>;
+};
+
+/** An edge in a connection. */
+export type PcvComponentsEdge = {
+  __typename?: 'PcvComponentsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: PcvComponent;
+};
+
+export type PcvFromExistingInput = {
+  code: Scalars['String'];
+  modelYear: Scalars['String'];
+  existingModelCode: Scalars['String'];
+};
+
+export type PcvInput = {
+  id?: Maybe<Scalars['UUID']>;
+  code: Scalars['String'];
+  description: Scalars['String'];
+  modelYear: Scalars['String'];
+  model: Scalars['String'];
+  series: Scalars['String'];
+  body: Scalars['String'];
+  componentStationInputs: Array<ComponentStationInput>;
+};
+
+/** A connection to a list of items. */
+export type PcvsConnection = {
+  __typename?: 'PcvsConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<PcvsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Pcv>>;
+};
+
+/** An edge in a connection. */
+export type PcvsEdge = {
+  __typename?: 'PcvsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Pcv;
+};
+
 export type Plant = {
   __typename?: 'Plant';
   code?: Maybe<Scalars['String']>;
@@ -2036,7 +2176,7 @@ export type ProductionStation = {
   code: Scalars['String'];
   name: Scalars['String'];
   sequence: Scalars['Int'];
-  modelComponents: Array<VehicleModelComponent>;
+  modelComponents: Array<PcvComponent>;
   vehicleComponents: Array<KitComponent>;
   id: Scalars['UUID'];
   createdAt: Scalars['DateTime'];
@@ -2049,7 +2189,7 @@ export type ProductionStationFilterInput = {
   code?: Maybe<StringOperationFilterInput>;
   name?: Maybe<StringOperationFilterInput>;
   sequence?: Maybe<ComparableInt32OperationFilterInput>;
-  modelComponents?: Maybe<ListFilterInputTypeOfVehicleModelComponentFilterInput>;
+  modelComponents?: Maybe<ListFilterInputTypeOfPcvComponentFilterInput>;
   vehicleComponents?: Maybe<ListFilterInputTypeOfKitComponentFilterInput>;
   id?: Maybe<ComparableGuidOperationFilterInput>;
   createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
@@ -2106,7 +2246,7 @@ export type Query = {
   lotPartsByBom: Array<LotPartDto>;
   lotPartsByShipment: Array<LotPartDto>;
   kitsByLot: Array<Kit>;
-  vehicleModelById?: Maybe<VehicleModel>;
+  pcvById?: Maybe<Pcv>;
   componentById?: Maybe<Component>;
   /** @deprecated no longer used */
   vehicleComponentByVinAndComponent?: Maybe<KitComponent>;
@@ -2144,8 +2284,8 @@ export type Query = {
   plants: Array<Plant>;
   kits?: Maybe<KitsConnection>;
   lots?: Maybe<LotsConnection>;
-  vehicleModels?: Maybe<VehicleModelsConnection>;
-  vehicleModelComponents?: Maybe<VehicleModelComponentsConnection>;
+  pcvs?: Maybe<PcvsConnection>;
+  pcvComponents?: Maybe<PcvComponentsConnection>;
   kitComponents?: Maybe<KitComponentsConnection>;
   componentSerails?: Maybe<ComponentSerailsConnection>;
   dcwsResponses?: Maybe<DcwsResponsesConnection>;
@@ -2216,7 +2356,7 @@ export type QueryKitsByLotArgs = {
 };
 
 
-export type QueryVehicleModelByIdArgs = {
+export type QueryPcvByIdArgs = {
   id: Scalars['UUID'];
 };
 
@@ -2413,23 +2553,23 @@ export type QueryLotsArgs = {
 };
 
 
-export type QueryVehicleModelsArgs = {
+export type QueryPcvsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
   last?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['String']>;
-  where?: Maybe<VehicleModelFilterInput>;
-  order?: Maybe<Array<VehicleModelSortInput>>;
+  where?: Maybe<PcvFilterInput>;
+  order?: Maybe<Array<PcvSortInput>>;
 };
 
 
-export type QueryVehicleModelComponentsArgs = {
+export type QueryPcvComponentsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
   last?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['String']>;
-  where?: Maybe<VehicleModelComponentFilterInput>;
-  order?: Maybe<Array<VehicleModelComponentSortInput>>;
+  where?: Maybe<PcvComponentFilterInput>;
+  order?: Maybe<Array<PcvComponentSortInput>>;
 };
 
 
@@ -2910,145 +3050,6 @@ export type TimelineEventDto = {
 };
 
 
-export type VehicleModel = {
-  __typename?: 'VehicleModel';
-  modelComponents: Array<VehicleModelComponent>;
-  code: Scalars['String'];
-  description: Scalars['String'];
-  modelYear: Scalars['String'];
-  model: Scalars['String'];
-  series: Scalars['String'];
-  body: Scalars['String'];
-  lots: Array<Lot>;
-  id: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type VehicleModelComponent = {
-  __typename?: 'VehicleModelComponent';
-  vehicleModelId: Scalars['UUID'];
-  vehicleModel?: Maybe<VehicleModel>;
-  componentId: Scalars['UUID'];
-  component?: Maybe<Component>;
-  productionStationId: Scalars['UUID'];
-  productionStation?: Maybe<ProductionStation>;
-  id: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type VehicleModelComponentFilterInput = {
-  and?: Maybe<Array<VehicleModelComponentFilterInput>>;
-  or?: Maybe<Array<VehicleModelComponentFilterInput>>;
-  vehicleModelId?: Maybe<ComparableGuidOperationFilterInput>;
-  vehicleModel?: Maybe<VehicleModelFilterInput>;
-  componentId?: Maybe<ComparableGuidOperationFilterInput>;
-  component?: Maybe<ComponentFilterInput>;
-  productionStationId?: Maybe<ComparableGuidOperationFilterInput>;
-  productionStation?: Maybe<ProductionStationFilterInput>;
-  id?: Maybe<ComparableGuidOperationFilterInput>;
-  createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
-  removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
-};
-
-export type VehicleModelComponentSortInput = {
-  vehicleModelId?: Maybe<SortEnumType>;
-  vehicleModel?: Maybe<VehicleModelSortInput>;
-  componentId?: Maybe<SortEnumType>;
-  component?: Maybe<ComponentSortInput>;
-  productionStationId?: Maybe<SortEnumType>;
-  productionStation?: Maybe<ProductionStationSortInput>;
-  id?: Maybe<SortEnumType>;
-  createdAt?: Maybe<SortEnumType>;
-  removedAt?: Maybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type VehicleModelComponentsConnection = {
-  __typename?: 'VehicleModelComponentsConnection';
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** A list of edges. */
-  edges?: Maybe<Array<VehicleModelComponentsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<VehicleModelComponent>>;
-};
-
-/** An edge in a connection. */
-export type VehicleModelComponentsEdge = {
-  __typename?: 'VehicleModelComponentsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: VehicleModelComponent;
-};
-
-export type VehicleModelFilterInput = {
-  and?: Maybe<Array<VehicleModelFilterInput>>;
-  or?: Maybe<Array<VehicleModelFilterInput>>;
-  code?: Maybe<StringOperationFilterInput>;
-  description?: Maybe<StringOperationFilterInput>;
-  modelYear?: Maybe<StringOperationFilterInput>;
-  model?: Maybe<StringOperationFilterInput>;
-  series?: Maybe<StringOperationFilterInput>;
-  body?: Maybe<StringOperationFilterInput>;
-  lots?: Maybe<ListFilterInputTypeOfLotFilterInput>;
-  modelComponents?: Maybe<ListFilterInputTypeOfVehicleModelComponentFilterInput>;
-  id?: Maybe<ComparableGuidOperationFilterInput>;
-  createdAt?: Maybe<ComparableDateTimeOperationFilterInput>;
-  removedAt?: Maybe<ComparableNullableOfDateTimeOperationFilterInput>;
-};
-
-export type VehicleModelFromExistingInput = {
-  code: Scalars['String'];
-  modelYear: Scalars['String'];
-  existingModelCode: Scalars['String'];
-};
-
-export type VehicleModelInput = {
-  id?: Maybe<Scalars['UUID']>;
-  code: Scalars['String'];
-  description: Scalars['String'];
-  modelYear: Scalars['String'];
-  model: Scalars['String'];
-  series: Scalars['String'];
-  body: Scalars['String'];
-  componentStationInputs: Array<ComponentStationInput>;
-};
-
-export type VehicleModelSortInput = {
-  code?: Maybe<SortEnumType>;
-  description?: Maybe<SortEnumType>;
-  modelYear?: Maybe<SortEnumType>;
-  model?: Maybe<SortEnumType>;
-  series?: Maybe<SortEnumType>;
-  body?: Maybe<SortEnumType>;
-  id?: Maybe<SortEnumType>;
-  createdAt?: Maybe<SortEnumType>;
-  removedAt?: Maybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type VehicleModelsConnection = {
-  __typename?: 'VehicleModelsConnection';
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** A list of edges. */
-  edges?: Maybe<Array<VehicleModelsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<VehicleModel>>;
-};
-
-/** An edge in a connection. */
-export type VehicleModelsEdge = {
-  __typename?: 'VehicleModelsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: VehicleModel;
-};
-
 export type VinFile = {
   __typename?: 'VinFile';
   plantCode?: Maybe<Scalars['String']>;
@@ -3328,7 +3329,7 @@ export type ParseBomFileQuery = (
       & Pick<BomFileLot, 'lotNo'>
       & { kits: Array<(
         { __typename?: 'BomFileKit' }
-        & Pick<BomFileKit, 'kitNo' | 'modelCode'>
+        & Pick<BomFileKit, 'kitNo' | 'pcvCode'>
       )> }
     )>, lotParts: Array<(
       { __typename?: 'BomFileLotPart' }
