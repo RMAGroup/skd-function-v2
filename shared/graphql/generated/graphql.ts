@@ -132,10 +132,9 @@ export type BomListConnection = {
 export type BomListDto = {
   __typename?: 'BomListDTO';
   id: Scalars['UUID'];
-  plantCode: Scalars['String'];
+  plantCode?: Maybe<Scalars['String']>;
   sequence: Scalars['Int'];
-  partCount: Scalars['Int'];
-  lots: Array<BomList_Lot>;
+  lots?: Maybe<Array<Maybe<BomList_Lot>>>;
   createdAt: Scalars['DateTime'];
 };
 
@@ -143,7 +142,6 @@ export type BomListDtoSortInput = {
   id?: Maybe<SortEnumType>;
   plantCode?: Maybe<SortEnumType>;
   sequence?: Maybe<SortEnumType>;
-  partCount?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
 };
 
@@ -158,7 +156,7 @@ export type BomListEdge = {
 
 export type BomList_Lot = {
   __typename?: 'BomList_Lot';
-  lotNo: Scalars['String'];
+  lotNo?: Maybe<Scalars['String']>;
   shipmentSequence?: Maybe<Scalars['Int']>;
 };
 
@@ -320,26 +318,6 @@ export type ComponentInput = {
   dcwsSerialCaptureRule: ComponentSerialRule;
 };
 
-/** A connection to a list of items. */
-export type ComponentSerailsConnection = {
-  __typename?: 'ComponentSerailsConnection';
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** A list of edges. */
-  edges?: Maybe<Array<ComponentSerailsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ComponentSerial>>;
-};
-
-/** An edge in a connection. */
-export type ComponentSerailsEdge = {
-  __typename?: 'ComponentSerailsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: ComponentSerial;
-};
-
 export type ComponentSerial = {
   __typename?: 'ComponentSerial';
   kitComponentId: Scalars['UUID'];
@@ -418,6 +396,26 @@ export type ComponentSerialSortInput = {
   id?: Maybe<SortEnumType>;
   createdAt?: Maybe<SortEnumType>;
   removedAt?: Maybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type ComponentSerialsConnection = {
+  __typename?: 'ComponentSerialsConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<ComponentSerialsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<ComponentSerial>>;
+};
+
+/** An edge in a connection. */
+export type ComponentSerialsEdge = {
+  __typename?: 'ComponentSerialsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: ComponentSerial;
 };
 
 export type ComponentSortInput = {
@@ -509,8 +507,8 @@ export type ComponentsEdge = {
   node: Component;
 };
 
-export type ConfigettingDto = {
-  __typename?: 'ConfigettingDTO';
+export type ConfigurationDto = {
+  __typename?: 'ConfigurationDTO';
   dcwsServiceAddress: Scalars['String'];
   allowGraphqlIntrospection: Scalars['String'];
 };
@@ -791,6 +789,13 @@ export type ICategory = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type ItemCountDto = {
+  __typename?: 'ItemCountDTO';
+  code?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  count: Scalars['Int'];
+};
+
 export type Kit = {
   __typename?: 'Kit';
   vin: Scalars['String'];
@@ -848,6 +853,7 @@ export type KitComponentSerialInfo = {
   __typename?: 'KitComponentSerialInfo';
   componentCode: Scalars['String'];
   componentName: Scalars['String'];
+  componentIconURL: Scalars['String'];
   removedAt?: Maybe<Scalars['DateTime']>;
   stations: Array<StatcionSerialInfo>;
 };
@@ -1313,6 +1319,26 @@ export type KitVinImportSortInput = {
 };
 
 /** A connection to a list of items. */
+export type KitsByCurrentTimelineEventConnection = {
+  __typename?: 'KitsByCurrentTimelineEventConnection';
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** A list of edges. */
+  edges?: Maybe<Array<KitsByCurrentTimelineEventEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Kit>>;
+};
+
+/** An edge in a connection. */
+export type KitsByCurrentTimelineEventEdge = {
+  __typename?: 'KitsByCurrentTimelineEventEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Kit;
+};
+
+/** A connection to a list of items. */
 export type KitsConnection = {
   __typename?: 'KitsConnection';
   /** Information to aid in pagination. */
@@ -1573,18 +1599,6 @@ export type LotOverviewDto = {
   createdAt: Scalars['DateTime'];
 };
 
-export type LotParReceivedtDto = {
-  __typename?: 'LotParReceivedtDTO';
-  lotNo?: Maybe<Scalars['String']>;
-  partNo?: Maybe<Scalars['String']>;
-  partDesc?: Maybe<Scalars['String']>;
-  receivedQuantity: Scalars['Int'];
-  bomQuantity: Scalars['Int'];
-  shipmentQuantity: Scalars['Int'];
-  createdAt: Scalars['DateTime'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
 export type LotPart = {
   __typename?: 'LotPart';
   partId: Scalars['UUID'];
@@ -1633,6 +1647,18 @@ export type LotPartReceived = {
   lotPart?: Maybe<LotPart>;
   quantity: Scalars['Int'];
   id: Scalars['UUID'];
+  createdAt: Scalars['DateTime'];
+  removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type LotPartReceivedDto = {
+  __typename?: 'LotPartReceivedDTO';
+  lotNo?: Maybe<Scalars['String']>;
+  partNo?: Maybe<Scalars['String']>;
+  partDesc?: Maybe<Scalars['String']>;
+  receivedQuantity: Scalars['Int'];
+  bomQuantity: Scalars['Int'];
+  shipmentQuantity: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   removedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -1712,6 +1738,7 @@ export type Mutation = {
   rollbackKitsnapshots: MutationResultOfListOfKitSnapshot;
   importPartnerStatusAck: MutationResultOfPartnerStatusAck;
   createPCV: MutationResultOfSavePcvPayload;
+  autoVerifyVIN: MutationResultOfVerifyVinsPayload;
   createPcvMetaData: MutationResultOfUpdateCategoryPayload;
   updatePcvMetaData: MutationResultOfUpdateCategoryPayload;
   removeShipment: MutationResultOfString;
@@ -1822,6 +1849,11 @@ export type MutationImportPartnerStatusAckArgs = {
 
 export type MutationCreatePcvArgs = {
   input: CreatePcvInput;
+};
+
+
+export type MutationAutoVerifyVinArgs = {
+  currentDate?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -1959,6 +1991,12 @@ export type MutationResultOfUpdateComponentPayload = {
 export type MutationResultOfUpdateStationPayload = {
   __typename?: 'MutationResultOfUpdateStationPayload';
   payload?: Maybe<UpdateStationPayload>;
+  errors: Array<Error>;
+};
+
+export type MutationResultOfVerifyVinsPayload = {
+  __typename?: 'MutationResultOfVerifyVinsPayload';
+  payload?: Maybe<VerifyVinsPayload>;
   errors: Array<Error>;
 };
 
@@ -2795,7 +2833,7 @@ export type ProductionStationsEdge = {
 
 export type Query = {
   __typename?: 'Query';
-  serverConfigSettings: ConfigettingDto;
+  serverConfigSettings: ConfigurationDto;
   info: Scalars['String'];
   shipmentOverview?: Maybe<ShipmentOverviewDto>;
   handlingUnitOverviews: Array<HandlingUnitOverview>;
@@ -2826,7 +2864,7 @@ export type Query = {
   kitSnapshotRun?: Maybe<KitSnapshotRunDto>;
   lotInfo?: Maybe<LotDto>;
   lotPartInfo?: Maybe<LotPartDto>;
-  recentLotPartsReceived: Array<LotParReceivedtDto>;
+  recentLotPartsReceived: Array<LotPartReceivedDto>;
   basicKitInfo?: Maybe<BasicKitInfo>;
   kitComponentSerialInfo?: Maybe<KitComponentSerialInfo>;
   pingDcwsService: Scalars['Boolean'];
@@ -2841,13 +2879,14 @@ export type Query = {
   genPartnerStatusFilename: Scalars['String'];
   appSettings: Array<AppSetting>;
   kitTimelineEventsByDate: Array<KitTimelineEvent>;
+  kitsByCurrentTimelineEvent?: Maybe<KitsByCurrentTimelineEventConnection>;
   components?: Maybe<ComponentsConnection>;
   parts?: Maybe<PartsConnection>;
   plants: Array<Plant>;
   kits?: Maybe<KitsConnection>;
   lots?: Maybe<LotsConnection>;
   kitComponents?: Maybe<KitComponentsConnection>;
-  componentSerails?: Maybe<ComponentSerailsConnection>;
+  componentSerials?: Maybe<ComponentSerialsConnection>;
   dcwsResponses?: Maybe<DcwsResponsesConnection>;
   productionStations?: Maybe<ProductionStationsConnection>;
   componentStations?: Maybe<ComponentStationsConnection>;
@@ -2869,6 +2908,7 @@ export type Query = {
   pcvDrives?: Maybe<PcvDrivesConnection>;
   pcvPaint?: Maybe<PcvPaintConnection>;
   pcvTrim?: Maybe<PcvTrimConnection>;
+  kitsByTimelineStatusSummary: Array<ItemCountDto>;
 };
 
 
@@ -3082,6 +3122,18 @@ export type QueryKitTimelineEventsByDateArgs = {
 };
 
 
+export type QueryKitsByCurrentTimelineEventArgs = {
+  plantCode: Scalars['String'];
+  eventCode?: Maybe<TimeLineEventCode>;
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['String']>;
+  where?: Maybe<KitFilterInput>;
+  order?: Maybe<Array<KitSortInput>>;
+};
+
+
 export type QueryComponentsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
@@ -3134,7 +3186,7 @@ export type QueryKitComponentsArgs = {
 };
 
 
-export type QueryComponentSerailsArgs = {
+export type QueryComponentSerialsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
   last?: Maybe<Scalars['Int']>;
@@ -3789,6 +3841,11 @@ export type UpdateStationPayload = {
   sequence: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type VerifyVinsPayload = {
+  __typename?: 'VerifyVinsPayload';
+  kitNos: Array<Scalars['String']>;
 };
 
 export type VinFile = {
