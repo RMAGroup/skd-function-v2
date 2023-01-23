@@ -534,7 +534,7 @@ export type CreatePcvInput = {
 
 
 export type DcwsComponentResponseInput = {
-  vehicleComponentId: Scalars['UUID'];
+  kitComponentId: Scalars['UUID'];
   responseCode?: Maybe<Scalars['String']>;
   errorMessage?: Maybe<Scalars['String']>;
 };
@@ -1739,6 +1739,7 @@ export type Mutation = {
   importPartnerStatusAck: MutationResultOfPartnerStatusAck;
   createPCV: MutationResultOfSavePcvPayload;
   autoVerifyVIN: MutationResultOfVerifyVinsPayload;
+  saveDcwsComponentResponse: MutationResultOfDcwsResponse;
   createPcvMetaData: MutationResultOfUpdateCategoryPayload;
   updatePcvMetaData: MutationResultOfUpdateCategoryPayload;
   removeShipment: MutationResultOfString;
@@ -1854,6 +1855,11 @@ export type MutationCreatePcvArgs = {
 
 export type MutationAutoVerifyVinArgs = {
   currentDate?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type MutationSaveDcwsComponentResponseArgs = {
+  input: DcwsComponentResponseInput;
 };
 
 
