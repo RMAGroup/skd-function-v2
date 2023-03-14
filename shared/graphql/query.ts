@@ -7,7 +7,7 @@ mutation importBom($input:BomFileInput!) {
       id
       sequence
       plantCode
-      lotCount
+      lotNumbers
       partCount
       vehicleCount
       createdAt
@@ -94,13 +94,16 @@ mutation importPartnerStatusAck($input: PartnerStatusAckDTOInput!) {
 export const PLANTS = gql`
 query plants {
   plants {
+    nodes {
       code
       partnerPlantCode
       partnerPlantType
       name
       createdAt
+    }
   }
 }
+
 `
 
 export const GENERATE_KIT_SNAPSHOT_RUN = gql`

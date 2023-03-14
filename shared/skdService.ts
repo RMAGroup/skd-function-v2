@@ -125,7 +125,7 @@ export class skdService {
       query: PLANTS,
       fetchPolicy: 'network-only'
     })
-    return result.data.plants
+    return result.data.plants.nodes
   }
 
 
