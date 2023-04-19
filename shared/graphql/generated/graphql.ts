@@ -1201,6 +1201,22 @@ export type KitSortInput = {
   vin?: InputMaybe<SortEnumType>;
 };
 
+export enum KitStatusCode {
+  Fpbc = 'FPBC',
+  Fpbp = 'FPBP',
+  Fpbs = 'FPBS',
+  Fpcr = 'FPCR',
+  Fpgr = 'FPGR',
+  Fpws = 'FPWS'
+}
+
+export type KitStatusCodeOperationFilterInput = {
+  eq?: InputMaybe<KitStatusCode>;
+  in?: InputMaybe<Array<KitStatusCode>>;
+  neq?: InputMaybe<KitStatusCode>;
+  nin?: InputMaybe<Array<KitStatusCode>>;
+};
+
 export type KitTimelineDto = {
   __typename?: 'KitTimelineDTO';
   kitNo: Scalars['String'];
@@ -1262,6 +1278,7 @@ export type KitTimelineEventType = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['UUID'];
+  kitStatusCode: KitStatusCode;
   removedAt?: Maybe<Scalars['DateTime']>;
   sequence: Scalars['Int'];
   snapshots: Array<KitSnapshot>;
@@ -1273,6 +1290,7 @@ export type KitTimelineEventTypeFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  kitStatusCode?: InputMaybe<KitStatusCodeOperationFilterInput>;
   or?: InputMaybe<Array<KitTimelineEventTypeFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
@@ -1284,6 +1302,7 @@ export type KitTimelineEventTypeSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  kitStatusCode?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   sequence?: InputMaybe<SortEnumType>;
 };
@@ -2481,8 +2500,6 @@ export type PcvComponent = {
   id: Scalars['UUID'];
   pcv?: Maybe<Pcv>;
   pcvId: Scalars['UUID'];
-  productionStation?: Maybe<ProductionStation>;
-  productionStationId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -2495,8 +2512,6 @@ export type PcvComponentFilterInput = {
   or?: InputMaybe<Array<PcvComponentFilterInput>>;
   pcv?: InputMaybe<PcvFilterInput>;
   pcvId?: InputMaybe<UuidOperationFilterInput>;
-  productionStation?: InputMaybe<ProductionStationFilterInput>;
-  productionStationId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
@@ -2507,8 +2522,6 @@ export type PcvComponentSortInput = {
   id?: InputMaybe<SortEnumType>;
   pcv?: InputMaybe<PcvSortInput>;
   pcvId?: InputMaybe<SortEnumType>;
-  productionStation?: InputMaybe<ProductionStationSortInput>;
-  productionStationId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
 };
 
@@ -3040,7 +3053,6 @@ export type ProductionStation = {
   defaultStationComponents: Array<Component>;
   id: Scalars['UUID'];
   kitComponents: Array<KitComponent>;
-  modelComponents: Array<PcvComponent>;
   name: Scalars['String'];
   removedAt?: Maybe<Scalars['DateTime']>;
   sequence: Scalars['Int'];
@@ -3053,7 +3065,6 @@ export type ProductionStationFilterInput = {
   defaultStationComponents?: InputMaybe<ListFilterInputTypeOfComponentFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   kitComponents?: InputMaybe<ListFilterInputTypeOfKitComponentFilterInput>;
-  modelComponents?: InputMaybe<ListFilterInputTypeOfPcvComponentFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ProductionStationFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -3153,7 +3164,6 @@ export type Query = {
   partnerStatusAcks?: Maybe<PartnerStatusAcksConnection>;
   partnerStatusFilePayload: PartnerStatusDto;
   parts?: Maybe<PartsConnection>;
-  pcvById?: Maybe<Pcv>;
   pcvComponents?: Maybe<PcvComponentsConnection>;
   pcvDrives?: Maybe<PcvDrivesConnection>;
   pcvEngines?: Maybe<PcvEnginesConnection>;
@@ -3597,11 +3607,6 @@ export type QueryPartsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<PartSortInput>>;
   where?: InputMaybe<PartFilterInput>;
-};
-
-
-export type QueryPcvByIdArgs = {
-  id: Scalars['UUID'];
 };
 
 
