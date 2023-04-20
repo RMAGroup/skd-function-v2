@@ -41,4 +41,4 @@ jobs:
           app-name: 'skd-function-production'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_14FF937EC9B4452BA29A7BC5D16761CB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B27EB4DF28A4F59980C1A8A07038334 }}
