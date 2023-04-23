@@ -511,8 +511,10 @@ export type ComponentsEdge = {
 
 export type ConfigurationDto = {
   __typename?: 'ConfigurationDTO';
-  allowGraphqlIntrospection: Scalars['String'];
+  allowGraphqlIntrospection: Scalars['Boolean'];
   dcwsServiceAddress: Scalars['String'];
+  executionTimeoutSeconds: Scalars['Int'];
+  kitStatusFeedUrl: Scalars['String'];
 };
 
 export type CreateCategoryInput = {

@@ -29,7 +29,7 @@ With the following content. Change the server grapgql server endpoint if differe
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "ActivityLogTable": "ActivityLog",
-    "SkdGraphqlURI": "http://localhost:5100/graphql",
+    "SkdGraphqlURI": "http://0.0.0.0:5100/graphql",
     "EnginComponentCode": "EN"
   }
 }
@@ -56,7 +56,7 @@ npm i -g azurite
 azurite --loose
 ```
 
-### via docker
+### azurite storage emulator
 
 ```bash
 docker run -d \
