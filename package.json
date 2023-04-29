@@ -12,24 +12,20 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "description": "",
-  "dependencies": {
-    "@apollo/client": "^3.2.5",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.11.0",
-    "isomorphic-fetch": "^3.0.0",
-    "@azure/functions": "^3.0.0",
-    "azure-functions-core-tools": "^4.x",
-    "@types/node": "16.x",
-    "typescript": "^4.0.0"
-  },
   "devDependencies": {
-    "@azure/data-tables": "^12.1.2",
-    "@azure/functions": "^1.0.2-beta2",
+    "@azure/data-tables": "^13.2.2",
+    "@azure/functions": "^3.0.0",
     "@azure/storage-blob": "^12.0.0",
-    "@graphql-codegen/cli": "^2.16.1",
-    "@graphql-codegen/typescript": "^2.8.5",
-    "@graphql-codegen/typescript-operations": "^2.5.10",
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-operations": "^3.0.4",
+    "@types/node": "16.x",
+    "@urql/core": "^4.0.7",
+    "azure-functions-core-tools": "^4.x",
+    "graphql": "^16.6.0",
+    "isomorphic-fetch": "^3.0.0",
+    "node-fetch": "^3.3.1",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.9.4"
+    "typescript": "^4.0.0"
   }
 }

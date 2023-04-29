@@ -1,5 +1,3 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
-import fetch from 'isomorphic-fetch'
 import {
   ImportShipmentMutation,
   ImportShipmentMutationVariables,
@@ -62,91 +60,94 @@ import {
   KIT_SNAPSHOT_RUN_BY_SEQUENCE,
   KIT_SNAPSHOT_RUNS,
 } from './graphql/query';
+import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
 
 export class skdService {
 
-  client: ApolloClient<any>
+  client: Client
 
   constructor(uri: string) {
-    this.client = new ApolloClient({
-      link: createHttpLink({ uri, fetch }),
-      cache: new InMemoryCache({
-        addTypename: false
-      })
+
+    this.client = createClient({
+      url: uri,
+      exchanges: [fetchExchange],
+      fetch
     })
   }
 
   importBom = async (input: BomFileInput) => {
-    const result = await this.client.mutate<ImportBomMutation, ImportBomMutationVariables>({
-      mutation: IMPORT_BOM,
-      variables: {
+    const result = await this.client.mutation<ImportBomMutation, ImportBomMutationVariables>(
+      IMPORT_BOM,
+      {
         input
       }
-    })
+    ).toPromise();
 
     return result.data.importBom
   }
 
 
   async importShipment(shipment: ShipFileInput) {
-    const result = await this.client.mutate<ImportShipmentMutation, ImportShipmentMutationVariables>({
-      mutation: IMPORT_SHIPMENT,
-      variables: {
+    const result = await this.client.mutation<ImportShipmentMutation, ImportShipmentMutationVariables>(
+      IMPORT_SHIPMENT,
+      {
         input: shipment
       }
-    })
+    ).toPromise();
 
     return result.data.importShipment
   }
 
   importVIN = async (input: VinFileInput) => {
-    const result = await this.client.mutate<ImportVinMutation, ImportVinMutationVariables>({
-      mutation: IMPORT_VIN,
-      variables: {
+    const result = await this.client.mutation<ImportVinMutation, ImportVinMutationVariables>(
+      IMPORT_VIN,
+      {
         input
       }
-    })
+    ).toPromise();
     return result.data.importVIN
   }
 
   importPartnerStatusAck = async (input: PartnerStatusAckDtoInput) => {
-    const result = await this.client.mutate<ImportPartnerStatusAckMutation, ImportPartnerStatusAckMutationVariables>({
-      mutation: IMPORT_PARTNER_STATUS_ACK,
-      variables: {
+    const result = await this.client.mutation<ImportPartnerStatusAckMutation, ImportPartnerStatusAckMutationVariables>(
+      IMPORT_PARTNER_STATUS_ACK,
+      {
         input
       }
-    })
+    ).toPromise()
     return result.data.importPartnerStatusAck
   }
 
 
   getPlants = async () => {
-    let result = await this.client.query<PlantsQuery, PlantsQueryVariables>({
-      query: PLANTS,
-      fetchPolicy: 'network-only'
-    })
+    const result = await this.client.query<PlantsQuery, PlantsQueryVariables>(
+      PLANTS,
+      {}
+    ).toPromise();
+
     return result.data.plants.nodes
   }
 
-
   generateKitSnapshotRun = async (input: KitSnapshotInput) => {
-    const result = await this.client.mutate<GenerateKitSnapshotRunMutation, GenerateKitSnapshotRunMutationVariables>({
-      mutation: GENERATE_KIT_SNAPSHOT_RUN,
-      variables: {
+    // Call the GraphQL mutation to generate the kit snapshot run
+    const result = await this.client.mutation<GenerateKitSnapshotRunMutation, GenerateKitSnapshotRunMutationVariables>(
+      GENERATE_KIT_SNAPSHOT_RUN,
+      {
         input: input
       }
-    })
+    ).toPromise()
+    // Return the generated kit snapshot run
     return result.data.generateKitSnapshotRun
   }
 
   getKitSnapshotBySequence = async (plantCode: string, sequence: number) => {
-    const result = await this.client.query<KitSnapshotRunBySequenceQuery, KitSnapshotRunBySequenceQueryVariables>({
-      query: KIT_SNAPSHOT_RUN_BY_SEQUENCE,
-      variables: {
+    const result = await this.client.query<KitSnapshotRunBySequenceQuery, KitSnapshotRunBySequenceQueryVariables>(
+      KIT_SNAPSHOT_RUN_BY_SEQUENCE,
+      {
         plantCode,
         sequence
       }
-    })
+    ).toPromise()
 
     if (result.data.kitSnapshotRuns.nodes.length === 0) {
       return null;
@@ -155,27 +156,25 @@ export class skdService {
   }
 
   getKitSnapshotRuns = async (plantCode: string, sort: SortEnumType, first: number = 5) => {
-    const result = await this.client.query<KitSnapshotRunsQuery, KitSnapshotRunsQueryVariables>({
-      query: KIT_SNAPSHOT_RUNS,
-      variables: {
+    const result = await this.client.query<KitSnapshotRunsQuery, KitSnapshotRunsQueryVariables>(
+      KIT_SNAPSHOT_RUNS,
+      {
         plantCode,
         first,
         sort
-      },
-      fetchPolicy: 'network-only'
-    })
+      }
+    ).toPromise()
 
     return result.data.kitSnapshotRuns
   }
 
   getLatestKitSnaphotRun = async (plantCode: string) => {
-    const result = await this.client.query<LatestKitSnapshotRunQuery, LatestKitSnapshotRunQueryVariables>({
-      query: LATEST_KIT_SNAPSHOT_RUN,
-      variables: {
+    const result = await this.client.query<LatestKitSnapshotRunQuery, LatestKitSnapshotRunQueryVariables>(
+      LATEST_KIT_SNAPSHOT_RUN,
+      {
         plantCode
-      },
-      fetchPolicy: 'network-only'
-    })
+      }
+    ).toPromise()
 
     return result.data.kitSnapshotRuns.nodes.length > 0
       ? result.data.kitSnapshotRuns.nodes[0]
@@ -183,86 +182,86 @@ export class skdService {
   }
 
   getPartnerStatusFilePayload = async (input: { plantCode: string, sequence: number }) => {
-    const result = await this.client.query<PartnerStatusFilePayloadQuery, PartnerStatusFilePayloadQueryVariables>({
-      query: PARTNER_STATUS_FILE_PAYLOAD,
-      variables: {
+    const result = await this.client.query<PartnerStatusFilePayloadQuery, PartnerStatusFilePayloadQueryVariables>(
+      PARTNER_STATUS_FILE_PAYLOAD,
+      {
         plantCode: input.plantCode,
         sequence: input.sequence
       },
-      fetchPolicy: 'network-only'
-    })
+    ).toPromise()
     return result.data.partnerStatusFilePayload
   }
 
   genPartnerStatusFilename = async (id: string) => {
-    const result = await this.client.query<GenPartnerStatusFilenameQuery, GenPartnerStatusFilenameQueryVariables>({
-      query: GEN_PARTNER_STATUS_FILENAME,
-      variables: {
+    const result = await this.client.query<GenPartnerStatusFilenameQuery, GenPartnerStatusFilenameQueryVariables>(
+      GEN_PARTNER_STATUS_FILENAME,
+      {
         id
       }
-    })
+    ).toPromise()
     return result.data.genPartnerStatusFilename
   }
 
   parseBomFile = async (text: string) => {
-    const result = await this.client.query<ParseBomFileQuery, ParseBomFileQueryVariables>({
-      query: PARSE_BOM_FILE,
-      variables: {
+    const result = await this.client.query<ParseBomFileQuery, ParseBomFileQueryVariables>(
+      PARSE_BOM_FILE,
+      {
         text
       }
-    })
+    ).toPromise()
     return result.data.parseBomFile
   }
 
   parseShipFile = async (text: string) => {
-    const result = await this.client.query<ParseShipFileQuery, ParseShipFileQueryVariables>({
-      query: PARSE_SHIP_FILE,
-      variables: {
+    const result = await this.client.query<ParseShipFileQuery, ParseShipFileQueryVariables>(
+      PARSE_SHIP_FILE,
+      {
         text
       },
-    })
+    ).toPromise()
     return result.data.parseShipFile
   }
 
   parseVinFile = async (text: string) => {
-    const result = await this.client.query<ParseVinFileQuery, ParseVinFileQueryVariables>({
-      query: PARSE_VIN_FILE,
-      variables: {
+    const result = await this.client.query<ParseVinFileQuery, ParseVinFileQueryVariables>(
+      PARSE_VIN_FILE,
+      {
         text
       },
-    })
+    ).toPromise()
     return result.data.parseVinFile
   }
 
   genVinImportAck = async (plantCode: string, sequence: number) => {
-    const result = await this.client.query<GenVinImportAckQuery, GenVinImportAckQueryVariables>({
-      query: GEN_VIN_IMPORT_ACK,
-      variables: {
+    const result = await this.client.query<GenVinImportAckQuery, GenVinImportAckQueryVariables>(
+      GEN_VIN_IMPORT_ACK,
+      {
         plantCode,
         sequence
       },
-    })
+    ).toPromise()
     return result.data.genVinImportAcknowledgment
   }
 
   parsePartnerStatusAckFile = async (text: string) => {
-    const result = await this.client.query<ParsePartnerStatusAckQuery, ParsePartnerStatusAckQueryVariables>({
-      query: PARSE_PARTNER_STATUS_ACK,
-      variables: {
+    const result = await this.client.query<ParsePartnerStatusAckQuery, ParsePartnerStatusAckQueryVariables>(
+      PARSE_PARTNER_STATUS_ACK,
+      {
         text
       },
-    })
+    ).toPromise()
     return result.data.parsePartnerStatusAckFile
   }
 
   getFordInerfaceFileType = async (filename: string) => {
-    const result = await this.client.query<FordInterfaceFileTypeQuery, FordInterfaceFileTypeQueryVariables>({
-      query: FORD_INTERFACE_FILETYPE,
-      variables: {
+    const result = await this.client.query<FordInterfaceFileTypeQuery, FordInterfaceFileTypeQueryVariables>(
+      FORD_INTERFACE_FILETYPE,
+      {
         filename
       }
-    })
-    return result.data.fordInterfaceFileType
+    ).toPromise()
+    const r = result.data.fordInterfaceFileType
+    return r;
   }
 }
 
