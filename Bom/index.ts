@@ -23,6 +23,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         const text = inBlob.toString('utf-8', 0)
 
         const input = await service.parseBomFile(text)
+        input.filename = context.bindingData.name
         const { payload, errors } = await service.importBom(input);
 
         // write to data table

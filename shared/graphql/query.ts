@@ -231,6 +231,7 @@ query parseBomFile($text:String!) {
     plantCode
     sequence
     bomFileCreatedAt
+    filename
     lotEntries {
       lotNo
       kits {
@@ -254,6 +255,7 @@ query parseShipFile($text: String!) {
     sequence
     plantCode
     created
+    filename
     lots {
       lotNo
       invoices {

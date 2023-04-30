@@ -23,6 +23,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         // import
         const text = inBlob.toString('utf-8', 0)
         const input: ShipFileInput = await service.parseShipFile(text)
+        input.filename = context.bindingData.name
 
         // import shipment
         const { payload, errors } = await service.importShipment(input)
