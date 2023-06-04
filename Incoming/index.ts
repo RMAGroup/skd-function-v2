@@ -28,14 +28,6 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
                 context.bindings.shipBlob = inBlob
                 break
             }
-            case FordInterfaceFileType.Vin: {
-                context.bindings.vinBlob = inBlob
-                break
-            }
-            case FordInterfaceFileType.PartnerStatusAck: {
-                context.bindings.partnerStatusAckBlob = inBlob
-                break
-            }
             default:
                 context.bindings.unknownFileTypeBlob = inBlob
                 break;
