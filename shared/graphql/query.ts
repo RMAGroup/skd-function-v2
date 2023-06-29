@@ -1,47 +1,5 @@
 import gql from 'graphql-tag'
 
-export const IMPORT_BOM = gql`
-mutation importBom($input:BomFileInput!) { 
-  importBom(input: $input) {
-    payload {
-      id
-      sequence
-      plantCode
-      lotNumbers
-      partCount
-      vehicleCount
-      createdAt
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-`
-
-
-export const IMPORT_SHIPMENT = gql`
-mutation importShipment($input: ShipFileInput!){
-  importShipment(input:$input) {
-    payload {
-      id
-      plantCode
-      sequence
-      invoiceCount
-      lotCount
-      partCount
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-`
-
-
-
 export const PLANTS = gql`
 query plants {
   plants {
@@ -54,9 +12,7 @@ query plants {
     }
   }
 }
-
 `
-
 
 
 export const PARSE_BOM_FILE = gql`
@@ -112,5 +68,53 @@ query parseShipFile($text: String!) {
 export const FORD_INTERFACE_FILETYPE = gql`
 query fordInterfaceFileType($filename: String!) {
   fordInterfaceFileType(filename: $filename) 
+}
+`
+
+export const BUILD_START_PENDING_KITS = gql`
+query buildStartPendingKits($plantCode: String!) {
+  buildStartPendingKits(plantCode: $plantCode) {
+    id
+    kitNo
+    lotNo
+    vin
+    model
+    series
+    kitTimelineCode
+    partnerStatusCode
+  }
+}
+`
+
+export const UPDATE_PARTNER_STATUS_PENDING_KITS = gql`
+query updatePartnerStatusPendingKits($plantCode: String!){
+  updatePartnerStatusPendingKits(plantCode: $plantCode) {
+    kitNo
+    lotNo
+    vin
+    model
+    series
+    eventDtate
+    partnerStatusCode
+    kitTimelineCode
+    partnerStatusPending  
+  }
+}
+
+`
+
+export const PLAN_BUILD_VIN_PENDING_KITS = gql`
+query planBuildVinPendingKits($plantCode: String!) {
+  planBuildVinPendingKits(plantCode: $plantCode) {
+    id
+    kitNo
+    lotNo
+    vin
+    model
+    series
+    kitTimelineCode
+    partnerStatusCode
+    partnerStatusPending
+  }
 }
 `

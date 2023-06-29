@@ -1,55 +1,45 @@
+//#region Imports
 import {
   ImportShipmentMutation,
   ImportShipmentMutationVariables,
-  ImportVinMutation,
-  ImportVinMutationVariables,
-  GenerateKitSnapshotRunMutation,
-  GenerateKitSnapshotRunMutationVariables,
-  KitSnapshotInput,
   PlantsQuery,
   PlantsQueryVariables,
-  LatestKitSnapshotRunQuery,
-  LatestKitSnapshotRunQueryVariables,
-  PartnerStatusFilePayloadQuery,
-  PartnerStatusFilePayloadQueryVariables,
   ParseShipFileQuery,
   ParseShipFileQueryVariables,
   ShipFileInput,
-  ParseVinFileQuery,
-  ParseVinFileQueryVariables,
-  VinFileInput,
   ParseBomFileQuery,
   ParseBomFileQueryVariables,
   BomFileInput,
   ImportBomMutation,
   ImportBomMutationVariables,
-  GenVinImportAckQuery,
-  GenVinImportAckQueryVariables,
   FordInterfaceFileTypeQuery,
   FordInterfaceFileTypeQueryVariables,
-  GenPartnerStatusFilenameQuery,
-  GenPartnerStatusFilenameQueryVariables,
-  ImportPartnerStatusAckMutation,
-  ImportPartnerStatusAckMutationVariables,
-  PartnerStatusAckDtoInput,
-  ParsePartnerStatusAckQueryVariables,
-  ParsePartnerStatusAckQuery,
-  KitSnapshotRunBySequenceQuery,
-  KitSnapshotRunBySequenceQueryVariables,
-  SortEnumType,
-  KitSnapshotRunsQuery,
-  KitSnapshotRunsQueryVariables
+  UpdatePartnerStatusPendingKitsQuery,
+  UpdatePartnerStatusPendingKitsQueryVariables,
+  BuildStartPendingKitsQuery,
+  BuildStartPendingKitsQueryVariables,
+  PlanBuildVinPendingKitsQuery,
+  PlanBuildVinPendingKitsQueryVariables,
+  UpdatePartnerStatusInput,
+  UpdatePartnerStatusMutation,
+  UpdatePartnerStatusMutationVariables,
+  SyncKitStatusToPartnerStatusMutation,
+  SyncKitStatusToPartnerStatusMutationVariables
 } from './graphql/generated/graphql';
 
+import { IMPORT_BOM, IMPORT_SHIPMENT, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_PARTNER_STATUS } from './graphql/mutation';
+
 import {
-  IMPORT_SHIPMENT,
   PLANTS,
   PARSE_SHIP_FILE,
   PARSE_BOM_FILE,
-  IMPORT_BOM,
   FORD_INTERFACE_FILETYPE,
+  UPDATE_PARTNER_STATUS_PENDING_KITS,
+  BUILD_START_PENDING_KITS,
+  PLAN_BUILD_VIN_PENDING_KITS,
 } from './graphql/query';
 import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
+//#endregion
 
 export class skdService {
 
@@ -87,7 +77,25 @@ export class skdService {
     return result.data.importShipment
   }
 
+  updatePartnerStatus = async (input: UpdatePartnerStatusInput) => {
+    const result = await this.client.mutation<UpdatePartnerStatusMutation, UpdatePartnerStatusMutationVariables>(
+      UPDATE_PARTNER_STATUS,
+      {
+        input
+      }
+    ).toPromise()
+    return result.data.updatePartnerStatus
+  }
 
+  syncKitStatusToPartnerStatus = async (input: UpdatePartnerStatusInput) => {
+    const result = await this.client.mutation<SyncKitStatusToPartnerStatusMutation, SyncKitStatusToPartnerStatusMutationVariables>(
+      SYNC_KIT_STATUS_TO_PARTNER_STATUS,
+      {
+        input
+      }
+    ).toPromise()
+    return result.data.syncKitToPartnerStatus
+  }
 
 
   getPlants = async () => {
@@ -130,6 +138,37 @@ export class skdService {
     const r = result.data.fordInterfaceFileType
     return r;
   }
+
+  getUpdatePartnerStatusPendingKits = async (plantCode: string) => {
+    const result = await this.client.query<UpdatePartnerStatusPendingKitsQuery, UpdatePartnerStatusPendingKitsQueryVariables>(
+      UPDATE_PARTNER_STATUS_PENDING_KITS,
+      {
+        plantCode
+      },
+    ).toPromise()
+    return result.data.updatePartnerStatusPendingKits
+  }
+
+  getBuildStartPendingKits = async (plantCode: string) => {
+    const result = await this.client.query<BuildStartPendingKitsQuery, BuildStartPendingKitsQueryVariables>(
+      BUILD_START_PENDING_KITS,
+      {
+        plantCode
+      },
+    ).toPromise()
+    return result.data.buildStartPendingKits
+  }
+
+  getVinPendingKits = async (plantCode: string) => {
+    const result = await this.client.query<PlanBuildVinPendingKitsQuery, PlanBuildVinPendingKitsQueryVariables>(
+      PLAN_BUILD_VIN_PENDING_KITS,
+      {
+        plantCode
+      },
+    ).toPromise()
+    return result.data.planBuildVinPendingKits
+  }
+
 }
 
 

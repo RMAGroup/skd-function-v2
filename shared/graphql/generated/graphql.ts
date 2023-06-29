@@ -15,33 +15,6 @@ export type Scalars = {
   Upload: any;
 };
 
-export type ApiError = {
-  __typename?: 'ApiError';
-  errorCode: Scalars['String'];
-  errorMessage: Scalars['String'];
-};
-
-export type ApiResponseOfKitCurrentStatusResponse = {
-  __typename?: 'ApiResponseOfKitCurrentStatusResponse';
-  data?: Maybe<KitCurrentStatusResponse>;
-  error?: Maybe<ApiError>;
-  isSuccess: Scalars['Boolean'];
-};
-
-export type ApiResponseOfKitPVinResponse = {
-  __typename?: 'ApiResponseOfKitPVinResponse';
-  data?: Maybe<KitPVinResponse>;
-  error?: Maybe<ApiError>;
-  isSuccess: Scalars['Boolean'];
-};
-
-export type ApiResponseOfKitProcessPartnerStatusResponse = {
-  __typename?: 'ApiResponseOfKitProcessPartnerStatusResponse';
-  data?: Maybe<KitProcessPartnerStatusResponse>;
-  error?: Maybe<ApiError>;
-  isSuccess: Scalars['Boolean'];
-};
-
 export type AppSetting = {
   __typename?: 'AppSetting';
   code: Scalars['String'];
@@ -674,24 +647,6 @@ export type DealersEdge = {
   node: Dealer;
 };
 
-export type Entry = {
-  __typename?: 'Entry';
-  buildCompleted?: Maybe<Scalars['DateTime']>;
-  currentTimeLineCode: TimeLineEventCode;
-  customReceived?: Maybe<Scalars['DateTime']>;
-  dealerCode?: Maybe<Scalars['String']>;
-  engineSerialNumber?: Maybe<Scalars['String']>;
-  gateRelease?: Maybe<Scalars['DateTime']>;
-  kitNo?: Maybe<Scalars['String']>;
-  lotNo?: Maybe<Scalars['String']>;
-  originalPlanBuild?: Maybe<Scalars['DateTime']>;
-  planBuild?: Maybe<Scalars['DateTime']>;
-  txType: SnapshotChangeStatus;
-  verifyVIN?: Maybe<Scalars['DateTime']>;
-  vin?: Maybe<Scalars['String']>;
-  wholesale?: Maybe<Scalars['DateTime']>;
-};
-
 export type Error = {
   __typename?: 'Error';
   message: Scalars['String'];
@@ -959,10 +914,6 @@ export type KitComponentsEdge = {
   node: KitComponent;
 };
 
-export type KitCurrentStatusRequestInput = {
-  kitNumber: Scalars['String'];
-};
-
 export type KitCurrentStatusResponse = {
   __typename?: 'KitCurrentStatusResponse';
   kitNumber?: Maybe<Scalars['String']>;
@@ -988,6 +939,20 @@ export type KitFilterInput = {
   snapshots?: InputMaybe<ListFilterInputTypeOfKitSnapshotFilterInput>;
   timelineEvents?: InputMaybe<ListFilterInputTypeOfKitTimelineEventFilterInput>;
   vin?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type KitInfoDto = {
+  __typename?: 'KitInfoDTO';
+  eventDtate?: Maybe<Scalars['DateTime']>;
+  id: Scalars['UUID'];
+  kitNo: Scalars['String'];
+  kitTimelineCode?: Maybe<KitTimelineCode>;
+  lotNo: Scalars['String'];
+  model: Scalars['String'];
+  partnerStatusCode?: Maybe<PartnerStatusCode>;
+  partnerStatusPending: Scalars['Boolean'];
+  series: Scalars['String'];
+  vin?: Maybe<Scalars['String']>;
 };
 
 /** A connection to a list of items. */
@@ -1041,34 +1006,6 @@ export type KitListItemDtoSortInput = {
   vin?: InputMaybe<SortEnumType>;
 };
 
-export type KitPVinRequestInput = {
-  kitNumber: Scalars['String'];
-  partnerGsdb: Scalars['String'];
-};
-
-export type KitPVinResponse = {
-  __typename?: 'KitPVinResponse';
-  pvinFeedLayoutData: PvinFeedLayoutData;
-};
-
-export type KitProcessPartnerStatusRequestInput = {
-  actualDealerCode: Scalars['String'];
-  buildDate: Scalars['String'];
-  engineSerialNumber: Scalars['String'];
-  kitNumber: Scalars['String'];
-  lotNumber: Scalars['String'];
-  partnerGsdb: Scalars['String'];
-  physicalVin: Scalars['String'];
-  plantGsdb: Scalars['String'];
-  status: Scalars['String'];
-  statusDate: Scalars['String'];
-};
-
-export type KitProcessPartnerStatusResponse = {
-  __typename?: 'KitProcessPartnerStatusResponse';
-  partnerStatusLayoutData: PartnerStatusLayoutData;
-};
-
 export type KitSnapshot = {
   __typename?: 'KitSnapshot';
   buildCompleted?: Maybe<Scalars['DateTime']>;
@@ -1118,14 +1055,6 @@ export type KitSnapshotFilterInput = {
   wholesale?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
-export type KitSnapshotInput = {
-  allowMultipleSnapshotsPerDay: Scalars['Boolean'];
-  plantCode: Scalars['String'];
-  rejectIfNoChanges: Scalars['Boolean'];
-  rejectIfPriorSnapshotNotAcknowledged: Scalars['Boolean'];
-  runDate?: InputMaybe<Scalars['DateTime']>;
-};
-
 export type KitSnapshotRun = {
   __typename?: 'KitSnapshotRun';
   createdAt: Scalars['DateTime'];
@@ -1135,18 +1064,6 @@ export type KitSnapshotRun = {
   plant?: Maybe<Plant>;
   plantId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
-  runDate: Scalars['DateTime'];
-  sequence: Scalars['Int'];
-};
-
-export type KitSnapshotRunDto = {
-  __typename?: 'KitSnapshotRunDTO';
-  entries?: Maybe<Array<Maybe<Entry>>>;
-  partnerPlantCode?: Maybe<Scalars['String']>;
-  partnerPlantType?: Maybe<Scalars['String']>;
-  partnerStatusAck?: Maybe<PartnerStatusAckDto>;
-  partnerStatusFilename?: Maybe<Scalars['String']>;
-  plantCode?: Maybe<Scalars['String']>;
   runDate: Scalars['DateTime'];
   sequence: Scalars['Int'];
 };
@@ -1251,28 +1168,28 @@ export type KitSortInput = {
   vin?: InputMaybe<SortEnumType>;
 };
 
-export enum KitStatusCode {
-  Fpbc = 'FPBC',
-  Fpbp = 'FPBP',
-  Fpbs = 'FPBS',
-  Fpcr = 'FPCR',
-  Fpgr = 'FPGR',
-  Fpws = 'FPWS'
-}
-
-export type KitStatusCodeOperationFilterInput = {
-  eq?: InputMaybe<KitStatusCode>;
-  in?: InputMaybe<Array<KitStatusCode>>;
-  neq?: InputMaybe<KitStatusCode>;
-  nin?: InputMaybe<Array<KitStatusCode>>;
-};
-
-export type KitTimelineDto = {
-  __typename?: 'KitTimelineDTO';
+export type KitStatusDto = {
+  __typename?: 'KitStatusDTO';
   kitNo: Scalars['String'];
   lotNo: Scalars['String'];
-  timelineItems: Array<TimelineEventDto>;
+  timelineItems: Array<StatusEventDto>;
   vin: Scalars['String'];
+};
+
+export enum KitTimelineCode {
+  BuildCompleted = 'BUILD_COMPLETED',
+  BuildStart = 'BUILD_START',
+  CustomReceived = 'CUSTOM_RECEIVED',
+  GateReleased = 'GATE_RELEASED',
+  PlanBuild = 'PLAN_BUILD',
+  WholeSale = 'WHOLE_SALE'
+}
+
+export type KitTimelineCodeOperationFilterInput = {
+  eq?: InputMaybe<KitTimelineCode>;
+  in?: InputMaybe<Array<KitTimelineCode>>;
+  neq?: InputMaybe<KitTimelineCode>;
+  nin?: InputMaybe<Array<KitTimelineCode>>;
 };
 
 export type KitTimelineEvent = {
@@ -1285,6 +1202,7 @@ export type KitTimelineEvent = {
   kit?: Maybe<Kit>;
   kitId: Scalars['UUID'];
   kitTimelineEventTypeId: Scalars['UUID'];
+  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
   removedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -1299,12 +1217,13 @@ export type KitTimelineEventFilterInput = {
   kitId?: InputMaybe<UuidOperationFilterInput>;
   kitTimelineEventTypeId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<KitTimelineEventFilterInput>>;
+  partnerStatusUpdatedAt?: InputMaybe<DateTimeOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
 export type KitTimelineEventInput = {
   dealerCode: Scalars['String'];
-  eventCode: TimeLineEventCode;
+  eventCode: KitTimelineCode;
   eventDate: Scalars['DateTime'];
   eventNote: Scalars['String'];
   kitNo: Scalars['String'];
@@ -1319,16 +1238,17 @@ export type KitTimelineEventSortInput = {
   kit?: InputMaybe<KitSortInput>;
   kitId?: InputMaybe<SortEnumType>;
   kitTimelineEventTypeId?: InputMaybe<SortEnumType>;
+  partnerStatusUpdatedAt?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
 };
 
 export type KitTimelineEventType = {
   __typename?: 'KitTimelineEventType';
-  code: TimeLineEventCode;
+  code: KitTimelineCode;
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['UUID'];
-  kitStatusCode: KitStatusCode;
+  partnerStatusCode: PartnerStatusCode;
   removedAt?: Maybe<Scalars['DateTime']>;
   sequence: Scalars['Int'];
   snapshots: Array<KitSnapshot>;
@@ -1336,12 +1256,12 @@ export type KitTimelineEventType = {
 
 export type KitTimelineEventTypeFilterInput = {
   and?: InputMaybe<Array<KitTimelineEventTypeFilterInput>>;
-  code?: InputMaybe<TimeLineEventCodeOperationFilterInput>;
+  code?: InputMaybe<KitTimelineCodeOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
-  kitStatusCode?: InputMaybe<KitStatusCodeOperationFilterInput>;
   or?: InputMaybe<Array<KitTimelineEventTypeFilterInput>>;
+  partnerStatusCode?: InputMaybe<PartnerStatusCodeOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
   snapshots?: InputMaybe<ListFilterInputTypeOfKitSnapshotFilterInput>;
@@ -1352,7 +1272,7 @@ export type KitTimelineEventTypeSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
-  kitStatusCode?: InputMaybe<SortEnumType>;
+  partnerStatusCode?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   sequence?: InputMaybe<SortEnumType>;
 };
@@ -1403,19 +1323,8 @@ export type KitVin = {
   id: Scalars['UUID'];
   kit?: Maybe<Kit>;
   kitId: Scalars['UUID'];
-  kitVinImport?: Maybe<KitVinImport>;
-  kitVinImportId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
   vin?: Maybe<Scalars['String']>;
-};
-
-export type KitVinAckDto = {
-  __typename?: 'KitVinAckDTO';
-  errorMessage: Scalars['String'];
-  filename: Scalars['String'];
-  payloadText: Scalars['String'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
 };
 
 export type KitVinFilterInput = {
@@ -1424,66 +1333,14 @@ export type KitVinFilterInput = {
   id?: InputMaybe<UuidOperationFilterInput>;
   kit?: InputMaybe<KitFilterInput>;
   kitId?: InputMaybe<UuidOperationFilterInput>;
-  kitVinImport?: InputMaybe<KitVinImportFilterInput>;
-  kitVinImportId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<KitVinFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   vin?: InputMaybe<StringOperationFilterInput>;
 };
 
-export type KitVinImport = {
-  __typename?: 'KitVinImport';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  kitVins?: Maybe<Array<Maybe<KitVin>>>;
-  partnerPlantCode?: Maybe<Scalars['String']>;
-  plant?: Maybe<Plant>;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
-};
-
-export type KitVinImportFilterInput = {
-  and?: InputMaybe<Array<KitVinImportFilterInput>>;
-  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  kitVins?: InputMaybe<ListFilterInputTypeOfKitVinFilterInput>;
-  or?: InputMaybe<Array<KitVinImportFilterInput>>;
-  partnerPlantCode?: InputMaybe<StringOperationFilterInput>;
-  plant?: InputMaybe<PlantFilterInput>;
-  plantId?: InputMaybe<UuidOperationFilterInput>;
-  removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  sequence?: InputMaybe<IntOperationFilterInput>;
-};
-
-export type KitVinImportSortInput = {
-  createdAt?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  partnerPlantCode?: InputMaybe<SortEnumType>;
-  plant?: InputMaybe<PlantSortInput>;
-  plantId?: InputMaybe<SortEnumType>;
-  removedAt?: InputMaybe<SortEnumType>;
-  sequence?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type KitVinImportsConnection = {
-  __typename?: 'KitVinImportsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<KitVinImportsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<KitVinImport>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type KitVinImportsEdge = {
-  __typename?: 'KitVinImportsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: KitVinImport;
+export type KitVinInput = {
+  kitNo?: InputMaybe<Scalars['String']>;
+  vin?: InputMaybe<Scalars['String']>;
 };
 
 export type KitVinSortInput = {
@@ -1491,8 +1348,6 @@ export type KitVinSortInput = {
   id?: InputMaybe<SortEnumType>;
   kit?: InputMaybe<KitSortInput>;
   kitId?: InputMaybe<SortEnumType>;
-  kitVinImport?: InputMaybe<KitVinImportSortInput>;
-  kitVinImportId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   vin?: InputMaybe<SortEnumType>;
 };
@@ -1648,13 +1503,6 @@ export type ListFilterInputTypeOfKitVinFilterInput = {
   some?: InputMaybe<KitVinFilterInput>;
 };
 
-export type ListFilterInputTypeOfKitVinImportFilterInput = {
-  all?: InputMaybe<KitVinImportFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<KitVinImportFilterInput>;
-  some?: InputMaybe<KitVinImportFilterInput>;
-};
-
 export type ListFilterInputTypeOfLotFilterInput = {
   all?: InputMaybe<LotFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
@@ -1773,7 +1621,7 @@ export type LotListDto = {
   kitCount: Scalars['Int'];
   lotNo: Scalars['String'];
   plantCode: Scalars['String'];
-  timelineStatus?: Maybe<TimeLineEventCode>;
+  timelineStatus?: Maybe<KitTimelineCode>;
 };
 
 export type LotNoteInput = {
@@ -1786,7 +1634,7 @@ export type LotOverviewDto = {
   bomId: Scalars['UUID'];
   bomSequence: Scalars['Int'];
   createdAt: Scalars['DateTime'];
-  customReceived?: Maybe<TimelineEventDto>;
+  customReceived?: Maybe<StatusEventDto>;
   id: Scalars['UUID'];
   lotNo: Scalars['String'];
   note: Scalars['String'];
@@ -1949,7 +1797,7 @@ export type LotSortInput = {
 };
 
 export type LotTimelineEventInput = {
-  eventCode: TimeLineEventCode;
+  eventCode: KitTimelineCode;
   eventDate: Scalars['DateTime'];
   eventNote: Scalars['String'];
   lotNo: Scalars['String'];
@@ -1979,25 +1827,27 @@ export type Mutation = {
   __typename?: 'Mutation';
   applyComponentSerialFormat: ComponentSerial;
   captureComponentSerial: MutationResultOfComponentSerialDto;
+  /** Create build start event for a kit */
+  createBuildStartEvent: MutationResultOfKitTimelineEvent;
   createDcwsResponse: MutationResultOfDcwsResponse;
+  /** Create a timeline event for a kit */
   createKitTimelineEvent: MutationResultOfKitTimelineEvent;
   createLotPartQuantityReceived: MutationResultOfLotPartDto;
+  /** Create csutom received event for all kits in a lot */
   createLotTimelineEvent: MutationResultOfLot;
   createPlant: MutationResultOfPlantOverviewDto;
-  generateKitSnapshotRun: MutationResultOfSnapshotDto;
   importBom: MutationResultOfBomOverviewDto;
-  importPartnerStatusAck: MutationResultOfPartnerStatusAck;
   importShipment: MutationResultOfShipmentOverviewDto;
-  importVIN: MutationResultOfKitVinImport;
-  ksfKitCurrentStatus: ApiResponseOfKitCurrentStatusResponse;
-  ksfKitVin: ApiResponseOfKitPVinResponse;
-  ksfProcessPartnerStatus: ApiResponseOfKitProcessPartnerStatusResponse;
+  /**
+   * For every KitSnapshot find the related KitTimelineEvent
+   * and set the KitTimelineEvent.PartnerStatusUpdatedAt to the KitSnapshot.CreatedAt
+   */
+  migrateKitSnapshot: Scalars['Int'];
   /** Parses a PCV xlsx file and returns a list of PCV, and Component code records */
   parsePcvsXlsx: MutationResultOfParsePcvsXlxsResult;
   /** Parse a shipment file and return a ShipFile structure */
   parseShipmentFile: ShipFile;
   removeAllComponentStationMappings: MutationResultOfRemoveAllComponentStationMappingsPayload;
-  rollbackKitsnapshots: MutationResultOfListOfKitSnapshot;
   /** Create or update a component */
   saveComponent: MutationResultOfUpdateComponentPayload;
   saveDcwsComponentResponse: MutationResultOfDcwsResponse;
@@ -2008,12 +1858,29 @@ export type Mutation = {
   setComponentDefaultStation: MutationResultOfUpdateComponentPayload;
   setComponentStationMappings: MutationResultOfSetComponentStationMappingsPayload;
   setHandlingUnitReceived: MutationResultOfReceiveHandlingUnitPayload;
+  /**
+   * Set the VIN for a Kit.
+   * This will mark the existing VIN as removed and add a new VIN.
+   */
+  setKitVin: MutationResultOfKit;
   setLotNote: MutationResultOfLot;
+  /** Update each KitTimelineEvent.PartnerStatusUpdatedAt based on the partners kit status. */
+  syncKitToPartnerStatus: MutationResultOfUpdatePartnerStatusPayload;
   /**
    * Update kit component stations mappings to match the component station mappings template
    * where kit does not have a BUILD_COMPLETE timeline event
    */
   syncKitsWithComponentStationMappings: MutationResultOfSyncKitComponentsPayload;
+  /**
+   * Gets a VIN from the KitStatusFeedService and sets / updates  it to the kit
+   * Does not throw an error if the VIN is not found or if the VIN has not changed
+   */
+  updateKitVin: MutationResultOfUpdateKitVinPayload;
+  /**
+   * Given a Kit number update the partner status with the kit's current statuses
+   * Does NOT set the KitTimelineEvent.PartnerStatusUpdatedAt
+   */
+  updatePartnerStatus: MutationResultOfUpdatePartnerStatusPayload;
   verifyComponentSerial: MutationResultOfDcwsResponse;
 };
 
@@ -2025,6 +1892,11 @@ export type MutationApplyComponentSerialFormatArgs = {
 
 export type MutationCaptureComponentSerialArgs = {
   input: ComponentSerialInput;
+};
+
+
+export type MutationCreateBuildStartEventArgs = {
+  kitNo: Scalars['String'];
 };
 
 
@@ -2053,43 +1925,13 @@ export type MutationCreatePlantArgs = {
 };
 
 
-export type MutationGenerateKitSnapshotRunArgs = {
-  input: KitSnapshotInput;
-};
-
-
 export type MutationImportBomArgs = {
   input: BomFileInput;
 };
 
 
-export type MutationImportPartnerStatusAckArgs = {
-  input: PartnerStatusAckDtoInput;
-};
-
-
 export type MutationImportShipmentArgs = {
   input: ShipFileInput;
-};
-
-
-export type MutationImportVinArgs = {
-  input: VinFileInput;
-};
-
-
-export type MutationKsfKitCurrentStatusArgs = {
-  input: KitCurrentStatusRequestInput;
-};
-
-
-export type MutationKsfKitVinArgs = {
-  input: KitPVinRequestInput;
-};
-
-
-export type MutationKsfProcessPartnerStatusArgs = {
-  input: KitProcessPartnerStatusRequestInput;
 };
 
 
@@ -2100,12 +1942,6 @@ export type MutationParsePcvsXlsxArgs = {
 
 export type MutationParseShipmentFileArgs = {
   file: Scalars['Upload'];
-};
-
-
-export type MutationRollbackKitsnapshotsArgs = {
-  kitNo: Scalars['String'];
-  toTimelineEventCode: TimeLineEventCode;
 };
 
 
@@ -2144,8 +1980,28 @@ export type MutationSetHandlingUnitReceivedArgs = {
 };
 
 
+export type MutationSetKitVinArgs = {
+  input: KitVinInput;
+};
+
+
 export type MutationSetLotNoteArgs = {
   input: LotNoteInput;
+};
+
+
+export type MutationSyncKitToPartnerStatusArgs = {
+  input: UpdatePartnerStatusInput;
+};
+
+
+export type MutationUpdateKitVinArgs = {
+  input: UpdateKitVinInput;
+};
+
+
+export type MutationUpdatePartnerStatusArgs = {
+  input: UpdatePartnerStatusInput;
 };
 
 
@@ -2171,22 +2027,16 @@ export type MutationResultOfDcwsResponse = {
   payload?: Maybe<DcwsResponse>;
 };
 
+export type MutationResultOfKit = {
+  __typename?: 'MutationResultOfKit';
+  errors: Array<Error>;
+  payload?: Maybe<Kit>;
+};
+
 export type MutationResultOfKitTimelineEvent = {
   __typename?: 'MutationResultOfKitTimelineEvent';
   errors: Array<Error>;
   payload?: Maybe<KitTimelineEvent>;
-};
-
-export type MutationResultOfKitVinImport = {
-  __typename?: 'MutationResultOfKitVinImport';
-  errors: Array<Error>;
-  payload?: Maybe<KitVinImport>;
-};
-
-export type MutationResultOfListOfKitSnapshot = {
-  __typename?: 'MutationResultOfListOfKitSnapshot';
-  errors: Array<Error>;
-  payload?: Maybe<Array<Maybe<KitSnapshot>>>;
 };
 
 export type MutationResultOfLot = {
@@ -2205,12 +2055,6 @@ export type MutationResultOfParsePcvsXlxsResult = {
   __typename?: 'MutationResultOfParsePcvsXlxsResult';
   errors: Array<Error>;
   payload?: Maybe<ParsePcvsXlxsResult>;
-};
-
-export type MutationResultOfPartnerStatusAck = {
-  __typename?: 'MutationResultOfPartnerStatusAck';
-  errors: Array<Error>;
-  payload?: Maybe<PartnerStatusAck>;
 };
 
 export type MutationResultOfPlantOverviewDto = {
@@ -2249,12 +2093,6 @@ export type MutationResultOfShipmentOverviewDto = {
   payload?: Maybe<ShipmentOverviewDto>;
 };
 
-export type MutationResultOfSnapshotDto = {
-  __typename?: 'MutationResultOfSnapshotDTO';
-  errors: Array<Error>;
-  payload?: Maybe<SnapshotDto>;
-};
-
 export type MutationResultOfSyncKitComponentsPayload = {
   __typename?: 'MutationResultOfSyncKitComponentsPayload';
   errors: Array<Error>;
@@ -2265,6 +2103,18 @@ export type MutationResultOfUpdateComponentPayload = {
   __typename?: 'MutationResultOfUpdateComponentPayload';
   errors: Array<Error>;
   payload?: Maybe<UpdateComponentPayload>;
+};
+
+export type MutationResultOfUpdateKitVinPayload = {
+  __typename?: 'MutationResultOfUpdateKitVinPayload';
+  errors: Array<Error>;
+  payload?: Maybe<UpdateKitVinPayload>;
+};
+
+export type MutationResultOfUpdatePartnerStatusPayload = {
+  __typename?: 'MutationResultOfUpdatePartnerStatusPayload';
+  errors: Array<Error>;
+  payload?: Maybe<UpdatePartnerStatusPayload>;
 };
 
 export type MutationResultOfUpdateStationPayload = {
@@ -2437,27 +2287,6 @@ export type PartnerStatusAck = {
   totalRejected: Scalars['Int'];
 };
 
-export type PartnerStatusAckDto = {
-  __typename?: 'PartnerStatusAckDTO';
-  fileDate: Scalars['String'];
-  partnerPlantCode: Scalars['String'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-  totalAccepted: Scalars['Int'];
-  totalProcessed: Scalars['Int'];
-  totalRejected: Scalars['Int'];
-};
-
-export type PartnerStatusAckDtoInput = {
-  fileDate: Scalars['String'];
-  partnerPlantCode: Scalars['String'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-  totalAccepted: Scalars['Int'];
-  totalProcessed: Scalars['Int'];
-  totalRejected: Scalars['Int'];
-};
-
 export type PartnerStatusAckFilterInput = {
   and?: InputMaybe<Array<PartnerStatusAckFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -2504,26 +2333,21 @@ export type PartnerStatusAcksEdge = {
   node: PartnerStatusAck;
 };
 
-export type PartnerStatusDto = {
-  __typename?: 'PartnerStatusDTO';
-  errorMessage: Scalars['String'];
-  filename: Scalars['String'];
-  payloadText: Scalars['String'];
-  plantCode: Scalars['String'];
-  runDate?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
-};
+export enum PartnerStatusCode {
+  Fpbc = 'FPBC',
+  Fpbp = 'FPBP',
+  Fpbs = 'FPBS',
+  Fpcr = 'FPCR',
+  Fpgr = 'FPGR',
+  Fpws = 'FPWS',
+  Shpc = 'SHPC'
+}
 
-export type PartnerStatusLayoutData = {
-  __typename?: 'PartnerStatusLayoutData';
-  ackStatus: Scalars['String'];
-  currentDate: Scalars['String'];
-  errorReason: Scalars['String'];
-  errorType: Scalars['String'];
-  kdPlantGsdb: Scalars['String'];
-  kitNumber: Scalars['String'];
-  lotNumber: Scalars['String'];
-  partnerGsdb: Scalars['String'];
+export type PartnerStatusCodeOperationFilterInput = {
+  eq?: InputMaybe<PartnerStatusCode>;
+  in?: InputMaybe<Array<PartnerStatusCode>>;
+  neq?: InputMaybe<PartnerStatusCode>;
+  nin?: InputMaybe<Array<PartnerStatusCode>>;
 };
 
 /** A connection to a list of items. */
@@ -3034,7 +2858,6 @@ export type Plant = {
   createdAt: Scalars['DateTime'];
   id: Scalars['UUID'];
   kitSnapshotRuns?: Maybe<Array<Maybe<KitSnapshotRun>>>;
-  kitVinImports?: Maybe<Array<Maybe<KitVinImport>>>;
   lots?: Maybe<Array<Maybe<Lot>>>;
   name?: Maybe<Scalars['String']>;
   partnerPlantCode?: Maybe<Scalars['String']>;
@@ -3050,7 +2873,6 @@ export type PlantFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   kitSnapshotRuns?: InputMaybe<ListFilterInputTypeOfKitSnapshotRunFilterInput>;
-  kitVinImports?: InputMaybe<ListFilterInputTypeOfKitVinImportFilterInput>;
   lots?: InputMaybe<ListFilterInputTypeOfLotFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<PlantFilterInput>>;
@@ -3166,7 +2988,7 @@ export type PvinFeedLayoutData = {
   kitNumber: Scalars['String'];
   lotNumber: Scalars['String'];
   partnerGsdb: Scalars['String'];
-  physicalVin: Scalars['String'];
+  physicalVin?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -3178,6 +3000,11 @@ export type Query = {
   bomOverview?: Maybe<BomOverviewDto>;
   bomPartsQuantity: Array<PartQuantityDto>;
   boms?: Maybe<BomsConnection>;
+  /**
+   * Gets kits where status is BUILD_START status should be created
+   * Current status is PLAN_BUILD and has component serial input
+   */
+  buildStartPendingKits: Array<KitInfoDto>;
   componentById?: Maybe<Component>;
   /** @deprecated no longer used */
   componentScanById?: Maybe<ComponentSerial>;
@@ -3190,8 +3017,6 @@ export type Query = {
   /** @deprecated no longer used */
   existingComponentScan?: Maybe<ComponentSerial>;
   fordInterfaceFileType: FordInterfaceFileType;
-  genPartnerStatusFilename: Scalars['String'];
-  genVinImportAcknowledgment: KitVinAckDto;
   handlingUnitInfo?: Maybe<HandlingUnitInfoPayload>;
   handlingUnitOverviews: Array<HandlingUnitOverview>;
   handlingUnitReceived?: Maybe<HandlingUnitReceivedConnection>;
@@ -3201,25 +3026,19 @@ export type Query = {
   kitByKitNo?: Maybe<Kit>;
   kitComponentSerialInfo?: Maybe<KitComponentSerialInfo>;
   kitComponents?: Maybe<KitComponentsConnection>;
+  kitCurrentStatus: KitInfoDto;
   kitList?: Maybe<KitListConnection>;
-  kitSnapshotRun?: Maybe<KitSnapshotRunDto>;
-  kitSnapshotRunByDate?: Maybe<KitSnapshotRunDto>;
   kitSnapshotRuns?: Maybe<KitSnapshotRunsConnection>;
   kitSnapshots?: Maybe<KitSnapshotsConnection>;
-  kitTimeline?: Maybe<KitTimelineDto>;
+  kitTimeline?: Maybe<KitStatusDto>;
   kitTimelineEventTypes?: Maybe<KitTimelineEventTypesConnection>;
   kitTimelineEvents?: Maybe<KitTimelineEventsConnection>;
   kitTimelineEventsByDate: Array<KitTimelineEvent>;
-  kitVinImports?: Maybe<KitVinImportsConnection>;
   kitVins?: Maybe<KitVinsConnection>;
   kits?: Maybe<KitsConnection>;
   kitsByCurrentTimelineEvent?: Maybe<KitsByCurrentTimelineEventConnection>;
   kitsByLot: Array<Kit>;
   kitsByTimelineStatusSummary: Array<ItemCountDto>;
-  /** Get kit current status from Kit Status Feed api */
-  ksf_KitCurrentStatus: KitCurrentStatusResponse;
-  /** Get kit physical VIN from Kit Status Feed api */
-  ksf_KitVin: PvinFeedLayoutData;
   lotByLotNo?: Maybe<Lot>;
   lotInfo?: Maybe<LotDto>;
   lotListByBomId: Array<LotListDto>;
@@ -3231,11 +3050,12 @@ export type Query = {
   lotPartsReceived?: Maybe<LotPartsReceivedConnection>;
   lots?: Maybe<LotsConnection>;
   parseBomFile: BomFile;
-  parsePartnerStatusAckFile: PartnerStatusAckDto;
   parseShipFile: ShipFile;
   parseVinFile: VinFile;
+  /** Get kit current status from Kit Status Feed api */
+  partnerKitCurrentStatus: KitCurrentStatusResponse;
+  partnerKitPhysicalVin: PvinFeedLayoutData;
   partnerStatusAcks?: Maybe<PartnerStatusAcksConnection>;
-  partnerStatusFilePayload: PartnerStatusDto;
   parts?: Maybe<PartsConnection>;
   pcvComponents?: Maybe<PcvComponentsConnection>;
   pcvDrives?: Maybe<PcvDrivesConnection>;
@@ -3248,6 +3068,7 @@ export type Query = {
   pcvTrim?: Maybe<PcvTrimConnection>;
   pcvs?: Maybe<PcvsConnection>;
   pingDcwsService: Scalars['Boolean'];
+  planBuildVinPendingKits: Array<KitInfoDto>;
   plants?: Maybe<PlantsConnection>;
   productionStations?: Maybe<ProductionStationsConnection>;
   recentLotPartsReceived: Array<LotPartReceivedDto>;
@@ -3257,6 +3078,8 @@ export type Query = {
   shipmentOverview?: Maybe<ShipmentOverviewDto>;
   shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
+  /** Kits that have timeline event entries that have not beed synced to partner status */
+  updatePartnerStatusPendingKits: Array<KitInfoDto>;
   /** @deprecated no longer used */
   vehicleComponentByVinAndComponent?: Maybe<KitComponent>;
 };
@@ -3309,6 +3132,11 @@ export type QueryBomsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<BomSortInput>>;
   where?: InputMaybe<BomFilterInput>;
+};
+
+
+export type QueryBuildStartPendingKitsArgs = {
+  plantCode: Scalars['String'];
 };
 
 
@@ -3382,17 +3210,6 @@ export type QueryFordInterfaceFileTypeArgs = {
 };
 
 
-export type QueryGenPartnerStatusFilenameArgs = {
-  kitSnapshotRunId: Scalars['UUID'];
-};
-
-
-export type QueryGenVinImportAcknowledgmentArgs = {
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
-
 export type QueryHandlingUnitInfoArgs = {
   huCode: Scalars['String'];
 };
@@ -3449,6 +3266,11 @@ export type QueryKitComponentsArgs = {
 };
 
 
+export type QueryKitCurrentStatusArgs = {
+  kitNo: Scalars['String'];
+};
+
+
 export type QueryKitListArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -3456,18 +3278,6 @@ export type QueryKitListArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<KitListItemDtoSortInput>>;
   plantCode: Scalars['String'];
-};
-
-
-export type QueryKitSnapshotRunArgs = {
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
-
-export type QueryKitSnapshotRunByDateArgs = {
-  plantCode: Scalars['String'];
-  runDate: Scalars['DateTime'];
 };
 
 
@@ -3519,18 +3329,8 @@ export type QueryKitTimelineEventsArgs = {
 export type QueryKitTimelineEventsByDateArgs = {
   fromDate: Scalars['DateTime'];
   plantCode: Scalars['String'];
-  timelineEventCode?: InputMaybe<TimeLineEventCode>;
+  timelineEventCode?: InputMaybe<KitTimelineCode>;
   toDate: Scalars['DateTime'];
-};
-
-
-export type QueryKitVinImportsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<KitVinImportSortInput>>;
-  where?: InputMaybe<KitVinImportFilterInput>;
 };
 
 
@@ -3557,7 +3357,7 @@ export type QueryKitsArgs = {
 export type QueryKitsByCurrentTimelineEventArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
-  eventCode?: InputMaybe<TimeLineEventCode>;
+  eventCode?: InputMaybe<KitTimelineCode>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<KitSortInput>>;
@@ -3568,16 +3368,6 @@ export type QueryKitsByCurrentTimelineEventArgs = {
 
 export type QueryKitsByLotArgs = {
   lotNo: Scalars['String'];
-};
-
-
-export type QueryKsf_KitCurrentStatusArgs = {
-  input: KitCurrentStatusRequestInput;
-};
-
-
-export type QueryKsf_KitVinArgs = {
-  input: KitPVinRequestInput;
 };
 
 
@@ -3652,11 +3442,6 @@ export type QueryParseBomFileArgs = {
 };
 
 
-export type QueryParsePartnerStatusAckFileArgs = {
-  text: Scalars['String'];
-};
-
-
 export type QueryParseShipFileArgs = {
   text: Scalars['String'];
 };
@@ -3667,6 +3452,16 @@ export type QueryParseVinFileArgs = {
 };
 
 
+export type QueryPartnerKitCurrentStatusArgs = {
+  kitNo: Scalars['String'];
+};
+
+
+export type QueryPartnerKitPhysicalVinArgs = {
+  kitNo: Scalars['String'];
+};
+
+
 export type QueryPartnerStatusAcksArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -3674,12 +3469,6 @@ export type QueryPartnerStatusAcksArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<PartnerStatusAckSortInput>>;
   where?: InputMaybe<PartnerStatusAckFilterInput>;
-};
-
-
-export type QueryPartnerStatusFilePayloadArgs = {
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
 };
 
 
@@ -3793,6 +3582,11 @@ export type QueryPcvsArgs = {
 };
 
 
+export type QueryPlanBuildVinPendingKitsArgs = {
+  plantCode: Scalars['String'];
+};
+
+
 export type QueryPlantsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -3860,6 +3654,11 @@ export type QueryShipmentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<ShipmentSortInput>>;
   where?: InputMaybe<ShipmentFilterInput>;
+};
+
+
+export type QueryUpdatePartnerStatusPendingKitsArgs = {
+  plantCode: Scalars['String'];
 };
 
 
@@ -4247,16 +4046,6 @@ export type SnapshotChangeStatusOperationFilterInput = {
   nin?: InputMaybe<Array<SnapshotChangeStatus>>;
 };
 
-export type SnapshotDto = {
-  __typename?: 'SnapshotDTO';
-  changedCount: Scalars['Int'];
-  plantCode?: Maybe<Scalars['String']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  runDate: Scalars['DateTime'];
-  sequence: Scalars['Int'];
-  snapshotCount: Scalars['Int'];
-};
-
 export enum SortEnumType {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -4281,6 +4070,17 @@ export type StationInput = {
   sequence: Scalars['Int'];
 };
 
+export type StatusEventDto = {
+  __typename?: 'StatusEventDTO';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  eventDate?: Maybe<Scalars['DateTime']>;
+  eventNote?: Maybe<Scalars['String']>;
+  eventType: KitTimelineCode;
+  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']>;
+  sequence: Scalars['Int'];
+};
+
 export type StringOperationFilterInput = {
   and?: InputMaybe<Array<StringOperationFilterInput>>;
   contains?: InputMaybe<Scalars['String']>;
@@ -4301,32 +4101,6 @@ export type SyncKitComponentsPayload = {
   kitNos?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export enum TimeLineEventCode {
-  BuildCompleted = 'BUILD_COMPLETED',
-  BuildStart = 'BUILD_START',
-  CustomReceived = 'CUSTOM_RECEIVED',
-  GateReleased = 'GATE_RELEASED',
-  PlanBuild = 'PLAN_BUILD',
-  WholeSale = 'WHOLE_SALE'
-}
-
-export type TimeLineEventCodeOperationFilterInput = {
-  eq?: InputMaybe<TimeLineEventCode>;
-  in?: InputMaybe<Array<TimeLineEventCode>>;
-  neq?: InputMaybe<TimeLineEventCode>;
-  nin?: InputMaybe<Array<TimeLineEventCode>>;
-};
-
-export type TimelineEventDto = {
-  __typename?: 'TimelineEventDTO';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  eventDate?: Maybe<Scalars['DateTime']>;
-  eventNote?: Maybe<Scalars['String']>;
-  eventType: TimeLineEventCode;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
-};
-
 export type UpdateComponentPayload = {
   __typename?: 'UpdateComponentPayload';
   code: Scalars['String'];
@@ -4336,6 +4110,27 @@ export type UpdateComponentPayload = {
   name: Scalars['String'];
   productionStationCode?: Maybe<Scalars['String']>;
   removedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type UpdateKitVinInput = {
+  kitNo: Scalars['String'];
+};
+
+export type UpdateKitVinPayload = {
+  __typename?: 'UpdateKitVinPayload';
+  kitNo: Scalars['String'];
+  vin?: Maybe<Scalars['String']>;
+};
+
+export type UpdatePartnerStatusInput = {
+  kitNo?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdatePartnerStatusPayload = {
+  __typename?: 'UpdatePartnerStatusPayload';
+  kitNo?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  updatedStatuses?: Maybe<Array<PartnerStatusCode>>;
 };
 
 export type UpdateStationPayload = {
@@ -4371,24 +4166,11 @@ export type VinFile = {
   sequence: Scalars['Int'];
 };
 
-export type VinFileInput = {
-  kits?: InputMaybe<Array<InputMaybe<VinFileKitInput>>>;
-  partnerPlantCode?: InputMaybe<Scalars['String']>;
-  plantCode?: InputMaybe<Scalars['String']>;
-  sequence: Scalars['Int'];
-};
-
 export type VinFileKit = {
   __typename?: 'VinFileKit';
   kitNo?: Maybe<Scalars['String']>;
   lotNo?: Maybe<Scalars['String']>;
   vin?: Maybe<Scalars['String']>;
-};
-
-export type VinFileKitInput = {
-  kitNo?: InputMaybe<Scalars['String']>;
-  lotNo?: InputMaybe<Scalars['String']>;
-  vin?: InputMaybe<Scalars['String']>;
 };
 
 export type ImportBomMutationVariables = Exact<{
@@ -4405,70 +4187,31 @@ export type ImportShipmentMutationVariables = Exact<{
 
 export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'MutationResultOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode?: string | null, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
 
-export type ImportVinMutationVariables = Exact<{
-  input: VinFileInput;
+export type UpdatePartnerStatusMutationVariables = Exact<{
+  input: UpdatePartnerStatusInput;
 }>;
 
 
-export type ImportVinMutation = { __typename?: 'Mutation', importVIN: { __typename?: 'MutationResultOfKitVinImport', payload?: { __typename?: 'KitVinImport', sequence: number, partnerPlantCode?: string | null, plant?: { __typename?: 'Plant', code?: string | null } | null, kitVins?: Array<{ __typename?: 'KitVin', vin?: string | null, kit?: { __typename?: 'Kit', kitNo: string, lot: { __typename?: 'Lot', lotNo?: string | null } } | null } | null> | null } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
+export type UpdatePartnerStatusMutation = { __typename?: 'Mutation', updatePartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo?: string | null, updatedStatuses?: Array<PartnerStatusCode> | null } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
-export type ImportPartnerStatusAckMutationVariables = Exact<{
-  input: PartnerStatusAckDtoInput;
+export type SyncKitStatusToPartnerStatusMutationVariables = Exact<{
+  input: UpdatePartnerStatusInput;
 }>;
 
 
-export type ImportPartnerStatusAckMutation = { __typename?: 'Mutation', importPartnerStatusAck: { __typename?: 'MutationResultOfPartnerStatusAck', payload?: { __typename?: 'PartnerStatusAck', id: any, fileDate: any, totalProcessed: number, totalAccepted: number, totalRejected: number, kitSnapshotRun: { __typename?: 'KitSnapshotRun', plantId: any, sequence: number, plant?: { __typename?: 'Plant', code?: string | null } | null } } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+export type SyncKitStatusToPartnerStatusMutation = { __typename?: 'Mutation', syncKitToPartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo?: string | null, updatedStatuses?: Array<PartnerStatusCode> | null } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+
+export type CreateBuildStartEventMutationVariables = Exact<{
+  kitNo: Scalars['String'];
+}>;
+
+
+export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitTimelineEvent', payload?: { __typename?: 'KitTimelineEvent', id: any, kitId: any, eventDate: any } | null } };
 
 export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PlantsQuery = { __typename?: 'Query', plants?: { __typename?: 'PlantsConnection', nodes?: Array<{ __typename?: 'Plant', code?: string | null, partnerPlantCode?: string | null, partnerPlantType?: string | null, name?: string | null, createdAt: any }> | null } | null };
-
-export type GenerateKitSnapshotRunMutationVariables = Exact<{
-  input: KitSnapshotInput;
-}>;
-
-
-export type GenerateKitSnapshotRunMutation = { __typename?: 'Mutation', generateKitSnapshotRun: { __typename?: 'MutationResultOfSnapshotDTO', payload?: { __typename?: 'SnapshotDTO', plantCode?: string | null, runDate: any, snapshotCount: number, sequence: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
-
-export type KitSnapshotRunBySequenceQueryVariables = Exact<{
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-}>;
-
-
-export type KitSnapshotRunBySequenceQuery = { __typename?: 'Query', kitSnapshotRuns?: { __typename?: 'KitSnapshotRunsConnection', nodes?: Array<{ __typename?: 'KitSnapshotRun', id: any, sequence: number, runDate: any, createdAt: any, removedAt?: any | null, plant?: { __typename?: 'Plant', code?: string | null, partnerPlantCode?: string | null, partnerPlantType?: string | null } | null }> | null } | null };
-
-export type KitSnapshotRunsQueryVariables = Exact<{
-  plantCode: Scalars['String'];
-  first: Scalars['Int'];
-  sort: SortEnumType;
-}>;
-
-
-export type KitSnapshotRunsQuery = { __typename?: 'Query', kitSnapshotRuns?: { __typename?: 'KitSnapshotRunsConnection', nodes?: Array<{ __typename?: 'KitSnapshotRun', id: any, sequence: number, runDate: any, createdAt: any, removedAt?: any | null, plant?: { __typename?: 'Plant', code?: string | null, partnerPlantCode?: string | null, partnerPlantType?: string | null } | null }> | null } | null };
-
-export type LatestKitSnapshotRunQueryVariables = Exact<{
-  plantCode: Scalars['String'];
-}>;
-
-
-export type LatestKitSnapshotRunQuery = { __typename?: 'Query', kitSnapshotRuns?: { __typename?: 'KitSnapshotRunsConnection', nodes?: Array<{ __typename?: 'KitSnapshotRun', id: any, sequence: number, runDate: any, createdAt: any, plant?: { __typename?: 'Plant', code?: string | null, partnerPlantCode?: string | null, partnerPlantType?: string | null } | null }> | null } | null };
-
-export type PartnerStatusFilePayloadQueryVariables = Exact<{
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-}>;
-
-
-export type PartnerStatusFilePayloadQuery = { __typename?: 'Query', partnerStatusFilePayload: { __typename?: 'PartnerStatusDTO', plantCode: string, runDate?: any | null, sequence: number, filename: string, errorMessage: string, payloadText: string } };
-
-export type GenPartnerStatusFilenameQueryVariables = Exact<{
-  id: Scalars['UUID'];
-}>;
-
-
-export type GenPartnerStatusFilenameQuery = { __typename?: 'Query', genPartnerStatusFilename: string };
 
 export type ParseBomFileQueryVariables = Exact<{
   text: Scalars['String'];
@@ -4484,31 +4227,30 @@ export type ParseShipFileQueryVariables = Exact<{
 
 export type ParseShipFileQuery = { __typename?: 'Query', parseShipFile: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
 
-export type ParseVinFileQueryVariables = Exact<{
-  text: Scalars['String'];
-}>;
-
-
-export type ParseVinFileQuery = { __typename?: 'Query', parseVinFile: { __typename?: 'VinFile', plantCode?: string | null, partnerPlantCode?: string | null, sequence: number, kits?: Array<{ __typename?: 'VinFileKit', lotNo?: string | null, kitNo?: string | null, vin?: string | null } | null> | null } };
-
-export type ParsePartnerStatusAckQueryVariables = Exact<{
-  text: Scalars['String'];
-}>;
-
-
-export type ParsePartnerStatusAckQuery = { __typename?: 'Query', parsePartnerStatusAckFile: { __typename?: 'PartnerStatusAckDTO', plantCode: string, partnerPlantCode: string, sequence: number, totalProcessed: number, totalAccepted: number, totalRejected: number, fileDate: string } };
-
-export type GenVinImportAckQueryVariables = Exact<{
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-}>;
-
-
-export type GenVinImportAckQuery = { __typename?: 'Query', genVinImportAcknowledgment: { __typename?: 'KitVinAckDTO', plantCode: string, sequence: number, filename: string, payloadText: string, errorMessage: string } };
-
 export type FordInterfaceFileTypeQueryVariables = Exact<{
   filename: Scalars['String'];
 }>;
 
 
 export type FordInterfaceFileTypeQuery = { __typename?: 'Query', fordInterfaceFileType: FordInterfaceFileType };
+
+export type BuildStartPendingKitsQueryVariables = Exact<{
+  plantCode: Scalars['String'];
+}>;
+
+
+export type BuildStartPendingKitsQuery = { __typename?: 'Query', buildStartPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitTimelineCode?: KitTimelineCode | null, partnerStatusCode?: PartnerStatusCode | null }> };
+
+export type UpdatePartnerStatusPendingKitsQueryVariables = Exact<{
+  plantCode: Scalars['String'];
+}>;
+
+
+export type UpdatePartnerStatusPendingKitsQuery = { __typename?: 'Query', updatePartnerStatusPendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitTimelineCode?: KitTimelineCode | null, partnerStatusPending: boolean }> };
+
+export type PlanBuildVinPendingKitsQueryVariables = Exact<{
+  plantCode: Scalars['String'];
+}>;
+
+
+export type PlanBuildVinPendingKitsQuery = { __typename?: 'Query', planBuildVinPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitTimelineCode?: KitTimelineCode | null, partnerStatusCode?: PartnerStatusCode | null, partnerStatusPending: boolean }> };

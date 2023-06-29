@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "myTimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 0 */6 * * 1-5",
+      "runOnStartup": false
+    }
+  ],
+  "scriptFile": "../dist/UpdatePartnerStatus/index.js"
+}
