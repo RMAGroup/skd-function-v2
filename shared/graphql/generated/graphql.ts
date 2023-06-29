@@ -4208,6 +4208,13 @@ export type CreateBuildStartEventMutationVariables = Exact<{
 
 export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitTimelineEvent', payload?: { __typename?: 'KitTimelineEvent', id: any, kitId: any, eventDate: any } | null } };
 
+export type UpdateKitVinMutationVariables = Exact<{
+  input: UpdateKitVinInput;
+}>;
+
+
+export type UpdateKitVinMutation = { __typename?: 'Mutation', updateKitVin: { __typename?: 'MutationResultOfUpdateKitVinPayload', payload?: { __typename?: 'UpdateKitVinPayload', vin?: string | null, kitNo: string } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+
 export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 

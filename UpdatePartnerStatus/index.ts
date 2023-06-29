@@ -14,7 +14,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
             context.log(`updating partner status for ${plant.code}`)
             // updates pending kits
             const updatePendingKits = await service.getUpdatePartnerStatusPendingKits(plant.code)
-            console.log(`${updatePendingKits.length} pending kits to update`)
+            context.log(`${updatePendingKits.length} pending kits to update`)
 
             for (const kit of updatePendingKits) {
                 await updateKitPartnerStatus(kit.kitNo)

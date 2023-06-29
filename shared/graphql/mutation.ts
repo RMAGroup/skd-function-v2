@@ -80,3 +80,17 @@ mutation createBuildStartEvent($kitNo: String!) {
 }
 
 `
+
+export const UPDATE_KIT_VIN = gql`
+mutation updateKitVin($input: UpdateKitVinInput!) {
+  updateKitVin(input: $input) {
+    payload {
+      vin
+      kitNo
+    }
+    errors {
+      message 
+    }
+  }
+}
+`
