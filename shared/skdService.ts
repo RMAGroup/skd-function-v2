@@ -27,10 +27,12 @@ import {
   SyncKitStatusToPartnerStatusMutationVariables,
   UpdateKitVinMutation,
   UpdateKitVinMutationVariables,
-  UpdateKitVinInput
+  UpdateKitVinInput,
+  CreateBuildStartEventMutation,
+  CreateBuildStartEventMutationVariables
 } from './graphql/generated/graphql';
 
-import { IMPORT_BOM, IMPORT_SHIPMENT, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
+import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
 
 import {
   PLANTS,
@@ -115,6 +117,19 @@ export class skdService {
     }
     return { vin: result.data.updateKitVin.payload.vin, error: null }
   }
+
+  updateKitToBuildStart = async (kitNo: string) => {
+    const resuilt = await this.client.mutation<CreateBuildStartEventMutation, CreateBuildStartEventMutationVariables>(
+      CREATE_BUILD_START_EVENT,
+      {
+        kitNo
+      },
+    ).toPromise()
+
+    return resuilt.data.createBuildStartEvent
+  }
+
+
 
   getPlants = async () => {
     const result = await this.client.query<PlantsQuery, PlantsQueryVariables>(

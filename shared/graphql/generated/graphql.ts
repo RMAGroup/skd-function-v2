@@ -4206,7 +4206,7 @@ export type CreateBuildStartEventMutationVariables = Exact<{
 }>;
 
 
-export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitTimelineEvent', payload?: { __typename?: 'KitTimelineEvent', id: any, kitId: any, eventDate: any } | null } };
+export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitTimelineEvent', payload?: { __typename?: 'KitTimelineEvent', id: any, kitId: any, eventDate: any } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type UpdateKitVinMutationVariables = Exact<{
   input: UpdateKitVinInput;

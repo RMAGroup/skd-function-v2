@@ -76,6 +76,9 @@ mutation createBuildStartEvent($kitNo: String!) {
       kitId
       eventDate
     }
+    errors {
+      message
+    }
   }
 }
 
