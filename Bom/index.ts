@@ -17,7 +17,10 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
 
         // copy to archive and delete original
         context.bindings.outBlob = inBlob
+
+        /* not deleting for now, until we have a better way to handle errors
         blobService.deleteBlob(appConfig.BOM_CONTAINER, context.bindingData.name)
+        */
 
         // import
         const text = inBlob.toString('utf-8', 0)
