@@ -833,11 +833,11 @@ export type Kit = {
   id: Scalars['UUID'];
   kitComponents: Array<KitComponent>;
   kitNo: Scalars['String'];
+  kitStatusEvents: Array<KitStatusEvent>;
   kitVins: Array<KitVin>;
   lot: Lot;
   lotId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
-  timelineEvents: Array<KitTimelineEvent>;
   vin: Scalars['String'];
 };
 
@@ -931,12 +931,12 @@ export type KitFilterInput = {
   id?: InputMaybe<UuidOperationFilterInput>;
   kitComponents?: InputMaybe<ListFilterInputTypeOfKitComponentFilterInput>;
   kitNo?: InputMaybe<StringOperationFilterInput>;
+  kitStatusEvents?: InputMaybe<ListFilterInputTypeOfKitStatusEventFilterInput>;
   kitVins?: InputMaybe<ListFilterInputTypeOfKitVinFilterInput>;
   lot?: InputMaybe<LotFilterInput>;
   lotId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<KitFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  timelineEvents?: InputMaybe<ListFilterInputTypeOfKitTimelineEventFilterInput>;
   vin?: InputMaybe<StringOperationFilterInput>;
 };
 
@@ -945,7 +945,7 @@ export type KitInfoDto = {
   eventDtate?: Maybe<Scalars['DateTime']>;
   id: Scalars['UUID'];
   kitNo: Scalars['String'];
-  kitTimelineCode?: Maybe<KitTimelineCode>;
+  kitStatusCode?: Maybe<KitStatusCode>;
   lotNo: Scalars['String'];
   model: Scalars['String'];
   partnerStatusCode?: Maybe<PartnerStatusCode>;
@@ -1017,15 +1017,7 @@ export type KitSortInput = {
   vin?: InputMaybe<SortEnumType>;
 };
 
-export type KitStatusDto = {
-  __typename?: 'KitStatusDTO';
-  kitNo: Scalars['String'];
-  lotNo: Scalars['String'];
-  timelineItems: Array<StatusEventDto>;
-  vin: Scalars['String'];
-};
-
-export enum KitTimelineCode {
+export enum KitStatusCode {
   BuildCompleted = 'BUILD_COMPLETED',
   BuildStart = 'BUILD_START',
   CustomReceived = 'CUSTOM_RECEIVED',
@@ -1034,66 +1026,74 @@ export enum KitTimelineCode {
   WholeSale = 'WHOLE_SALE'
 }
 
-export type KitTimelineCodeOperationFilterInput = {
-  eq?: InputMaybe<KitTimelineCode>;
-  in?: InputMaybe<Array<KitTimelineCode>>;
-  neq?: InputMaybe<KitTimelineCode>;
-  nin?: InputMaybe<Array<KitTimelineCode>>;
+export type KitStatusCodeOperationFilterInput = {
+  eq?: InputMaybe<KitStatusCode>;
+  in?: InputMaybe<Array<KitStatusCode>>;
+  neq?: InputMaybe<KitStatusCode>;
+  nin?: InputMaybe<Array<KitStatusCode>>;
 };
 
-export type KitTimelineEvent = {
-  __typename?: 'KitTimelineEvent';
+export type KitStatusDto = {
+  __typename?: 'KitStatusDTO';
+  kitNo: Scalars['String'];
+  lotNo: Scalars['String'];
+  timelineItems: Array<StatusEventDto>;
+  vin: Scalars['String'];
+};
+
+export type KitStatusEvent = {
+  __typename?: 'KitStatusEvent';
   createdAt: Scalars['DateTime'];
   eventDate: Scalars['DateTime'];
   eventNote?: Maybe<Scalars['String']>;
-  eventType?: Maybe<KitTimelineEventType>;
+  eventType?: Maybe<KitStatusEventType>;
   id: Scalars['UUID'];
   kit?: Maybe<Kit>;
   kitId: Scalars['UUID'];
-  kitTimelineEventTypeId: Scalars['UUID'];
+  kitStatusEventTypeId: Scalars['UUID'];
   partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
   removedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type KitTimelineEventFilterInput = {
-  and?: InputMaybe<Array<KitTimelineEventFilterInput>>;
+export type KitStatusEventFilterInput = {
+  and?: InputMaybe<Array<KitStatusEventFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   eventDate?: InputMaybe<DateTimeOperationFilterInput>;
   eventNote?: InputMaybe<StringOperationFilterInput>;
-  eventType?: InputMaybe<KitTimelineEventTypeFilterInput>;
+  eventType?: InputMaybe<KitStatusEventTypeFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   kit?: InputMaybe<KitFilterInput>;
   kitId?: InputMaybe<UuidOperationFilterInput>;
-  kitTimelineEventTypeId?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<KitTimelineEventFilterInput>>;
+  kitStatusEventTypeId?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<KitStatusEventFilterInput>>;
   partnerStatusUpdatedAt?: InputMaybe<DateTimeOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
-export type KitTimelineEventInput = {
+export type KitStatusEventInput = {
   dealerCode: Scalars['String'];
-  eventCode: KitTimelineCode;
+  eventCode: KitStatusCode;
   eventDate: Scalars['DateTime'];
   eventNote: Scalars['String'];
   kitNo: Scalars['String'];
 };
 
-export type KitTimelineEventSortInput = {
+export type KitStatusEventSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   eventDate?: InputMaybe<SortEnumType>;
   eventNote?: InputMaybe<SortEnumType>;
-  eventType?: InputMaybe<KitTimelineEventTypeSortInput>;
+  eventType?: InputMaybe<KitStatusEventTypeSortInput>;
   id?: InputMaybe<SortEnumType>;
   kit?: InputMaybe<KitSortInput>;
   kitId?: InputMaybe<SortEnumType>;
-  kitTimelineEventTypeId?: InputMaybe<SortEnumType>;
+  kitStatusEventTypeId?: InputMaybe<SortEnumType>;
   partnerStatusUpdatedAt?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
 };
 
-export type KitTimelineEventType = {
-  __typename?: 'KitTimelineEventType';
-  code: KitTimelineCode;
+export type KitStatusEventType = {
+  __typename?: 'KitStatusEventType';
+  code: KitStatusCode;
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['UUID'];
@@ -1102,19 +1102,19 @@ export type KitTimelineEventType = {
   sequence: Scalars['Int'];
 };
 
-export type KitTimelineEventTypeFilterInput = {
-  and?: InputMaybe<Array<KitTimelineEventTypeFilterInput>>;
-  code?: InputMaybe<KitTimelineCodeOperationFilterInput>;
+export type KitStatusEventTypeFilterInput = {
+  and?: InputMaybe<Array<KitStatusEventTypeFilterInput>>;
+  code?: InputMaybe<KitStatusCodeOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<KitTimelineEventTypeFilterInput>>;
+  or?: InputMaybe<Array<KitStatusEventTypeFilterInput>>;
   partnerStatusCode?: InputMaybe<PartnerStatusCodeOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
 };
 
-export type KitTimelineEventTypeSortInput = {
+export type KitStatusEventTypeSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -1125,12 +1125,32 @@ export type KitTimelineEventTypeSortInput = {
 };
 
 /** A connection to a list of items. */
+export type KitStatusEventsConnection = {
+  __typename?: 'KitStatusEventsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<KitStatusEventsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<KitStatusEvent>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type KitStatusEventsEdge = {
+  __typename?: 'KitStatusEventsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: KitStatusEvent;
+};
+
+/** A connection to a list of items. */
 export type KitTimelineEventTypesConnection = {
   __typename?: 'KitTimelineEventTypesConnection';
   /** A list of edges. */
   edges?: Maybe<Array<KitTimelineEventTypesEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<KitTimelineEventType>>;
+  nodes?: Maybe<Array<KitStatusEventType>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -1141,27 +1161,7 @@ export type KitTimelineEventTypesEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
-  node: KitTimelineEventType;
-};
-
-/** A connection to a list of items. */
-export type KitTimelineEventsConnection = {
-  __typename?: 'KitTimelineEventsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<KitTimelineEventsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<KitTimelineEvent>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type KitTimelineEventsEdge = {
-  __typename?: 'KitTimelineEventsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: KitTimelineEvent;
+  node: KitStatusEventType;
 };
 
 export type KitVin = {
@@ -1322,11 +1322,11 @@ export type ListFilterInputTypeOfKitFilterInput = {
   some?: InputMaybe<KitFilterInput>;
 };
 
-export type ListFilterInputTypeOfKitTimelineEventFilterInput = {
-  all?: InputMaybe<KitTimelineEventFilterInput>;
+export type ListFilterInputTypeOfKitStatusEventFilterInput = {
+  all?: InputMaybe<KitStatusEventFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<KitTimelineEventFilterInput>;
-  some?: InputMaybe<KitTimelineEventFilterInput>;
+  none?: InputMaybe<KitStatusEventFilterInput>;
+  some?: InputMaybe<KitStatusEventFilterInput>;
 };
 
 export type ListFilterInputTypeOfKitVinFilterInput = {
@@ -1447,6 +1447,13 @@ export type LotFilterInput = {
   shipmentLots?: InputMaybe<ListFilterInputTypeOfShipmentLotFilterInput>;
 };
 
+export type LotKitStatusEventInput = {
+  eventCode: KitStatusCode;
+  eventDate: Scalars['DateTime'];
+  eventNote: Scalars['String'];
+  lotNo: Scalars['String'];
+};
+
 export type LotListDto = {
   __typename?: 'LotListDTO';
   createdAt: Scalars['DateTime'];
@@ -1454,7 +1461,7 @@ export type LotListDto = {
   kitCount: Scalars['Int'];
   lotNo: Scalars['String'];
   plantCode: Scalars['String'];
-  timelineStatus?: Maybe<KitTimelineCode>;
+  timelineStatus?: Maybe<KitStatusCode>;
 };
 
 export type LotNoteInput = {
@@ -1649,13 +1656,6 @@ export type LotSortInput = {
   removedAt?: InputMaybe<SortEnumType>;
 };
 
-export type LotTimelineEventInput = {
-  eventCode: KitTimelineCode;
-  eventDate: Scalars['DateTime'];
-  eventNote: Scalars['String'];
-  lotNo: Scalars['String'];
-};
-
 /** A connection to a list of items. */
 export type LotsConnection = {
   __typename?: 'LotsConnection';
@@ -1681,10 +1681,10 @@ export type Mutation = {
   applyComponentSerialFormat: ComponentSerial;
   captureComponentSerial: MutationResultOfComponentSerialDto;
   /** Create build start event for a kit */
-  createBuildStartEvent: MutationResultOfKitTimelineEvent;
+  createBuildStartEvent: MutationResultOfKitStatusEvent;
   createDcwsResponse: MutationResultOfDcwsResponse;
   /** Create a timeline event for a kit */
-  createKitTimelineEvent: MutationResultOfKitTimelineEvent;
+  createKitTimelineEvent: MutationResultOfKitStatusEvent;
   createLotPartQuantityReceived: MutationResultOfLotPartDto;
   /** Create csutom received event for all kits in a lot */
   createLotTimelineEvent: MutationResultOfLot;
@@ -1719,6 +1719,7 @@ export type Mutation = {
    * where kit does not have a BUILD_COMPLETE timeline event
    */
   syncKitsWithPcvComponents: MutationResultOfSyncKitWithPcvComponentsResult;
+  synchronizeKitWithPCVComponents: MutationResultOfSyncKitComponentsResult;
   /**
    * Gets a VIN from the KitStatusFeedService and sets / updates  it to the kit
    * Does not throw an error if the VIN is not found or if the VIN has not changed
@@ -1754,7 +1755,7 @@ export type MutationCreateDcwsResponseArgs = {
 
 
 export type MutationCreateKitTimelineEventArgs = {
-  input: KitTimelineEventInput;
+  input: KitStatusEventInput;
 };
 
 
@@ -1764,7 +1765,7 @@ export type MutationCreateLotPartQuantityReceivedArgs = {
 
 
 export type MutationCreateLotTimelineEventArgs = {
-  input: LotTimelineEventInput;
+  input: LotKitStatusEventInput;
 };
 
 
@@ -1843,6 +1844,11 @@ export type MutationSyncKitToPartnerStatusArgs = {
 };
 
 
+export type MutationSynchronizeKitWithPcvComponentsArgs = {
+  input: SyncKitComponentsInput;
+};
+
+
 export type MutationUpdateKitVinArgs = {
   input: UpdateKitVinInput;
 };
@@ -1881,10 +1887,10 @@ export type MutationResultOfKit = {
   payload?: Maybe<Kit>;
 };
 
-export type MutationResultOfKitTimelineEvent = {
-  __typename?: 'MutationResultOfKitTimelineEvent';
+export type MutationResultOfKitStatusEvent = {
+  __typename?: 'MutationResultOfKitStatusEvent';
   errors: Array<Error>;
-  payload?: Maybe<KitTimelineEvent>;
+  payload?: Maybe<KitStatusEvent>;
 };
 
 export type MutationResultOfLot = {
@@ -1939,6 +1945,12 @@ export type MutationResultOfShipmentOverviewDto = {
   __typename?: 'MutationResultOfShipmentOverviewDTO';
   errors: Array<Error>;
   payload?: Maybe<ShipmentOverviewDto>;
+};
+
+export type MutationResultOfSyncKitComponentsResult = {
+  __typename?: 'MutationResultOfSyncKitComponentsResult';
+  errors: Array<Error>;
+  payload?: Maybe<SyncKitComponentsResult>;
 };
 
 export type MutationResultOfSyncKitWithPcvComponentsResult = {
@@ -2815,10 +2827,10 @@ export type Query = {
   kitComponents?: Maybe<KitComponentsConnection>;
   kitCurrentStatus: KitInfoDto;
   kitList?: Maybe<KitListConnection>;
+  kitStatusEvents?: Maybe<KitStatusEventsConnection>;
+  kitStatusEventsByDate: Array<KitStatusEvent>;
   kitTimeline?: Maybe<KitStatusDto>;
   kitTimelineEventTypes?: Maybe<KitTimelineEventTypesConnection>;
-  kitTimelineEvents?: Maybe<KitTimelineEventsConnection>;
-  kitTimelineEventsByDate: Array<KitTimelineEvent>;
   kitVins?: Maybe<KitVinsConnection>;
   kits?: Maybe<KitsConnection>;
   kitsByCurrentTimelineEvent?: Maybe<KitsByCurrentTimelineEventConnection>;
@@ -3065,6 +3077,24 @@ export type QueryKitListArgs = {
 };
 
 
+export type QueryKitStatusEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Array<KitStatusEventSortInput>>;
+  where?: InputMaybe<KitStatusEventFilterInput>;
+};
+
+
+export type QueryKitStatusEventsByDateArgs = {
+  fromDate: Scalars['DateTime'];
+  plantCode: Scalars['String'];
+  timelineEventCode?: InputMaybe<KitStatusCode>;
+  toDate: Scalars['DateTime'];
+};
+
+
 export type QueryKitTimelineArgs = {
   kitNo: Scalars['String'];
 };
@@ -3075,26 +3105,8 @@ export type QueryKitTimelineEventTypesArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<KitTimelineEventTypeSortInput>>;
-  where?: InputMaybe<KitTimelineEventTypeFilterInput>;
-};
-
-
-export type QueryKitTimelineEventsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<KitTimelineEventSortInput>>;
-  where?: InputMaybe<KitTimelineEventFilterInput>;
-};
-
-
-export type QueryKitTimelineEventsByDateArgs = {
-  fromDate: Scalars['DateTime'];
-  plantCode: Scalars['String'];
-  timelineEventCode?: InputMaybe<KitTimelineCode>;
-  toDate: Scalars['DateTime'];
+  order?: InputMaybe<Array<KitStatusEventTypeSortInput>>;
+  where?: InputMaybe<KitStatusEventTypeFilterInput>;
 };
 
 
@@ -3121,7 +3133,7 @@ export type QueryKitsArgs = {
 export type QueryKitsByCurrentTimelineEventArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
-  eventCode?: InputMaybe<KitTimelineCode>;
+  eventCode?: InputMaybe<KitStatusCode>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<KitSortInput>>;
@@ -3815,7 +3827,7 @@ export type StatusEventDto = {
   createdAt?: Maybe<Scalars['DateTime']>;
   eventDate?: Maybe<Scalars['DateTime']>;
   eventNote?: Maybe<Scalars['String']>;
-  eventType: KitTimelineCode;
+  eventType: KitStatusCode;
   partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
   removedAt?: Maybe<Scalars['DateTime']>;
   sequence: Scalars['Int'];
@@ -3834,6 +3846,16 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']>;
+};
+
+export type SyncKitComponentsInput = {
+  kitNo?: InputMaybe<Scalars['String']>;
+};
+
+export type SyncKitComponentsResult = {
+  __typename?: 'SyncKitComponentsResult';
+  componentCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  kitNo?: Maybe<Scalars['String']>;
 };
 
 export type SyncKitWithPcvComponentsResult = {
@@ -3931,7 +3953,7 @@ export type CreateBuildStartEventMutationVariables = Exact<{
 }>;
 
 
-export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitTimelineEvent', payload?: { __typename?: 'KitTimelineEvent', id: any, kitId: any, eventDate: any } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+export type CreateBuildStartEventMutation = { __typename?: 'Mutation', createBuildStartEvent: { __typename?: 'MutationResultOfKitStatusEvent', payload?: { __typename?: 'KitStatusEvent', id: any, kitId: any, eventDate: any } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type UpdateKitVinMutationVariables = Exact<{
   input: UpdateKitVinInput;
@@ -3971,18 +3993,18 @@ export type BuildStartPendingKitsQueryVariables = Exact<{
 }>;
 
 
-export type BuildStartPendingKitsQuery = { __typename?: 'Query', buildStartPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitTimelineCode?: KitTimelineCode | null, partnerStatusCode?: PartnerStatusCode | null }> };
+export type BuildStartPendingKitsQuery = { __typename?: 'Query', buildStartPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitStatusCode?: KitStatusCode | null, partnerStatusCode?: PartnerStatusCode | null }> };
 
 export type UpdatePartnerStatusPendingKitsQueryVariables = Exact<{
   plantCode: Scalars['String'];
 }>;
 
 
-export type UpdatePartnerStatusPendingKitsQuery = { __typename?: 'Query', updatePartnerStatusPendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitTimelineCode?: KitTimelineCode | null, partnerStatusPending: boolean }> };
+export type UpdatePartnerStatusPendingKitsQuery = { __typename?: 'Query', updatePartnerStatusPendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitStatusCode?: KitStatusCode | null, partnerStatusPending: boolean }> };
 
 export type PlanBuildVinPendingKitsQueryVariables = Exact<{
   plantCode: Scalars['String'];
 }>;
 
 
-export type PlanBuildVinPendingKitsQuery = { __typename?: 'Query', planBuildVinPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitTimelineCode?: KitTimelineCode | null, partnerStatusCode?: PartnerStatusCode | null, partnerStatusPending: boolean }> };
+export type PlanBuildVinPendingKitsQuery = { __typename?: 'Query', planBuildVinPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitStatusCode?: KitStatusCode | null, partnerStatusCode?: PartnerStatusCode | null, partnerStatusPending: boolean }> };

@@ -80,7 +80,7 @@ query buildStartPendingKits($plantCode: String!) {
     vin
     model
     series
-    kitTimelineCode
+    kitStatusCode
     partnerStatusCode
   }
 }
@@ -96,7 +96,7 @@ query updatePartnerStatusPendingKits($plantCode: String!){
     series
     eventDtate
     partnerStatusCode
-    kitTimelineCode
+    kitStatusCode
     partnerStatusPending  
   }
 }
@@ -112,7 +112,7 @@ query planBuildVinPendingKits($plantCode: String!) {
     vin
     model
     series
-    kitTimelineCode
+    kitStatusCode
     partnerStatusCode
     partnerStatusPending
   }

@@ -1,9 +1,7 @@
-//#region imports
 import { AzureFunction, Context } from "@azure/functions"
 import { getAppConfig } from "../shared/appConfig";
 import { UpdatePartnerStatusInput } from "../shared/graphql/generated/graphql";
 import { skdService } from "../shared/skdService";
-//#endregion
 
 const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
     const appConfig = getAppConfig();
