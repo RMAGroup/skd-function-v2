@@ -980,8 +980,8 @@ export type KitListItemDto = {
   id: Scalars['UUID'];
   imported?: Maybe<Scalars['DateTime']>;
   kitNo: Scalars['String'];
-  lastTimelineEvent?: Maybe<Scalars['String']>;
-  lastTimelineEventDate?: Maybe<Scalars['DateTime']>;
+  lastKitStatusEvent?: Maybe<Scalars['String']>;
+  lastKitStatusEventDate?: Maybe<Scalars['DateTime']>;
   lotNo: Scalars['String'];
   modelCode: Scalars['String'];
   modelName: Scalars['String'];
@@ -995,8 +995,8 @@ export type KitListItemDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   imported?: InputMaybe<SortEnumType>;
   kitNo?: InputMaybe<SortEnumType>;
-  lastTimelineEvent?: InputMaybe<SortEnumType>;
-  lastTimelineEventDate?: InputMaybe<SortEnumType>;
+  lastKitStatusEvent?: InputMaybe<SortEnumType>;
+  lastKitStatusEventDate?: InputMaybe<SortEnumType>;
   lotNo?: InputMaybe<SortEnumType>;
   modelCode?: InputMaybe<SortEnumType>;
   modelName?: InputMaybe<SortEnumType>;
@@ -1036,8 +1036,8 @@ export type KitStatusCodeOperationFilterInput = {
 export type KitStatusDto = {
   __typename?: 'KitStatusDTO';
   kitNo: Scalars['String'];
+  kitStatusItems: Array<StatusEventDto>;
   lotNo: Scalars['String'];
-  timelineItems: Array<StatusEventDto>;
   vin: Scalars['String'];
 };
 
@@ -1220,10 +1220,10 @@ export type KitVinsEdge = {
 };
 
 /** A connection to a list of items. */
-export type KitsByCurrentTimelineEventConnection = {
-  __typename?: 'KitsByCurrentTimelineEventConnection';
+export type KitsByCurrentKitStatusConnection = {
+  __typename?: 'KitsByCurrentKitStatusConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<KitsByCurrentTimelineEventEdge>>;
+  edges?: Maybe<Array<KitsByCurrentKitStatusEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Kit>>;
   /** Information to aid in pagination. */
@@ -1231,8 +1231,8 @@ export type KitsByCurrentTimelineEventConnection = {
 };
 
 /** An edge in a connection. */
-export type KitsByCurrentTimelineEventEdge = {
-  __typename?: 'KitsByCurrentTimelineEventEdge';
+export type KitsByCurrentKitStatusEdge = {
+  __typename?: 'KitsByCurrentKitStatusEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
@@ -1459,9 +1459,9 @@ export type LotListDto = {
   createdAt: Scalars['DateTime'];
   id: Scalars['UUID'];
   kitCount: Scalars['Int'];
+  kitStatusCode?: Maybe<KitStatusCode>;
   lotNo: Scalars['String'];
   plantCode: Scalars['String'];
-  timelineStatus?: Maybe<KitStatusCode>;
 };
 
 export type LotNoteInput = {
@@ -2827,15 +2827,15 @@ export type Query = {
   kitComponents?: Maybe<KitComponentsConnection>;
   kitCurrentStatus: KitInfoDto;
   kitList?: Maybe<KitListConnection>;
+  kitStatus?: Maybe<KitStatusDto>;
   kitStatusEvents?: Maybe<KitStatusEventsConnection>;
   kitStatusEventsByDate: Array<KitStatusEvent>;
-  kitTimeline?: Maybe<KitStatusDto>;
   kitTimelineEventTypes?: Maybe<KitTimelineEventTypesConnection>;
   kitVins?: Maybe<KitVinsConnection>;
   kits?: Maybe<KitsConnection>;
-  kitsByCurrentTimelineEvent?: Maybe<KitsByCurrentTimelineEventConnection>;
+  kitsByCurrentKitStatus?: Maybe<KitsByCurrentKitStatusConnection>;
+  kitsByKitStatusSummary: Array<ItemCountDto>;
   kitsByLot: Array<Kit>;
-  kitsByTimelineStatusSummary: Array<ItemCountDto>;
   lotByLotNo?: Maybe<Lot>;
   lotInfo?: Maybe<LotDto>;
   lotListByBomId: Array<LotListDto>;
@@ -2874,7 +2874,7 @@ export type Query = {
   shipmentOverview?: Maybe<ShipmentOverviewDto>;
   shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
-  /** Kits that have timeline event entries that have not beed synced to partner status */
+  /** Kits that have kit status event entries that have not beed synced to partner status */
   updatePartnerStatusPendingKits: Array<KitInfoDto>;
   /** @deprecated no longer used */
   vehicleComponentByVinAndComponent?: Maybe<KitComponent>;
@@ -3077,6 +3077,11 @@ export type QueryKitListArgs = {
 };
 
 
+export type QueryKitStatusArgs = {
+  kitNo: Scalars['String'];
+};
+
+
 export type QueryKitStatusEventsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -3089,14 +3094,9 @@ export type QueryKitStatusEventsArgs = {
 
 export type QueryKitStatusEventsByDateArgs = {
   fromDate: Scalars['DateTime'];
+  kitStatusCode?: InputMaybe<KitStatusCode>;
   plantCode: Scalars['String'];
-  timelineEventCode?: InputMaybe<KitStatusCode>;
   toDate: Scalars['DateTime'];
-};
-
-
-export type QueryKitTimelineArgs = {
-  kitNo: Scalars['String'];
 };
 
 
@@ -3130,7 +3130,7 @@ export type QueryKitsArgs = {
 };
 
 
-export type QueryKitsByCurrentTimelineEventArgs = {
+export type QueryKitsByCurrentKitStatusArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   eventCode?: InputMaybe<KitStatusCode>;

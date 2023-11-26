@@ -6,20 +6,28 @@ Handle automated import and export of interface files between Ford and RMA.
 
 - BOM: Import bill of material from flat file
 - Shipment: Import shipment detail from flat file
-- VIN: Import VIN numbers from flat file
+- UpdateKitsToBuildStart: Find kits where at least one component serial has been captured and update the kit status to "Build Start"
+- UpdatePartnerStatus: Finds kits where there are KitStatus's that have not be marked as updated and updates the status to "Updated"
 - Incoming: distribute incoming blob to appropriate function / blob trigger
-- GenPartnerStatus: triggerd generation of kit snapshot and partner status flat files
 - EnsureIncomingFolder: triggered generation of "incoming" container on function startup
 
 ## local settings
 
-create `local.setting.json`
-
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+    "ActivityLogTable": "ActivityLog",
+    "SkdGraphqlURI": "http://0.0.0.0:5100/graphql",
+    "EnginComponentCode": "EN"
+  }
+}
 ```
-touch local.settings.json
-```
 
-With the following content. Change the server grapgql server endpoint if different.
+With the following content. Change the server GraphQL server endpoint if different.
 
 ```json
 {
@@ -37,11 +45,10 @@ With the following content. Change the server grapgql server endpoint if differe
 
 ## run
 
-- First start `skd-server` and it's assocated sql database
+- First start `skd-server`
 - then run `func start`
 
 ## azure storage explorer
-
 
 - Download [azure storage explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
 
