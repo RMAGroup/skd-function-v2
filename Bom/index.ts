@@ -27,7 +27,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
 
         const input = await service.parseBomFile(text)
         input.filename = context.bindingData.name
-        const { payload, errors } = await service.importBom(input);
+        const { errors } = await service.importBom(input);
 
         // write to data table
         const description = `lots: ${input?.lotEntries.map(l => l.lotNo).join(', ')}`
@@ -45,7 +45,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         if (errors.length > 0) {
             context.log(`bom import error: ${errorMessage}`);
         } else {
-            context.log(`imported bom file ${payload.plantCode}-${payload.sequence}   ${description}`)
+            context.log(`imported bom file ${input.plantCode}-${input.sequence}   ${description}`)
         }
     } catch (error) {
         context.log(`error importing bom file: ${context.bindingData.name}`)

@@ -4,13 +4,7 @@ export const IMPORT_BOM = gql`
 mutation importBom($input:BomFileInput!) { 
   importBom(input: $input) {
     payload {
-      id
-      sequence
-      plantCode
-      lotNumbers
-      partCount
-      vehicleCount
-      createdAt
+      bomId
     }
     errors {
       path
