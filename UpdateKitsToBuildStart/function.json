@@ -4,7 +4,8 @@
       "name": "myTimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 10 4,9 * * 1-6"
+      "schedule": "0 10 4,9 * * 1-6",
+      "runOnStartup": false
     }
   ],
   "scriptFile": "../dist/UpdateKitsToBuildStart/index.js"

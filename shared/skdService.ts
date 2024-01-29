@@ -6,8 +6,6 @@ import {
   PlantsQueryVariables,
   FordInterfaceFileTypeQuery,
   FordInterfaceFileTypeQueryVariables,
-  UpdatePartnerStatusPendingKitsQuery,
-  UpdatePartnerStatusPendingKitsQueryVariables,
   BuildStartPendingKitsQuery,
   BuildStartPendingKitsQueryVariables,
   PlanBuildVinPendingKitsQuery,
@@ -29,6 +27,8 @@ import {
   ParseBomFileMutation,
   ParseBomFileMutationVariables,
   ParseBomFileResult,
+  PartnerStatusUpdatePendingKitsQuery,
+  PartnerStatusUpdatePendingKitsQueryVariables,
 } from './graphql/generated/graphql';
 
 import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, PARSE_BOM_FILE, PARSE_SHIP_FILE, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
@@ -36,7 +36,7 @@ import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, PARSE_BOM_FILE, 
 import {
   PLANTS,
   FORD_INTERFACE_FILETYPE,
-  UPDATE_PARTNER_STATUS_PENDING_KITS,
+  GET_PARTNER_STATUS_UPDATE_PENDING_KITS,
   BUILD_START_PENDING_KITS,
   PLAN_BUILD_VIN_PENDING_KITS,
 } from './graphql/query';
@@ -177,13 +177,13 @@ export class skdService {
   }
 
   getUpdatePartnerStatusPendingKits = async (plantCode: string) => {
-    const result = await this.client.query<UpdatePartnerStatusPendingKitsQuery, UpdatePartnerStatusPendingKitsQueryVariables>(
-      UPDATE_PARTNER_STATUS_PENDING_KITS,
+    const result = await this.client.query<PartnerStatusUpdatePendingKitsQuery, PartnerStatusUpdatePendingKitsQueryVariables>(
+      GET_PARTNER_STATUS_UPDATE_PENDING_KITS,
       {
         plantCode
       },
     ).toPromise()
-    return result.data.updatePartnerStatusPendingKits
+    return result.data.partnerStatusUpdatePendingKits
   }
 
   getBuildStartPendingKits = async (plantCode: string) => {

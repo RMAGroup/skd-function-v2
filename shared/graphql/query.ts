@@ -34,9 +34,9 @@ query buildStartPendingKits($plantCode: String!) {
 }
 `
 
-export const UPDATE_PARTNER_STATUS_PENDING_KITS = gql`
-query updatePartnerStatusPendingKits($plantCode: String!){
-  updatePartnerStatusPendingKits(plantCode: $plantCode) {
+export const GET_PARTNER_STATUS_UPDATE_PENDING_KITS = gql`
+query partnerStatusUpdatePendingKits($plantCode: String!){
+  partnerStatusUpdatePendingKits(plantCode: $plantCode) {
     kitNo
     lotNo
     vin
@@ -48,7 +48,6 @@ query updatePartnerStatusPendingKits($plantCode: String!){
     partnerStatusPending  
   }
 }
-
 `
 
 export const PLAN_BUILD_VIN_PENDING_KITS = gql`

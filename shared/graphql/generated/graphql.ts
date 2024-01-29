@@ -2856,6 +2856,8 @@ export type Query = {
   /** Get kit current status from Kit Status Feed api */
   partnerKitCurrentStatus: KitCurrentStatusResponse;
   partnerKitPhysicalVin: PvinFeedLayoutData;
+  /** Get kits that have kit status event entries that have not been synced to partner status */
+  partnerStatusUpdatePendingKits: Array<KitInfoDto>;
   parts?: Maybe<PartsConnection>;
   pcvComponents?: Maybe<PcvComponentsConnection>;
   pcvDrives?: Maybe<PcvDrivesConnection>;
@@ -2878,8 +2880,6 @@ export type Query = {
   shipmentOverview?: Maybe<ShipmentOverviewDto>;
   shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
-  /** Kits that have kit status event entries that have not beed synced to partner status */
-  updatePartnerStatusPendingKits: Array<KitInfoDto>;
   /** @deprecated no longer used */
   vehicleComponentByVinAndComponent?: Maybe<KitComponent>;
   vinAllocation: VinAllocationQueryResult;
@@ -3243,6 +3243,11 @@ export type QueryPartnerKitPhysicalVinArgs = {
 };
 
 
+export type QueryPartnerStatusUpdatePendingKitsArgs = {
+  plantCode: Scalars['String'];
+};
+
+
 export type QueryPartsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -3425,11 +3430,6 @@ export type QueryShipmentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<ShipmentSortInput>>;
   where?: InputMaybe<ShipmentFilterInput>;
-};
-
-
-export type QueryUpdatePartnerStatusPendingKitsArgs = {
-  plantCode: Scalars['String'];
 };
 
 
@@ -4008,12 +4008,12 @@ export type BuildStartPendingKitsQueryVariables = Exact<{
 
 export type BuildStartPendingKitsQuery = { __typename?: 'Query', buildStartPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitStatusCode?: KitStatusCode | null, partnerStatusCode?: PartnerStatusCode | null }> };
 
-export type UpdatePartnerStatusPendingKitsQueryVariables = Exact<{
+export type PartnerStatusUpdatePendingKitsQueryVariables = Exact<{
   plantCode: Scalars['String'];
 }>;
 
 
-export type UpdatePartnerStatusPendingKitsQuery = { __typename?: 'Query', updatePartnerStatusPendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitStatusCode?: KitStatusCode | null, partnerStatusPending: boolean }> };
+export type PartnerStatusUpdatePendingKitsQuery = { __typename?: 'Query', partnerStatusUpdatePendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitStatusCode?: KitStatusCode | null, partnerStatusPending: boolean }> };
 
 export type PlanBuildVinPendingKitsQueryVariables = Exact<{
   plantCode: Scalars['String'];
