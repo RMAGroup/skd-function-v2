@@ -4,14 +4,6 @@ import {
   ImportShipmentMutationVariables,
   PlantsQuery,
   PlantsQueryVariables,
-  ParseShipFileQuery,
-  ParseShipFileQueryVariables,
-  ShipFileInput,
-  ParseBomFileQuery,
-  ParseBomFileQueryVariables,
-  BomFileInput,
-  ImportBomMutation,
-  ImportBomMutationVariables,
   FordInterfaceFileTypeQuery,
   FordInterfaceFileTypeQueryVariables,
   UpdatePartnerStatusPendingKitsQuery,
@@ -29,21 +21,27 @@ import {
   UpdateKitVinMutationVariables,
   UpdateKitVinInput,
   CreateBuildStartEventMutation,
-  CreateBuildStartEventMutationVariables
+  CreateBuildStartEventMutationVariables,
+  ImoprtBomMutation,
+  ImoprtBomMutationVariables,
+  ParseShipmentFileMutation,
+  ParseShipmentFileMutationVariables,
+  ParseBomFileMutation,
+  ParseBomFileMutationVariables,
+  ParseBomFileResult,
 } from './graphql/generated/graphql';
 
-import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
+import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, PARSE_BOM_FILE, PARSE_SHIP_FILE, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
 
 import {
   PLANTS,
-  PARSE_SHIP_FILE,
-  PARSE_BOM_FILE,
   FORD_INTERFACE_FILETYPE,
   UPDATE_PARTNER_STATUS_PENDING_KITS,
   BUILD_START_PENDING_KITS,
   PLAN_BUILD_VIN_PENDING_KITS,
 } from './graphql/query';
 import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
+import { omitTypenameDeep } from './util';
 //#endregion
 
 export class skdService {
@@ -55,32 +53,51 @@ export class skdService {
     this.client = createClient({
       url: uri,
       exchanges: [fetchExchange],
-      fetch
-    })
+      requestPolicy: "cache-and-network",
+      fetchOptions: () => {
+          return {
+              headers: {
+                  "GraphQL-Preflight": "1",
+              },
+          };
+      },
+      })
   }
 
-  importBom = async (input: BomFileInput) => {
-    const result = await this.client.mutation<ImportBomMutation, ImportBomMutationVariables>(
-      IMPORT_BOM,
+  parseBomFile = async (file: File) => {    
+    const result = await this.client.mutation<ParseBomFileMutation, ParseBomFileMutationVariables>(
+      PARSE_BOM_FILE,
       {
-        input
+        file: file
       }
     ).toPromise();
 
-    return result.data.importBom
+    return result.data.parseBomFile
   }
 
 
-  async importShipment(shipment: ShipFileInput) {
+  importBom = async (file: File) => {
+    const result = await this.client.mutation<ImoprtBomMutation, ImoprtBomMutationVariables>(
+      IMPORT_BOM,
+      {
+        file: file
+      }
+    ).toPromise();
+
+    return result.data.importBOM
+  }
+
+  async importShipment(file: File) {
     const result = await this.client.mutation<ImportShipmentMutation, ImportShipmentMutationVariables>(
       IMPORT_SHIPMENT,
       {
-        input: shipment
+        file
       }
-    ).toPromise();
+    ).toPromise()
 
     return result.data.importShipment
   }
+
 
   updatePartnerStatus = async (input: UpdatePartnerStatusInput) => {
     const result = await this.client.mutation<UpdatePartnerStatusMutation, UpdatePartnerStatusMutationVariables>(
@@ -129,8 +146,6 @@ export class skdService {
     return resuilt.data.createBuildStartEvent
   }
 
-
-
   getPlants = async () => {
     const result = await this.client.query<PlantsQuery, PlantsQueryVariables>(
       PLANTS,
@@ -140,25 +155,14 @@ export class skdService {
     return result.data.plants.nodes
   }
 
-
-  parseBomFile = async (text: string) => {
-    const result = await this.client.query<ParseBomFileQuery, ParseBomFileQueryVariables>(
-      PARSE_BOM_FILE,
-      {
-        text
-      }
-    ).toPromise()
-    return result.data.parseBomFile
-  }
-
-  parseShipFile = async (text: string) => {
-    const result = await this.client.query<ParseShipFileQuery, ParseShipFileQueryVariables>(
+  parseShipFile = async (file: File) => {
+    const result = await this.client.mutation<ParseShipmentFileMutation, ParseShipmentFileMutationVariables>(
       PARSE_SHIP_FILE,
       {
-        text
+        file
       },
     ).toPromise()
-    return result.data.parseShipFile
+    return result.data.parseShipmentFile
   }
 
   getFordInerfaceFileType = async (filename: string) => {

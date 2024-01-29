@@ -8,9 +8,6 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
     
     let container = await blobService.getCreateContainer(appConfig.INCOMING_CONTAINER)
     context.log(`Found ${container.containerName} exists`)    
-
-    container = await blobService.getCreateContainer(appConfig.PARTNER_STATUS_ACK_CONTAINER)
-    context.log(`Found ${container.containerName} exists`)    
 };
 
 export default timerTrigger;

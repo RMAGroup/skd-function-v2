@@ -1,22 +1,23 @@
 import gql from 'graphql-tag'
 
 export const IMPORT_BOM = gql`
-mutation importBom($input:BomFileInput!) { 
-  importBom(input: $input) {
+mutation imoprtBom($file: Upload!) {
+  importBOM(file: $file) {
     payload {
-      bomId
+      items {
+        bomId
+        plantCode
+        sequence
+      }
     }
-    errors {
-      path
-      message
-    }
+    errors { message }
   }
 }
 `
 
 export const IMPORT_SHIPMENT = gql`
-mutation importShipment($input: ShipFileInput!){
-  importShipment(input:$input) {
+mutation importShipment($file: Upload!){
+  importShipment(file: $file) {
     payload {
       id
       plantCode
@@ -28,6 +29,56 @@ mutation importShipment($input: ShipFileInput!){
     errors {
       path
       message
+    }
+  }
+}
+`
+
+export const PARSE_BOM_FILE = gql`
+mutation parseBomFile($file: Upload!) {
+  parseBomFile(file: $file) {
+    bomPlantSets {
+      plantCode
+      filename
+      sequenceNumber
+      kittingPlantCode
+      lots {
+        lotNo
+        pcvCode
+        lotParts {
+          partNo
+          partDesc
+          quantity
+        }
+        kits {
+          kitNo
+        }
+      }
+    }
+  }
+}
+`
+
+export const PARSE_SHIP_FILE = gql`
+mutation parseShipmentFile($file: Upload!) {
+  parseShipmentFile(file: $file) {
+    sequence
+    plantCode
+    created
+    filename
+    lots {
+      lotNo
+      invoices {
+        invoiceNo
+        shipDate
+        parts {
+          partNo
+          handlingUnitCode
+          customerPartNo
+          customerPartDesc
+          quantity
+        }
+      }
     }
   }
 }

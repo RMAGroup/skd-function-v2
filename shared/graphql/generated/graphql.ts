@@ -100,62 +100,6 @@ export type Bom = {
   sequence: Scalars['Int'];
 };
 
-export type BomFile = {
-  __typename?: 'BomFile';
-  bomFileCreatedAt: Scalars['String'];
-  filename: Scalars['String'];
-  lotEntries: Array<BomFileLot>;
-  lotParts: Array<BomFileLotPart>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
-export type BomFileInput = {
-  bomFileCreatedAt: Scalars['String'];
-  filename: Scalars['String'];
-  lotEntries: Array<BomFileLotInput>;
-  lotParts: Array<BomFileLotPartInput>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
-export type BomFileKit = {
-  __typename?: 'BomFileKit';
-  kitNo: Scalars['String'];
-  pcvCode: Scalars['String'];
-};
-
-export type BomFileKitInput = {
-  kitNo: Scalars['String'];
-  pcvCode: Scalars['String'];
-};
-
-export type BomFileLot = {
-  __typename?: 'BomFileLot';
-  kits: Array<BomFileKit>;
-  lotNo: Scalars['String'];
-};
-
-export type BomFileLotInput = {
-  kits: Array<BomFileKitInput>;
-  lotNo: Scalars['String'];
-};
-
-export type BomFileLotPart = {
-  __typename?: 'BomFileLotPart';
-  lotNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
-};
-
-export type BomFileLotPartInput = {
-  lotNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
-};
-
 export type BomFilterInput = {
   and?: InputMaybe<Array<BomFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -168,11 +112,6 @@ export type BomFilterInput = {
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
-};
-
-export type BomImportResult = {
-  __typename?: 'BomImportResult';
-  bomId: Scalars['UUID'];
 };
 
 /** A connection to a list of items. */
@@ -189,10 +128,10 @@ export type BomListConnection = {
 export type BomListDto = {
   __typename?: 'BomListDTO';
   createdAt: Scalars['DateTime'];
-  filename?: Maybe<Scalars['String']>;
+  filename: Scalars['String'];
   id: Scalars['UUID'];
-  lots?: Maybe<Array<Maybe<BomList_Lot>>>;
-  plantCode?: Maybe<Scalars['String']>;
+  lots: Array<BomList_Lot>;
+  plantCode: Scalars['String'];
   sequence: Scalars['Int'];
 };
 
@@ -215,8 +154,29 @@ export type BomListEdge = {
 
 export type BomList_Lot = {
   __typename?: 'BomList_Lot';
-  lotNo?: Maybe<Scalars['String']>;
+  lotNo: Scalars['String'];
   shipmentSequence?: Maybe<Scalars['Int']>;
+};
+
+export type BomLot = {
+  __typename?: 'BomLot';
+  kits: Array<BomLotKit>;
+  lotNo: Scalars['String'];
+  lotParts: Array<BomLotPart>;
+  pcvCode: Scalars['String'];
+};
+
+export type BomLotKit = {
+  __typename?: 'BomLotKit';
+  kitNo: Scalars['String'];
+};
+
+export type BomLotPart = {
+  __typename?: 'BomLotPart';
+  lotNo: Scalars['String'];
+  partDesc: Scalars['String'];
+  partNo: Scalars['String'];
+  quantity: Scalars['Int'];
 };
 
 export type BomOverviewQueryInput = {
@@ -241,6 +201,16 @@ export type BomOverviewQueryResultShipment = {
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
   shipmentId: Scalars['UUID'];
+};
+
+export type BomPlantSet = {
+  __typename?: 'BomPlantSet';
+  bomFileCreatedAt: Scalars['DateTime'];
+  filename: Scalars['String'];
+  kittingPlantCode: Scalars['String'];
+  lots: Array<BomLot>;
+  plantCode: Scalars['String'];
+  sequenceNumber: Scalars['Int'];
 };
 
 export type BomSortInput = {
@@ -372,8 +342,8 @@ export type ComponentSerialFilterInput = {
 export type ComponentSerialInput = {
   kitComponentId: Scalars['UUID'];
   replace?: Scalars['Boolean'];
-  serial1?: InputMaybe<Scalars['String']>;
-  serial2?: InputMaybe<Scalars['String']>;
+  serial1: Scalars['String'];
+  serial2?: Scalars['String'];
 };
 
 export enum ComponentSerialRule {
@@ -464,19 +434,19 @@ export type ComponentStationFilterInput = {
 
 export type ComponentStationMapping = {
   __typename?: 'ComponentStationMapping';
-  componentCode?: Maybe<Scalars['String']>;
+  componentCode: Scalars['String'];
   saveCDCComponent: Scalars['Boolean'];
-  stationCode?: Maybe<Scalars['String']>;
+  stationCode: Scalars['String'];
 };
 
 export type ComponentStationMappingInput = {
-  componentCode?: InputMaybe<Scalars['String']>;
+  componentCode: Scalars['String'];
   saveCDCComponent: Scalars['Boolean'];
-  stationCode?: InputMaybe<Scalars['String']>;
+  stationCode: Scalars['String'];
 };
 
 export type ComponentStationMappingsInput = {
-  mappings?: InputMaybe<Array<InputMaybe<ComponentStationMappingInput>>>;
+  mappings: Array<ComponentStationMappingInput>;
 };
 
 export type ComponentStationSortInput = {
@@ -546,9 +516,9 @@ export type DateTimeOperationFilterInput = {
 };
 
 export type DcwsComponentResponseInput = {
-  errorMessage?: InputMaybe<Scalars['String']>;
+  errorMessage: Scalars['String'];
   kitComponentId: Scalars['UUID'];
-  responseCode?: InputMaybe<Scalars['String']>;
+  responseCode: Scalars['String'];
 };
 
 export type DcwsResponse = {
@@ -721,11 +691,11 @@ export type HandlingUnitInfoPayload = {
 export type HandlingUnitOverview = {
   __typename?: 'HandlingUnitOverview';
   createdAt: Scalars['DateTime'];
-  handlingUnitCode?: Maybe<Scalars['String']>;
-  invoiceNo?: Maybe<Scalars['String']>;
-  lotNo?: Maybe<Scalars['String']>;
+  handlingUnitCode: Scalars['String'];
+  invoiceNo: Scalars['String'];
+  lotNo: Scalars['String'];
   partCount: Scalars['Int'];
-  plantCode?: Maybe<Scalars['String']>;
+  plantCode: Scalars['String'];
   receiveCancledAt?: Maybe<Scalars['DateTime']>;
   receivedAt?: Maybe<Scalars['DateTime']>;
   shipmentSequence: Scalars['Int'];
@@ -812,6 +782,18 @@ export type ICategory = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type ImportBomResult = {
+  __typename?: 'ImportBomResult';
+  items: Array<ImportBomResultItem>;
+};
+
+export type ImportBomResultItem = {
+  __typename?: 'ImportBomResultItem';
+  bomId: Scalars['UUID'];
+  plantCode: Scalars['String'];
+  sequence: Scalars['Int'];
+};
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']>;
   gt?: InputMaybe<Scalars['Int']>;
@@ -829,9 +811,9 @@ export type IntOperationFilterInput = {
 
 export type ItemCountDto = {
   __typename?: 'ItemCountDTO';
-  code?: Maybe<Scalars['String']>;
+  code: Scalars['String'];
   count: Scalars['Int'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type Kit = {
@@ -1195,8 +1177,8 @@ export type KitVinFilterInput = {
 };
 
 export type KitVinInput = {
-  kitNo?: InputMaybe<Scalars['String']>;
-  vin?: InputMaybe<Scalars['String']>;
+  kitNo: Scalars['String'];
+  vin: Scalars['String'];
 };
 
 export type KitVinSortInput = {
@@ -1473,11 +1455,6 @@ export type LotListDto = {
   plantCode: Scalars['String'];
 };
 
-export type LotNoteInput = {
-  lotNo?: InputMaybe<Scalars['String']>;
-  note?: InputMaybe<Scalars['String']>;
-};
-
 export type LotOverviewDto = {
   __typename?: 'LotOverviewDTO';
   bomId: Scalars['UUID'];
@@ -1513,9 +1490,9 @@ export type LotPartDto = {
   __typename?: 'LotPartDTO';
   bomQuantity: Scalars['Int'];
   importDate: Scalars['DateTime'];
-  lotNo?: Maybe<Scalars['String']>;
-  partDesc?: Maybe<Scalars['String']>;
-  partNo?: Maybe<Scalars['String']>;
+  lotNo: Scalars['String'];
+  partDesc: Scalars['String'];
+  partNo: Scalars['String'];
   receivedDate?: Maybe<Scalars['DateTime']>;
   receivedQuantity: Scalars['Int'];
   removedDate?: Maybe<Scalars['DateTime']>;
@@ -1523,23 +1500,23 @@ export type LotPartDto = {
 };
 
 export type LotPartDiffQueryInput = {
-  firstLotNo?: InputMaybe<Scalars['String']>;
-  secondLotNo?: InputMaybe<Scalars['String']>;
+  firstLotNo: Scalars['String'];
+  secondLotNo: Scalars['String'];
 };
 
 export type LotPartDiffQueryResult = {
   __typename?: 'LotPartDiffQueryResult';
-  errorMessage?: Maybe<Scalars['String']>;
-  firstLotNo?: Maybe<Scalars['String']>;
-  firstLotOnlyParts?: Maybe<Array<Maybe<LotPartDiffQueryResultItem>>>;
-  secondLotNo?: Maybe<Scalars['String']>;
-  secondLotOnlyParts?: Maybe<Array<Maybe<LotPartDiffQueryResultItem>>>;
+  errorMessage: Scalars['String'];
+  firstLotNo: Scalars['String'];
+  firstLotOnlyParts: Array<LotPartDiffQueryResultItem>;
+  secondLotNo: Scalars['String'];
+  secondLotOnlyParts: Array<LotPartDiffQueryResultItem>;
 };
 
 export type LotPartDiffQueryResultItem = {
   __typename?: 'LotPartDiffQueryResultItem';
-  partDesc?: Maybe<Scalars['String']>;
-  partNo?: Maybe<Scalars['String']>;
+  partDesc: Scalars['String'];
+  partNo: Scalars['String'];
 };
 
 export type LotPartFilterInput = {
@@ -1571,9 +1548,9 @@ export type LotPartReceivedDto = {
   __typename?: 'LotPartReceivedDTO';
   bomQuantity: Scalars['Int'];
   createdAt: Scalars['DateTime'];
-  lotNo?: Maybe<Scalars['String']>;
-  partDesc?: Maybe<Scalars['String']>;
-  partNo?: Maybe<Scalars['String']>;
+  lotNo: Scalars['String'];
+  partDesc: Scalars['String'];
+  partNo: Scalars['String'];
   receivedQuantity: Scalars['Int'];
   removedAt?: Maybe<Scalars['DateTime']>;
   shipmentQuantity: Scalars['Int'];
@@ -1665,6 +1642,20 @@ export type LotSortInput = {
   removedAt?: InputMaybe<SortEnumType>;
 };
 
+export type LotsByKitStatusQueryInput = {
+  kitStatusCode: KitStatusCode;
+  plantCode: Scalars['String'];
+};
+
+export type LotsByKitStatusQueryResult = {
+  __typename?: 'LotsByKitStatusQueryResult';
+  eventDate: Scalars['DateTime'];
+  lotNo: Scalars['String'];
+  model: Scalars['String'];
+  modelYear: Scalars['String'];
+  pcvCode: Scalars['String'];
+};
+
 /** A connection to a list of items. */
 export type LotsConnection = {
   __typename?: 'LotsConnection';
@@ -1698,11 +1689,15 @@ export type Mutation = {
   /** Create csutom received event for all kits in a lot */
   createLotTimelineEvent: MutationResultOfLot;
   createPlant: MutationResultOfPlantOverviewDto;
-  importBom: MutationResultOfBomImportResult;
+  /** Import BOM given the BomPlantSet input */
+  importBOM: MutationResultOfListOfImportBomResult;
+  /** Import shipment given the ShipFile input */
   importShipment: MutationResultOfShipmentOverviewDto;
+  /** Parse a BOM file and return a ParseBomFileResult object */
+  parseBomFile: ParseBomFileResult;
   /** Parses a PCV xlsx file and returns a list of PCV, and Component code records */
   parsePcvsXlsx: MutationResultOfParsePcvsXlxsResult;
-  /** Parse a shipment file and return a ShipFile structure */
+  /** Parse a shipment file and return a ShipFile object */
   parseShipmentFile: ShipFile;
   removeAllComponentStationMappings: MutationResultOfRemoveAllComponentStationMappingsPayload;
   /** Create or update a component */
@@ -1720,7 +1715,6 @@ export type Mutation = {
    * This will mark the existing VIN as removed and add a new VIN.
    */
   setKitVin: MutationResultOfKit;
-  setLotNote: MutationResultOfLot;
   /** Update each KitStatusEvent.PartnerStatusUpdatedAt based on the partners kit status. */
   syncKitToPartnerStatus: MutationResultOfUpdatePartnerStatusPayload;
   /**
@@ -1784,12 +1778,17 @@ export type MutationCreatePlantArgs = {
 
 
 export type MutationImportBomArgs = {
-  input: BomFileInput;
+  file: Scalars['Upload'];
 };
 
 
 export type MutationImportShipmentArgs = {
-  input: ShipFileInput;
+  file: Scalars['Upload'];
+};
+
+
+export type MutationParseBomFileArgs = {
+  file: Scalars['Upload'];
 };
 
 
@@ -1843,11 +1842,6 @@ export type MutationSetKitVinArgs = {
 };
 
 
-export type MutationSetLotNoteArgs = {
-  input: LotNoteInput;
-};
-
-
 export type MutationSyncKitToPartnerStatusArgs = {
   input: UpdatePartnerStatusInput;
 };
@@ -1872,12 +1866,6 @@ export type MutationVerifyComponentSerialArgs = {
   kitComponentId: Scalars['UUID'];
 };
 
-export type MutationResultOfBomImportResult = {
-  __typename?: 'MutationResultOfBomImportResult';
-  errors: Array<Error>;
-  payload?: Maybe<BomImportResult>;
-};
-
 export type MutationResultOfComponentSerialDto = {
   __typename?: 'MutationResultOfComponentSerialDTO';
   errors: Array<Error>;
@@ -1900,6 +1888,12 @@ export type MutationResultOfKitStatusEvent = {
   __typename?: 'MutationResultOfKitStatusEvent';
   errors: Array<Error>;
   payload?: Maybe<KitStatusEvent>;
+};
+
+export type MutationResultOfListOfImportBomResult = {
+  __typename?: 'MutationResultOfListOfImportBomResult';
+  errors: Array<Error>;
+  payload?: Maybe<Array<Maybe<ImportBomResult>>>;
 };
 
 export type MutationResultOfLot = {
@@ -2096,10 +2090,16 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type ParseBomFileResult = {
+  __typename?: 'ParseBomFileResult';
+  bomPlantSets: Array<BomPlantSet>;
+  errors: Array<Scalars['String']>;
+};
+
 export type ParsePcvsXlxsResult = {
   __typename?: 'ParsePcvsXlxsResult';
-  componentCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  pcvData?: Maybe<Array<Maybe<PcvDataFromXlsx>>>;
+  componentCodes: Array<Scalars['String']>;
+  pcvData: Array<PcvDataFromXlsx>;
 };
 
 export type Part = {
@@ -2235,18 +2235,18 @@ export type PcvComponentsEdge = {
 
 export type PcvDataFromXlsx = {
   __typename?: 'PcvDataFromXlsx';
-  componentCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  drive?: Maybe<Scalars['String']>;
-  engine?: Maybe<Scalars['String']>;
+  componentCodes: Array<Scalars['String']>;
+  drive: Scalars['String'];
+  engine: Scalars['String'];
   exists: Scalars['Boolean'];
-  model?: Maybe<Scalars['String']>;
-  modelYear?: Maybe<Scalars['String']>;
-  paint?: Maybe<Scalars['String']>;
-  pcv?: Maybe<Scalars['String']>;
-  series?: Maybe<Scalars['String']>;
-  submodel?: Maybe<Scalars['String']>;
-  transmission?: Maybe<Scalars['String']>;
-  trim?: Maybe<Scalars['String']>;
+  model: Scalars['String'];
+  modelYear: Scalars['String'];
+  paint: Scalars['String'];
+  pcv: Scalars['String'];
+  series: Scalars['String'];
+  submodel: Scalars['String'];
+  transmission: Scalars['String'];
+  trim: Scalars['String'];
 };
 
 export type PcvDrive = ICategory & {
@@ -2667,10 +2667,9 @@ export type Plant = {
   code?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   id: Scalars['UUID'];
+  kittingPlantCode?: Maybe<Scalars['String']>;
   lots?: Maybe<Array<Maybe<Lot>>>;
   name?: Maybe<Scalars['String']>;
-  partnerPlantCode?: Maybe<Scalars['String']>;
-  partnerPlantType?: Maybe<Scalars['String']>;
   removedAt?: Maybe<Scalars['DateTime']>;
   shipments?: Maybe<Array<Maybe<Shipment>>>;
 };
@@ -2681,20 +2680,18 @@ export type PlantFilterInput = {
   code?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  kittingPlantCode?: InputMaybe<StringOperationFilterInput>;
   lots?: InputMaybe<ListFilterInputTypeOfLotFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<PlantFilterInput>>;
-  partnerPlantCode?: InputMaybe<StringOperationFilterInput>;
-  partnerPlantType?: InputMaybe<StringOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   shipments?: InputMaybe<ListFilterInputTypeOfShipmentFilterInput>;
 };
 
 export type PlantInput = {
-  code?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  partnerPlantCode?: InputMaybe<Scalars['String']>;
-  partnerPlantType?: InputMaybe<Scalars['String']>;
+  code: Scalars['String'];
+  kittingPlantCode: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type PlantOverviewDto = {
@@ -2709,9 +2706,8 @@ export type PlantSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  kittingPlantCode?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
-  partnerPlantCode?: InputMaybe<SortEnumType>;
-  partnerPlantType?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
 };
 
@@ -2843,7 +2839,7 @@ export type Query = {
   kitVins?: Maybe<KitVinsConnection>;
   kits?: Maybe<KitsConnection>;
   kitsByCurrentKitStatus?: Maybe<KitsByCurrentKitStatusConnection>;
-  kitsByKitStatusSummary: Array<ItemCountDto>;
+  kitsByKitStatusCount: Array<ItemCountDto>;
   kitsByLot: Array<Kit>;
   lotByLotNo?: Maybe<Lot>;
   lotInfo?: Maybe<LotDto>;
@@ -2856,8 +2852,7 @@ export type Query = {
   lotPartsByShipment: Array<LotPartDto>;
   lotPartsReceived?: Maybe<LotPartsReceivedConnection>;
   lots?: Maybe<LotsConnection>;
-  parseBomFile: BomFile;
-  parseShipFile: ShipFile;
+  lotsByKitStatus: Array<LotsByKitStatusQueryResult>;
   /** Get kit current status from Kit Status Feed api */
   partnerKitCurrentStatus: KitCurrentStatusResponse;
   partnerKitPhysicalVin: PvinFeedLayoutData;
@@ -3152,6 +3147,11 @@ export type QueryKitsByCurrentKitStatusArgs = {
 };
 
 
+export type QueryKitsByKitStatusCountArgs = {
+  plantCode: Scalars['String'];
+};
+
+
 export type QueryKitsByLotArgs = {
   lotNo: Scalars['String'];
 };
@@ -3228,13 +3228,8 @@ export type QueryLotsArgs = {
 };
 
 
-export type QueryParseBomFileArgs = {
-  text: Scalars['String'];
-};
-
-
-export type QueryParseShipFileArgs = {
-  text: Scalars['String'];
+export type QueryLotsByKitStatusArgs = {
+  input: LotsByKitStatusQueryInput;
 };
 
 
@@ -3449,7 +3444,7 @@ export type QueryVinAllocationArgs = {
 };
 
 export type ReceiveHandlingUnitInput = {
-  handlingUnitCode?: InputMaybe<Scalars['String']>;
+  handlingUnitCode: Scalars['String'];
   remove?: Scalars['Boolean'];
 };
 
@@ -3506,7 +3501,7 @@ export type SavePcvPayload = {
 
 export type SetComponentStationMappingsPayload = {
   __typename?: 'SetComponentStationMappingsPayload';
-  mappings?: Maybe<Array<Maybe<ComponentStationMapping>>>;
+  mappings: Array<ComponentStationMapping>;
 };
 
 export type SetDefaultStationInput = {
@@ -3523,24 +3518,10 @@ export type ShipFile = {
   sequence: Scalars['Int'];
 };
 
-export type ShipFileInput = {
-  created: Scalars['DateTime'];
-  filename: Scalars['String'];
-  lots: Array<ShipFileLotInput>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
 export type ShipFileInvoice = {
   __typename?: 'ShipFileInvoice';
   invoiceNo: Scalars['String'];
   parts: Array<ShipFilePart>;
-  shipDate: Scalars['DateTime'];
-};
-
-export type ShipFileInvoiceInput = {
-  invoiceNo: Scalars['String'];
-  parts: Array<ShipFilePartInput>;
   shipDate: Scalars['DateTime'];
 };
 
@@ -3550,21 +3531,8 @@ export type ShipFileLot = {
   lotNo: Scalars['String'];
 };
 
-export type ShipFileLotInput = {
-  invoices: Array<ShipFileInvoiceInput>;
-  lotNo: Scalars['String'];
-};
-
 export type ShipFilePart = {
   __typename?: 'ShipFilePart';
-  customerPartDesc: Scalars['String'];
-  customerPartNo: Scalars['String'];
-  handlingUnitCode: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
-};
-
-export type ShipFilePartInput = {
   customerPartDesc: Scalars['String'];
   customerPartNo: Scalars['String'];
   handlingUnitCode: Scalars['String'];
@@ -3718,12 +3686,12 @@ export type ShipmentOverviewDto = {
   id: Scalars['UUID'];
   invoiceCount: Scalars['Int'];
   lotCount: Scalars['Int'];
-  lotNumbers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  lotNumbers: Array<Scalars['String']>;
   lotPartCount: Scalars['Int'];
   lotPartReceiveBomDiffCount: Scalars['Int'];
   lotPartReceivedCount: Scalars['Int'];
   partCount: Scalars['Int'];
-  plantCode?: Maybe<Scalars['String']>;
+  plantCode: Scalars['String'];
   sequence: Scalars['Int'];
 };
 
@@ -3864,18 +3832,18 @@ export type StringOperationFilterInput = {
 };
 
 export type SyncKitComponentsInput = {
-  kitNo?: InputMaybe<Scalars['String']>;
+  kitNo: Scalars['String'];
 };
 
 export type SyncKitComponentsResult = {
   __typename?: 'SyncKitComponentsResult';
-  componentCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  kitNo?: Maybe<Scalars['String']>;
+  componentCodes: Array<Scalars['String']>;
+  kitNo: Scalars['String'];
 };
 
 export type SyncKitWithPcvComponentsResult = {
   __typename?: 'SyncKitWithPcvComponentsResult';
-  kitNumbers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  kitNumbers: Array<Scalars['String']>;
 };
 
 export type UpdateComponentPayload = {
@@ -3900,14 +3868,14 @@ export type UpdateKitVinPayload = {
 };
 
 export type UpdatePartnerStatusInput = {
-  kitNo?: InputMaybe<Scalars['String']>;
+  kitNo: Scalars['String'];
 };
 
 export type UpdatePartnerStatusPayload = {
   __typename?: 'UpdatePartnerStatusPayload';
-  kitNo?: Maybe<Scalars['String']>;
-  message?: Maybe<Scalars['String']>;
-  updatedStatuses?: Maybe<Array<PartnerStatusCode>>;
+  kitNo: Scalars['String'];
+  message: Scalars['String'];
+  updatedStatuses: Array<PartnerStatusCode>;
 };
 
 export type UpdateStationPayload = {
@@ -3936,7 +3904,7 @@ export type UuidOperationFilterInput = {
 };
 
 export type VinAllocationQueryInput = {
-  lotNo?: InputMaybe<Scalars['String']>;
+  lotNo: Scalars['String'];
 };
 
 export type VinAllocationQueryResult = {
@@ -3956,40 +3924,56 @@ export type VinAllocationQueryResultItem = {
   paint?: Maybe<Scalars['String']>;
   pcvCode: Scalars['String'];
   plabBuildDate?: Maybe<Scalars['DateTime']>;
+  plantCode: Scalars['String'];
   series?: Maybe<Scalars['String']>;
+  shipmentSequence: Scalars['Int'];
   subModel?: Maybe<Scalars['String']>;
   transmission?: Maybe<Scalars['String']>;
   trim?: Maybe<Scalars['String']>;
   vin: Scalars['String'];
 };
 
-export type ImportBomMutationVariables = Exact<{
-  input: BomFileInput;
+export type ImoprtBomMutationVariables = Exact<{
+  file: Scalars['Upload'];
 }>;
 
 
-export type ImportBomMutation = { __typename?: 'Mutation', importBom: { __typename?: 'MutationResultOfBomImportResult', payload?: { __typename?: 'BomImportResult', bomId: any } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
+export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'MutationResultOfListOfImportBomResult', payload?: Array<{ __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null> | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type ImportShipmentMutationVariables = Exact<{
-  input: ShipFileInput;
+  file: Scalars['Upload'];
 }>;
 
 
-export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'MutationResultOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode?: string | null, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
+export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'MutationResultOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode: string, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
+
+export type ParseBomFileMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ParseBomFileResult', bomPlantSets: Array<{ __typename?: 'BomPlantSet', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'BomLot', lotNo: string, pcvCode: string, lotParts: Array<{ __typename?: 'BomLotPart', partNo: string, partDesc: string, quantity: number }>, kits: Array<{ __typename?: 'BomLotKit', kitNo: string }> }> }> } };
+
+export type ParseShipmentFileMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type ParseShipmentFileMutation = { __typename?: 'Mutation', parseShipmentFile: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
 
 export type UpdatePartnerStatusMutationVariables = Exact<{
   input: UpdatePartnerStatusInput;
 }>;
 
 
-export type UpdatePartnerStatusMutation = { __typename?: 'Mutation', updatePartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo?: string | null, updatedStatuses?: Array<PartnerStatusCode> | null } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+export type UpdatePartnerStatusMutation = { __typename?: 'Mutation', updatePartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo: string, updatedStatuses: Array<PartnerStatusCode> } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type SyncKitStatusToPartnerStatusMutationVariables = Exact<{
   input: UpdatePartnerStatusInput;
 }>;
 
 
-export type SyncKitStatusToPartnerStatusMutation = { __typename?: 'Mutation', syncKitToPartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo?: string | null, updatedStatuses?: Array<PartnerStatusCode> | null } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+export type SyncKitStatusToPartnerStatusMutation = { __typename?: 'Mutation', syncKitToPartnerStatus: { __typename?: 'MutationResultOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo: string, updatedStatuses: Array<PartnerStatusCode> } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type CreateBuildStartEventMutationVariables = Exact<{
   kitNo: Scalars['String'];
@@ -4008,21 +3992,7 @@ export type UpdateKitVinMutation = { __typename?: 'Mutation', updateKitVin: { __
 export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PlantsQuery = { __typename?: 'Query', plants?: { __typename?: 'PlantsConnection', nodes?: Array<{ __typename?: 'Plant', code?: string | null, partnerPlantCode?: string | null, partnerPlantType?: string | null, name?: string | null, createdAt: any }> | null } | null };
-
-export type ParseBomFileQueryVariables = Exact<{
-  text: Scalars['String'];
-}>;
-
-
-export type ParseBomFileQuery = { __typename?: 'Query', parseBomFile: { __typename?: 'BomFile', plantCode: string, sequence: number, bomFileCreatedAt: string, filename: string, lotEntries: Array<{ __typename?: 'BomFileLot', lotNo: string, kits: Array<{ __typename?: 'BomFileKit', kitNo: string, pcvCode: string }> }>, lotParts: Array<{ __typename?: 'BomFileLotPart', lotNo: string, partNo: string, partDesc: string, quantity: number }> } };
-
-export type ParseShipFileQueryVariables = Exact<{
-  text: Scalars['String'];
-}>;
-
-
-export type ParseShipFileQuery = { __typename?: 'Query', parseShipFile: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
+export type PlantsQuery = { __typename?: 'Query', plants?: { __typename?: 'PlantsConnection', nodes?: Array<{ __typename?: 'Plant', code?: string | null, name?: string | null, kittingPlantCode?: string | null, createdAt: any }> | null } | null };
 
 export type FordInterfaceFileTypeQueryVariables = Exact<{
   filename: Scalars['String'];

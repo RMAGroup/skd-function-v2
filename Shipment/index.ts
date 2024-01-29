@@ -1,5 +1,4 @@
 import { AzureFunction, Context } from "@azure/functions"
-import { ShipFileInput } from "../shared/graphql/generated/graphql";
 import { getAppConfig } from "../shared/appConfig";
 import { AzureBlobService } from "../shared/AzureBlobService";
 import { AzureTableService } from "../shared/AzureTableService";
@@ -12,31 +11,26 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
     try {
 
         const appConfig = getAppConfig();
-        const blobService = new AzureBlobService<ContainerName>(appConfig.AzureWebJobsStorage)
         const tableService = new AzureTableService(appConfig.AzureWebJobsStorage)
         const service = new skdService(appConfig.SkdGraphqlURI);
 
         // copy to archive and delete original
         context.bindings.outBlob = inBlob
-        /* not deleting for now, until we have a better way to handle errors
-        blobService.deleteBlob(appConfig.SHIP_CONTAINER, context.bindingData.name)
-        */
+        const file = new File([inBlob], context.bindingData.name, { type: "text/plain" })
 
-        // import
-        const text = inBlob.toString('utf-8', 0)
-        const input: ShipFileInput = await service.parseShipFile(text)
-        input.filename = context.bindingData.name
 
+        // parse
+        const parsedShipFile = await service.parseShipFile(file)
         // import shipment
-        const { payload, errors } = await service.importShipment(input)
+        const { payload, errors } = await service.importShipment(file)
 
         // write to data table
-        const description = `lots: ${input?.lots.map(l => l.lotNo).join(', ')}`
+        const description = `lots: ${parsedShipFile?.lots.map(l => l.lotNo).join(', ')}`
         const errorMessage = errors.map(err => err.message).join(', ')
         await addActivityLogEntry({
             importType: 'ship',
-            plantCode: input.plantCode,
-            sequence: input.sequence,
+            plantCode: parsedShipFile.plantCode,
+            sequence: parsedShipFile.sequence,
             filename: context.bindingData.name,
             description,
             error: errorMessage
@@ -45,7 +39,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         // log
         if (errors.length > 0) {
             const errorMessage = errors.map(t => t.message).join(', ')
-            context.log(`Error importing ship file ${input.plantCode}-${input.sequence}  ${errorMessage}`)
+            context.log(`Error importing ship file ${parsedShipFile.plantCode}-${parsedShipFile.sequence}  ${errorMessage}`)
         } else {
             const message = `imported ship file: ${payload.plantCode}-${payload.sequence}, lot count: ${payload.lotCount}, part count: ${payload.partCount}`
             context.log(message)

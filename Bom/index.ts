@@ -1,10 +1,8 @@
 import { AzureFunction, Context } from "@azure/functions"
 import { skdService } from "../shared/skdService";
-import { AzureBlobService } from "../shared/AzureBlobService";
 import { getAppConfig } from "../shared/appConfig";
 import { addActivityLogEntry } from "../shared/activityLog";
 import { AzureTableService } from "../shared/AzureTableService";
-import { ContainerName } from "../shared/types";
 
 const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
     try {
@@ -13,29 +11,32 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         const appConfig = getAppConfig();
         const service = new skdService(appConfig.SkdGraphqlURI);
         const tableService = new AzureTableService(appConfig.AzureWebJobsStorage)
-        const blobService = new AzureBlobService<ContainerName>(appConfig.AzureWebJobsStorage)
 
         // copy to archive and delete original
         context.bindings.outBlob = inBlob
+        const file: File = new File([inBlob], context.bindingData.name, { type: "text/plain" })
+
+        console.log(file.name)
 
         /* not deleting for now, until we have a better way to handle errors
         blobService.deleteBlob(appConfig.BOM_CONTAINER, context.bindingData.name)
         */
 
-        // import
-        const text = inBlob.toString('utf-8', 0)
+        // parse
+        const parsedBomFile = await service.parseBomFile(file)
+        const plantsAndSequences = parsedBomFile.bomPlantSets.map(b => b.plantCode + '-' + b.sequenceNumber).join(', ')
+        const lotNos = parsedBomFile.bomPlantSets.flatMap(b => b.lots).map(l => l.lotNo).join(', ')
 
-        const input = await service.parseBomFile(text)
-        input.filename = context.bindingData.name
-        const { errors } = await service.importBom(input);
+        // import bom
+        const { errors } = await service.importBom(file)
 
         // write to data table
-        const description = `lots: ${input?.lotEntries.map(l => l.lotNo).join(', ')}`
+        const description = `plants: ${plantsAndSequences}, lots: ${lotNos}`;
         const errorMessage = errors.map(err => err.message).join(', ')
         await addActivityLogEntry({
             importType: 'bom',
-            plantCode: input.plantCode,
-            sequence: input.sequence,
+            plantCode: plantsAndSequences,
+            sequence: 0,
             filename: context.bindingData.name,
             description,
             error: errorMessage
@@ -45,7 +46,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         if (errors.length > 0) {
             context.log(`bom import error: ${errorMessage}`);
         } else {
-            context.log(`imported bom file ${input.plantCode}-${input.sequence}   ${description}`)
+            context.log(`imported bom file ${plantsAndSequences} - ${description}`)
         }
     } catch (error) {
         context.log(`error importing bom file: ${context.bindingData.name}`)

@@ -10,11 +10,6 @@ export interface AppConfig {
     UNKNOWN_FILETYPE_CONTAINER: ContainerName
     BOM_CONTAINER: ContainerName
     SHIP_CONTAINER: ContainerName
-    VIN_CONATAINER: ContainerName
-    VIN_ACK_CONTAINER: ContainerName
-    PARTNER_STATUS_CONTAINER: ContainerName
-    PARTNER_STATUS_ARCHIVE_CONTAINER: ContainerName
-    PARTNER_STATUS_ACK_CONTAINER: ContainerName
 }
 
 export function getAppConfig(): AppConfig {
@@ -28,11 +23,6 @@ export function getAppConfig(): AppConfig {
         UNKNOWN_FILETYPE_CONTAINER: 'unknown-fileType',
         BOM_CONTAINER: 'bom',
         SHIP_CONTAINER: 'ship',
-        VIN_CONATAINER: 'vin',
-        VIN_ACK_CONTAINER: 'vin-ack',
-        PARTNER_STATUS_CONTAINER:  "partner-status",
-        PARTNER_STATUS_ARCHIVE_CONTAINER: "partner-status-archive",
-        PARTNER_STATUS_ACK_CONTAINER: "partner-status-ack",
     }
 
     return config;
