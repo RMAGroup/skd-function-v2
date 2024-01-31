@@ -1690,7 +1690,7 @@ export type Mutation = {
   createLotTimelineEvent: MutationResultOfLot;
   createPlant: MutationResultOfPlantOverviewDto;
   /** Import BOM given the BomPlantSet input */
-  importBOM: MutationResultOfListOfImportBomResult;
+  importBOM: MutationResultOfImportBomResult;
   /** Import shipment given the ShipFile input */
   importShipment: MutationResultOfShipmentOverviewDto;
   /** Parse a BOM file and return a ParseBomFileResult object */
@@ -1878,6 +1878,12 @@ export type MutationResultOfDcwsResponse = {
   payload?: Maybe<DcwsResponse>;
 };
 
+export type MutationResultOfImportBomResult = {
+  __typename?: 'MutationResultOfImportBomResult';
+  errors: Array<Error>;
+  payload?: Maybe<ImportBomResult>;
+};
+
 export type MutationResultOfKit = {
   __typename?: 'MutationResultOfKit';
   errors: Array<Error>;
@@ -1888,12 +1894,6 @@ export type MutationResultOfKitStatusEvent = {
   __typename?: 'MutationResultOfKitStatusEvent';
   errors: Array<Error>;
   payload?: Maybe<KitStatusEvent>;
-};
-
-export type MutationResultOfListOfImportBomResult = {
-  __typename?: 'MutationResultOfListOfImportBomResult';
-  errors: Array<Error>;
-  payload?: Maybe<Array<Maybe<ImportBomResult>>>;
 };
 
 export type MutationResultOfLot = {
@@ -3938,7 +3938,7 @@ export type ImoprtBomMutationVariables = Exact<{
 }>;
 
 
-export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'MutationResultOfListOfImportBomResult', payload?: Array<{ __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null> | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'MutationResultOfImportBomResult', payload?: { __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
 export type ImportShipmentMutationVariables = Exact<{
   file: Scalars['Upload'];
