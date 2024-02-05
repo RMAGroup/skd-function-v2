@@ -5,7 +5,7 @@
       "type": "timerTrigger",
       "direction": "in",
       "schedule": "0 10 4,7,9 * * 1-6",
-      "runOnStartup": true
+      "runOnStartup": false
     }
   ],
   "scriptFile": "../dist/UpdateKitsToBuildStart/index.js"

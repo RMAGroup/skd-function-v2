@@ -19,18 +19,6 @@
       "path": "ship/{name}"
     },
     {
-      "name": "vinBlob",
-      "type": "blob",
-      "direction": "out",
-      "path": "vin/{name}"
-    },
-    {
-      "name": "partnerStatusAckBlob",
-      "type": "blob",
-      "direction": "out",
-      "path": "partner-status-ack/{name}"
-    },
-    {
       "name": "unknownFileTypeBlob",
       "type": "blob",
       "direction": "out",
