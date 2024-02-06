@@ -3,20 +3,21 @@ import { getAppConfig } from "../shared/appConfig";
 import { AzureTableService } from "../shared/AzureTableService";
 import { addActivityLogEntry } from "../shared/activityLog";
 import { skdService } from "../shared/skdService";
+import { TextFile } from "../shared/types";
 
 const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
     try {
-        const { appConfig, service, tableService } = initializeServices();
-        const file = prepareFile(context, inBlob);
+        const { service, tableService } = initializeServices();
+        const textFile = prepareFile(context, inBlob);
 
         // Archive Blob
         archiveBlob(context, inBlob);
 
         // Parse Shipment File
-        const parsedShipFile = await parseShipFile(service, file);
+        const parsedShipFile = await parseShipFile(service, textFile);
 
         // Import Shipment
-        const { payload, errors } = await importShipment(service, file);
+        const { payload, errors } = await importShipment(service, textFile);
 
         // Write to Data Table
         await writeToDataTable(tableService, context, parsedShipFile, errors);
@@ -35,20 +36,20 @@ function initializeServices() {
     return { appConfig, service, tableService };
 }
 
-function prepareFile(context: Context, inBlob: any): File {
-    return new File([inBlob], context.bindingData.name, { type: "text/plain" });
+function prepareFile(context: Context, inBlob: any): TextFile {
+    return { filename: context.bindingData.name, text: inBlob.toString() };
 }
 
 function archiveBlob(context: Context, inBlob: any) {
     context.bindings.outBlob = inBlob;
 }
 
-async function parseShipFile(service: skdService, file: File) {
-    return await service.parseShipFile(file);
+async function parseShipFile(service: skdService, textFile: TextFile) {
+    return await service.parseShipFileText(textFile);
 }
 
-async function importShipment(service: skdService, file: File) {
-    return await service.importShipment(file);
+async function importShipment(service: skdService, textFile: TextFile) {
+    return await service.importShipmentFileText(textFile);
 }
 
 async function writeToDataTable(tableService: AzureTableService, context: Context, parsedShipFile: any, errors: any[]) {

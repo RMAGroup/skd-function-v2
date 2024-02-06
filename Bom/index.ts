@@ -3,19 +3,23 @@ import { skdService } from "../shared/skdService";
 import { getAppConfig } from "../shared/appConfig";
 import { addActivityLogEntry } from "../shared/activityLog";
 import { AzureTableService } from "../shared/AzureTableService";
+import { TextFile } from "../shared/types";
+
 
 const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
     try {
         const file = prepareFile(context, inBlob);
         const { appConfig, service, tableService } = initializeServices();
-                
+
         archiveBlob(context, inBlob);
 
+        const fileText = { filename: context.bindingData.name, text: inBlob.toString() };
+
         // Parse BOM
-        const { plantsAndSequences, lotNos } = await parseBomFile(service, file);
+        const { plantsAndSequences, lotNos } = await parseBomFile(service, fileText);
 
         // Import BOM
-        const errors = await importBom(service, file);
+        const errors = await importBom(service, fileText);
 
         // Write to data table
         await writeToDataTable(tableService, context, plantsAndSequences, lotNos, errors);
@@ -42,15 +46,15 @@ function archiveBlob(context: Context, inBlob: any) {
     context.bindings.outBlob = inBlob;
 }
 
-async function parseBomFile(service: skdService, file: File) {
-    const parsedBomFile = await service.parseBomFile(file);
+async function parseBomFile(service: skdService, textFile: TextFile) {
+    const parsedBomFile = await service.parseBomFileText(textFile);
     const plantsAndSequences = parsedBomFile.bomPlantSets.map(b => b.plantCode + '-' + b.sequenceNumber).join(', ');
     const lotNos = parsedBomFile.bomPlantSets.flatMap(b => b.lots).map(l => l.lotNo).join(', ');
     return { plantsAndSequences, lotNos };
 }
 
-async function importBom(service: skdService, file: File) {
-    const { errors } = await service.importBom(file);
+async function importBom(service: skdService, textFile: TextFile) {
+    const { errors } = await service.importBomFileText(textFile);
     return errors;
 }
 

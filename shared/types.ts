@@ -21,8 +21,8 @@ export interface LogEntryTableEntity extends TableEntity {
     error: string
 }
 
-export type ContainerName = 
-    | 'incoming' 
+export type ContainerName =
+    | 'incoming'
     | 'bom'
     | 'bom-archive'
     | 'ship'
@@ -34,3 +34,9 @@ export type ContainerName =
     | 'partner-status-archive'
     | 'partner-status-ack'
     | 'unknown-fileType'
+
+
+export type TextFile = {
+    filename: string,
+    text: string
+}

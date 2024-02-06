@@ -29,9 +29,17 @@ import {
   ParseBomFileResult,
   PartnerStatusUpdatePendingKitsQuery,
   PartnerStatusUpdatePendingKitsQueryVariables,
+  ParseBomFileTextMutation,
+  ParseBomFileTextMutationVariables,
+  ImportBomFileTextMutation,
+  ImportBomFileTextMutationVariables,
+  ImportShipmentFileTextMutation,
+  ImportShipmentFileTextMutationVariables,
+  ParseShipmentFileTextMutation,
+  ParseShipmentFileTextMutationVariables,
 } from './graphql/generated/graphql';
 
-import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_SHIPMENT, PARSE_BOM_FILE, PARSE_SHIP_FILE, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
+import { CREATE_BUILD_START_EVENT, IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT, PARSE_SHIP_FILE, PARSE_SHIP_FILE_TEXT, SYNC_KIT_STATUS_TO_PARTNER_STATUS, UPDATE_KIT_VIN, UPDATE_PARTNER_STATUS } from './graphql/mutation';
 
 import {
   PLANTS,
@@ -42,6 +50,7 @@ import {
 } from './graphql/query';
 import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
 import { omitTypenameDeep } from './util';
+import { TextFile } from './types';
 //#endregion
 
 export class skdService {
@@ -74,6 +83,17 @@ export class skdService {
 
     return result.data.parseBomFile
   }
+  parseBomFileText = async (textFile: TextFile) => {    
+    const result = await this.client.mutation<ParseBomFileTextMutation, ParseBomFileTextMutationVariables>(
+      PARSE_BOM_FILE_TEXT,
+      {
+        filename: textFile.filename,
+        text: textFile.text
+      }
+    ).toPromise();
+
+    return result.data.parseBomFileText
+  }
 
 
   importBom = async (file: File) => {
@@ -86,6 +106,17 @@ export class skdService {
 
     return result.data.importBOM
   }
+  importBomFileText = async (textFile: TextFile) => {
+    const result = await this.client.mutation<ImportBomFileTextMutation, ImportBomFileTextMutationVariables>(
+      IMPORT_BOM_FILE_TEXT,
+      {
+        filename: textFile.filename,
+        text: textFile.text
+      }
+    ).toPromise();
+
+    return result.data.importBOMFileText
+  }
 
   async importShipment(file: File) {
     const result = await this.client.mutation<ImportShipmentMutation, ImportShipmentMutationVariables>(
@@ -97,7 +128,17 @@ export class skdService {
 
     return result.data.importShipment
   }
+  async importShipmentFileText(textFile: TextFile) {
+    const result = await this.client.mutation<ImportShipmentFileTextMutation, ImportShipmentFileTextMutationVariables>(
+      IMPORT_SHIPMENT_FILE_TEXT,
+      {
+        filename: textFile.filename,
+        text: textFile.text
+      }
+    ).toPromise()
 
+    return result.data.importShipmentFileText
+  }
 
   updatePartnerStatus = async (input: UpdatePartnerStatusInput) => {
     const result = await this.client.mutation<UpdatePartnerStatusMutation, UpdatePartnerStatusMutationVariables>(
@@ -163,6 +204,16 @@ export class skdService {
       },
     ).toPromise()
     return result.data.parseShipmentFile
+  }
+  parseShipFileText = async (file: TextFile) => {
+    const result = await this.client.mutation<ParseShipmentFileTextMutation, ParseShipmentFileTextMutationVariables>(
+      PARSE_SHIP_FILE_TEXT,
+      {
+        filename: file.filename,
+        text: file.text
+      },
+    ).toPromise()
+    return result.data.parseShipmentFileText
   }
 
   getFordInerfaceFileType = async (filename: string) => {

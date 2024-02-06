@@ -15,6 +15,22 @@ mutation imoprtBom($file: Upload!) {
 }
 `
 
+export const IMPORT_BOM_FILE_TEXT = gql`
+mutation importBOMFileText($filename: String!, $text: String!) {
+  importBOMFileText(filename: $filename, text: $text) {
+    payload {
+      items {
+        bomId
+        plantCode
+        sequence
+      }
+    }
+    errors { message }
+  }
+}
+`
+
+
 export const IMPORT_SHIPMENT = gql`
 mutation importShipment($file: Upload!){
   importShipment(file: $file) {
@@ -34,9 +50,52 @@ mutation importShipment($file: Upload!){
 }
 `
 
+export const IMPORT_SHIPMENT_FILE_TEXT = gql`
+mutation importShipmentFileText($filename: String!, $text: String!){
+  importShipmentFileText(filename: $filename, text: $text) {
+    payload {
+      id
+      plantCode
+      sequence
+      invoiceCount
+      lotCount
+      partCount
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+`
+
 export const PARSE_BOM_FILE = gql`
 mutation parseBomFile($file: Upload!) {
   parseBomFile(file: $file) {
+    bomPlantSets {
+      plantCode
+      filename
+      sequenceNumber
+      kittingPlantCode
+      lots {
+        lotNo
+        pcvCode
+        lotParts {
+          partNo
+          partDesc
+          quantity
+        }
+        kits {
+          kitNo
+        }
+      }
+    }
+  }
+}
+`
+export const PARSE_BOM_FILE_TEXT = gql`
+mutation parseBomFileText($filename: String!, $text: String!) {
+  parseBomFileText(filename: $filename, text: $text) {
     bomPlantSets {
       plantCode
       filename
@@ -83,6 +142,32 @@ mutation parseShipmentFile($file: Upload!) {
   }
 }
 `
+
+export const PARSE_SHIP_FILE_TEXT = gql`
+mutation parseShipmentFileText($filename: String!, $text: String!) {
+  parseShipmentFileText(filename: $filename, text: $text) {
+    sequence
+    plantCode
+    created
+    filename
+    lots {
+      lotNo
+      invoices {
+        invoiceNo
+        shipDate
+        parts {
+          partNo
+          handlingUnitCode
+          customerPartNo
+          customerPartDesc
+          quantity
+        }
+      }
+    }
+  }
+}
+`
+
 
 export const UPDATE_PARTNER_STATUS = gql`
 mutation updatePartnerStatus($input: UpdatePartnerStatusInput!) {

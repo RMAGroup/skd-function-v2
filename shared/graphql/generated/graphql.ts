@@ -1472,6 +1472,24 @@ export type LotOverviewDto = {
   shipmentSequence: Scalars['Int'];
 };
 
+export type LotOverviewQueryInput = {
+  lotNo: Scalars['String'];
+};
+
+export type LotOverviewQueryRewsult = {
+  __typename?: 'LotOverviewQueryRewsult';
+  bomId?: Maybe<Scalars['UUID']>;
+  bomSequence?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['DateTime'];
+  lotNo: Scalars['String'];
+  modelName: Scalars['String'];
+  pcvCode: Scalars['String'];
+  plantCode: Scalars['String'];
+  priorLotNo?: Maybe<Scalars['String']>;
+  shipmentId?: Maybe<Scalars['UUID']>;
+  shipmentSequence?: Maybe<Scalars['Int']>;
+};
+
 export type LotPart = {
   __typename?: 'LotPart';
   bomQuantity: Scalars['Int'];
@@ -1499,24 +1517,22 @@ export type LotPartDto = {
   shipmentQuantity: Scalars['Int'];
 };
 
-export type LotPartDiffQueryInput = {
+export type LotPartDiffItem = {
+  __typename?: 'LotPartDiffItem';
   firstLotNo: Scalars['String'];
+  firstLotQuantity: Scalars['Int'];
+  partNo: Scalars['String'];
   secondLotNo: Scalars['String'];
+  secontLotQuantity: Scalars['Int'];
+};
+
+export type LotPartDiffQueryInput = {
+  lotNo: Scalars['String'];
 };
 
 export type LotPartDiffQueryResult = {
   __typename?: 'LotPartDiffQueryResult';
-  errorMessage: Scalars['String'];
-  firstLotNo: Scalars['String'];
-  firstLotOnlyParts: Array<LotPartDiffQueryResultItem>;
-  secondLotNo: Scalars['String'];
-  secondLotOnlyParts: Array<LotPartDiffQueryResultItem>;
-};
-
-export type LotPartDiffQueryResultItem = {
-  __typename?: 'LotPartDiffQueryResultItem';
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
+  diffItems: Array<LotPartDiffItem>;
 };
 
 export type LotPartFilterInput = {
@@ -1691,14 +1707,22 @@ export type Mutation = {
   createPlant: MutationResultOfPlantOverviewDto;
   /** Import BOM given the BomPlantSet input */
   importBOM: MutationResultOfImportBomResult;
+  /** Import BOM given the BomPlantSet input */
+  importBOMFileText: MutationResultOfImportBomResult;
   /** Import shipment given the ShipFile input */
   importShipment: MutationResultOfShipmentOverviewDto;
+  /** Import shipment given the ShipFile input */
+  importShipmentFileText: MutationResultOfShipmentOverviewDto;
   /** Parse a BOM file and return a ParseBomFileResult object */
   parseBomFile: ParseBomFileResult;
+  /** Parse a BOM file and return a ParseBomFileResult object */
+  parseBomFileText: ParseBomFileResult;
   /** Parses a PCV xlsx file and returns a list of PCV, and Component code records */
   parsePcvsXlsx: MutationResultOfParsePcvsXlxsResult;
   /** Parse a shipment file and return a ShipFile object */
   parseShipmentFile: ShipFile;
+  /** Parse a shipment file and return a ShipFile object */
+  parseShipmentFileText: ShipFile;
   removeAllComponentStationMappings: MutationResultOfRemoveAllComponentStationMappingsPayload;
   /** Create or update a component */
   saveComponent: MutationResultOfUpdateComponentPayload;
@@ -1782,13 +1806,31 @@ export type MutationImportBomArgs = {
 };
 
 
+export type MutationImportBomFileTextArgs = {
+  filename: Scalars['String'];
+  text: Scalars['String'];
+};
+
+
 export type MutationImportShipmentArgs = {
   file: Scalars['Upload'];
 };
 
 
+export type MutationImportShipmentFileTextArgs = {
+  filename: Scalars['String'];
+  text: Scalars['String'];
+};
+
+
 export type MutationParseBomFileArgs = {
   file: Scalars['Upload'];
+};
+
+
+export type MutationParseBomFileTextArgs = {
+  filename: Scalars['String'];
+  text: Scalars['String'];
 };
 
 
@@ -1799,6 +1841,12 @@ export type MutationParsePcvsXlsxArgs = {
 
 export type MutationParseShipmentFileArgs = {
   file: Scalars['Upload'];
+};
+
+
+export type MutationParseShipmentFileTextArgs = {
+  filename: Scalars['String'];
+  text: Scalars['String'];
 };
 
 
@@ -2845,7 +2893,10 @@ export type Query = {
   lotInfo?: Maybe<LotDto>;
   lotListByBomId: Array<LotListDto>;
   lotOverview?: Maybe<LotOverviewDto>;
-  lotPartDiff: LotPartDiffQueryResult;
+  /** Get the lot overview for a given lot number */
+  lotOverview2: QueryResultOfLotOverviewQueryRewsult;
+  /** Get the difference in lot parts between the current lot and the prior lot if it exists */
+  lotPartDiff: QueryResultOfLotPartDiffQueryResult;
   lotPartInfo?: Maybe<LotPartDto>;
   lotParts?: Maybe<LotPartsConnection>;
   lotPartsByBom: Array<LotPartDto>;
@@ -3177,6 +3228,11 @@ export type QueryLotOverviewArgs = {
 };
 
 
+export type QueryLotOverview2Args = {
+  input: LotOverviewQueryInput;
+};
+
+
 export type QueryLotPartDiffArgs = {
   input: LotPartDiffQueryInput;
 };
@@ -3441,6 +3497,18 @@ export type QueryVehicleComponentByVinAndComponentArgs = {
 
 export type QueryVinAllocationArgs = {
   input: VinAllocationQueryInput;
+};
+
+export type QueryResultOfLotOverviewQueryRewsult = {
+  __typename?: 'QueryResultOfLotOverviewQueryRewsult';
+  errors: Array<Error>;
+  payload?: Maybe<LotOverviewQueryRewsult>;
+};
+
+export type QueryResultOfLotPartDiffQueryResult = {
+  __typename?: 'QueryResultOfLotPartDiffQueryResult';
+  errors: Array<Error>;
+  payload?: Maybe<LotPartDiffQueryResult>;
 };
 
 export type ReceiveHandlingUnitInput = {
@@ -3940,12 +4008,28 @@ export type ImoprtBomMutationVariables = Exact<{
 
 export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'MutationResultOfImportBomResult', payload?: { __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
 
+export type ImportBomFileTextMutationVariables = Exact<{
+  filename: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type ImportBomFileTextMutation = { __typename?: 'Mutation', importBOMFileText: { __typename?: 'MutationResultOfImportBomResult', payload?: { __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null, errors: Array<{ __typename?: 'Error', message: string }> } };
+
 export type ImportShipmentMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
 export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'MutationResultOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode: string, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
+
+export type ImportShipmentFileTextMutationVariables = Exact<{
+  filename: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type ImportShipmentFileTextMutation = { __typename?: 'Mutation', importShipmentFileText: { __typename?: 'MutationResultOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode: string, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', path: Array<string>, message: string }> } };
 
 export type ParseBomFileMutationVariables = Exact<{
   file: Scalars['Upload'];
@@ -3954,12 +4038,28 @@ export type ParseBomFileMutationVariables = Exact<{
 
 export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ParseBomFileResult', bomPlantSets: Array<{ __typename?: 'BomPlantSet', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'BomLot', lotNo: string, pcvCode: string, lotParts: Array<{ __typename?: 'BomLotPart', partNo: string, partDesc: string, quantity: number }>, kits: Array<{ __typename?: 'BomLotKit', kitNo: string }> }> }> } };
 
+export type ParseBomFileTextMutationVariables = Exact<{
+  filename: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ParseBomFileResult', bomPlantSets: Array<{ __typename?: 'BomPlantSet', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'BomLot', lotNo: string, pcvCode: string, lotParts: Array<{ __typename?: 'BomLotPart', partNo: string, partDesc: string, quantity: number }>, kits: Array<{ __typename?: 'BomLotKit', kitNo: string }> }> }> } };
+
 export type ParseShipmentFileMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
 export type ParseShipmentFileMutation = { __typename?: 'Mutation', parseShipmentFile: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
+
+export type ParseShipmentFileTextMutationVariables = Exact<{
+  filename: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type ParseShipmentFileTextMutation = { __typename?: 'Mutation', parseShipmentFileText: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
 
 export type UpdatePartnerStatusMutationVariables = Exact<{
   input: UpdatePartnerStatusInput;
