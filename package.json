@@ -19,7 +19,7 @@
     "@graphql-codegen/cli": "^3.3.1",
     "@graphql-codegen/typescript": "^3.0.4",
     "@graphql-codegen/typescript-operations": "^3.0.4",
-    "@types/node": "18.x",
+    "@types/node": "16.x",
     "@urql/core": "^4.0.7",
     "azure-functions-core-tools": "^4.x",
     "graphql": "^16.6.0",
