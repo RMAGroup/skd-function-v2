@@ -60,6 +60,7 @@ This is the azure storage emulator.
 
 ```bash
 npm i -g azurite
+~/Documents/azurite
 azurite --loose --silent
 ```
 
