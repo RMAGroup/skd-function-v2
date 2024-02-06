@@ -31,8 +31,8 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
     }
 };
 
-function prepareFile(context: Context, inBlob: any): File {
-    return new File([inBlob], context.bindingData.name, { type: "text/plain" });
+function prepareFile(context: Context, inBlob: any): TextFile {
+    return { filename: context.bindingData.name, text: inBlob.toString() };
 }
 
 function initializeServices() {
