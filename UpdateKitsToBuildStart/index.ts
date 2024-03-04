@@ -39,7 +39,7 @@ async function updateToBuildStart(service: skdService, context: Context, kitNo: 
     const hasError = result.errors.length > 0;
 
     if (hasError) {
-        const errorMessage = result.errors.map(e => e.message).join(",");
+        const errorMessage = result.errors.map(e => e.description).join(",");
         context.log(`error updating kit VIN ${kitNo}: ${errorMessage}`);
     } else {
         context.log(`updated kit ${kitNo} to BUILD START`);

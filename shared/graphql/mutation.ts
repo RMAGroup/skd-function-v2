@@ -10,7 +10,7 @@ mutation imoprtBom($file: Upload!) {
         sequence
       }
     }
-    errors { message }
+    errors { description }
   }
 }
 `
@@ -25,7 +25,7 @@ mutation importBOMFileText($filename: String!, $text: String!) {
         sequence
       }
     }
-    errors { message }
+    errors { description }
   }
 }
 `
@@ -43,8 +43,8 @@ mutation importShipment($file: Upload!){
       partCount
     }
     errors {
-      path
-      message
+      code
+      description
     }
   }
 }
@@ -62,8 +62,8 @@ mutation importShipmentFileText($filename: String!, $text: String!){
       partCount
     }
     errors {
-      path
-      message
+      code
+      description
     }
   }
 }
@@ -177,7 +177,8 @@ mutation updatePartnerStatus($input: UpdatePartnerStatusInput!) {
       updatedStatuses
     }
     errors {
-      message
+      code
+      description
     }
   }
 }
@@ -191,7 +192,8 @@ mutation syncKitStatusToPartnerStatus($input: UpdatePartnerStatusInput!) {
       updatedStatuses
     }
     errors {
-      message
+      code
+      description
     }
   }
 }
@@ -207,7 +209,8 @@ mutation createBuildStartEvent($kitNo: String!) {
       eventDate
     }
     errors {
-      message
+      code
+      description
     }
   }
 }
@@ -222,7 +225,8 @@ mutation updateKitVin($input: UpdateKitVinInput!) {
       kitNo
     }
     errors {
-      message 
+      code
+      description
     }
   }
 }

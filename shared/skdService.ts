@@ -171,7 +171,7 @@ export class skdService {
       return { vin: "", error: "error" }
     }
     if (result.data.updateKitVin.errors.length > 0) {
-      return { vin: "", error: result.data.updateKitVin.errors[0].message }
+      return { vin: "", error: result.data.updateKitVin.errors[0].description }
     }
     return { vin: result.data.updateKitVin.payload.vin, error: null }
   }

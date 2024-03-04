@@ -40,7 +40,7 @@ async function updateKitPartnerStatus(service: skdService, context: Context, kit
     const { payload, errors } = await service.updatePartnerStatus({ kitNo });
 
     if (errors.length > 0) {
-        context.log(`error updating partner status for kit ${kitNo}: ${errors.map(err => err.message).join(', ')}`);
+        context.log(`error updating partner status for kit ${kitNo}: ${errors.map(err => err.description).join(', ')}`);
     } else {
         context.log(`updated partner status for kit ${kitNo}, new statuses: ${payload.updatedStatuses.join(', ')}`);
     }
@@ -52,7 +52,7 @@ async function syncKitToPartnerStatus(service: skdService, context: Context, kit
     const { payload, errors } = await service.syncKitStatusToPartnerStatus({ kitNo });
 
     if (errors.length > 0) {
-        context.log(`error syncing partner status for kit ${kitNo}: ${errors.map(err => err.message).join(', ')}`);
+        context.log(`error syncing partner status for kit ${kitNo}: ${errors.map(err => err.description).join(', ')}`);
     } else {
         context.log(`synced partner status for kit ${kitNo}, synched statuses: ${payload.updatedStatuses.join(', ')}`);
     }

@@ -9,7 +9,7 @@
     "start:host": "func start",
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\"",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts --watch"
   },
   "description": "",
   "devDependencies": {

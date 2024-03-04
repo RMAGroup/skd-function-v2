@@ -37,7 +37,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
 
     } catch (error) {
         context.log(`error processing incoming file: ${context.bindingData.name}`)
-        context.log(error.message)
+        context.log(error.description)
         throw error
     }
 };
