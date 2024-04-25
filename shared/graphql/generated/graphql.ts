@@ -796,6 +796,16 @@ export type ImportBomResultItem = {
   sequence: Scalars['Int'];
 };
 
+export type ImportShipmentResult = {
+  __typename?: 'ImportShipmentResult';
+  handlingUnitCount: Scalars['Int'];
+  invoiceCount: Scalars['Int'];
+  lotCount: Scalars['Int'];
+  plantCode: Scalars['String'];
+  sequence: Scalars['Int'];
+  shipmentId: Scalars['UUID'];
+};
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']>;
   gt?: InputMaybe<Scalars['Int']>;
@@ -1832,9 +1842,9 @@ export type Mutation = {
   /** Import BOM given the BomPlantSet input */
   importBOMFileText: ResultOrOfImportBomResult;
   /** Import shipment given the ShipFile input */
-  importShipment: ResultOrOfShipmentOverviewDto;
+  importShipment: ResultOrOfImportShipmentResult;
   /** Import shipment given the ShipFile input */
-  importShipmentFileText: ResultOrOfShipmentOverviewDto;
+  importShipmentFileText: ResultOrOfImportShipmentResult;
   /** Parse a BOM file and return a ParseBomFileResult object */
   parseBomFile: ParseBomFileResult;
   /** Parse a BOM file and return a ParseBomFileResult object */
@@ -3655,6 +3665,14 @@ export type ResultOrOfImportBomResult = {
   payload?: Maybe<ImportBomResult>;
 };
 
+export type ResultOrOfImportShipmentResult = {
+  __typename?: 'ResultOrOfImportShipmentResult';
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean'];
+  isSuccess: Scalars['Boolean'];
+  payload?: Maybe<ImportShipmentResult>;
+};
+
 export type ResultOrOfKit = {
   __typename?: 'ResultOrOfKit';
   errors: Array<Error>;
@@ -3797,14 +3815,6 @@ export type ResultOrOfSetPartTypeResult = {
   isFailure: Scalars['Boolean'];
   isSuccess: Scalars['Boolean'];
   payload?: Maybe<SetPartTypeResult>;
-};
-
-export type ResultOrOfShipmentOverviewDto = {
-  __typename?: 'ResultOrOfShipmentOverviewDTO';
-  errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
-  payload?: Maybe<ShipmentOverviewDto>;
 };
 
 export type ResultOrOfSyncKitComponentsResult = {
@@ -4370,7 +4380,7 @@ export type ImportShipmentMutationVariables = Exact<{
 }>;
 
 
-export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'ResultOrOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode: string, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
+export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'ResultOrOfImportShipmentResult', payload?: { __typename?: 'ImportShipmentResult', shipmentId: any, plantCode: string, sequence: number, lotCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
 
 export type ImportShipmentFileTextMutationVariables = Exact<{
   filename: Scalars['String'];
@@ -4378,7 +4388,7 @@ export type ImportShipmentFileTextMutationVariables = Exact<{
 }>;
 
 
-export type ImportShipmentFileTextMutation = { __typename?: 'Mutation', importShipmentFileText: { __typename?: 'ResultOrOfShipmentOverviewDTO', payload?: { __typename?: 'ShipmentOverviewDTO', id: any, plantCode: string, sequence: number, invoiceCount: number, lotCount: number, partCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
+export type ImportShipmentFileTextMutation = { __typename?: 'Mutation', importShipmentFileText: { __typename?: 'ResultOrOfImportShipmentResult', payload?: { __typename?: 'ImportShipmentResult', shipmentId: any, plantCode: string, sequence: number, lotCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
 
 export type ParseBomFileMutationVariables = Exact<{
   file: Scalars['Upload'];

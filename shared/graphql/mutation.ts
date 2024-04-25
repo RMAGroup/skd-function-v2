@@ -35,12 +35,10 @@ export const IMPORT_SHIPMENT = gql`
 mutation importShipment($file: Upload!){
   importShipment(file: $file) {
     payload {
-      id
+      shipmentId
       plantCode
       sequence
-      invoiceCount
       lotCount
-      partCount
     }
     errors {
       code
@@ -54,12 +52,10 @@ export const IMPORT_SHIPMENT_FILE_TEXT = gql`
 mutation importShipmentFileText($filename: String!, $text: String!){
   importShipmentFileText(filename: $filename, text: $text) {
     payload {
-      id
+      shipmentId
       plantCode
       sequence
-      invoiceCount
       lotCount
-      partCount
     }
     errors {
       code
