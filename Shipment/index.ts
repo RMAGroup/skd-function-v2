@@ -1,29 +1,32 @@
 import { AzureFunction, Context } from "@azure/functions";
-import { getAppConfig } from "../shared/appConfig";
-import { AzureTableService } from "../shared/AzureTableService";
-import { addActivityLogEntry } from "../shared/activityLog";
-import { skdService } from "../shared/skdService";
-import { TextFile } from "../shared/types";
+import { getAppConfig } from "../Common/appConfig";
+import { AzureTableService } from "../Common/AzureTableService";
+import { skdService } from "../Common/skdService";
+import { ContainerName, TextFile } from "../Common/types";
+import { AzureBlobService } from "../Common/AzureBlobService";
 
 const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
+
+    const { service } = initializeServices();
+    const textFile: TextFile = toTextFile(context, inBlob);
+    const appCOnfig = getAppConfig();
+    const blobService = new AzureBlobService<ContainerName>(appCOnfig.AzureWebJobsStorage)
+
+    // save to archive
+    blobService.saveBlob(ContainerName.ShipArchive, textFile.filename, textFile.text);
+
     try {
-        const { service, tableService } = initializeServices();
-        const textFile = prepareFile(context, inBlob);
+        
+        // import ship file
+        const result = await service.importShipmentFileText(textFile);
 
-        // Archive Blob
-        archiveBlob(context, inBlob);
-
-        // Parse Shipment File
-        const parsedShipFile = await parseShipFile(service, textFile);
-
-        // Import Shipment
-        const { payload, errors } = await importShipment(service, textFile);
-
-        // Write to Data Table
-        await writeToDataTable(tableService, context, parsedShipFile, errors);
-
-        // Log Result
-        logResult(context, errors, payload);
+        // log
+        if (result.errors.length > 0) {
+            const errorMessage = result.errors.map(t => t.description).join(', ');
+            context.log(`Error importing ship file ${textFile.filename} ${errorMessage}`);
+        } else {
+            context.log(`imported ship file: ${textFile.filename}}`);
+        }
     } catch (error) {
         logError(context, error);
     }
@@ -36,43 +39,8 @@ function initializeServices() {
     return { appConfig, service, tableService };
 }
 
-function prepareFile(context: Context, inBlob: any): TextFile {
+function toTextFile(context: Context, inBlob: any): TextFile {
     return { filename: context.bindingData.name, text: inBlob.toString() };
-}
-
-function archiveBlob(context: Context, inBlob: any) {
-    context.bindings.outBlob = inBlob;
-}
-
-async function parseShipFile(service: skdService, textFile: TextFile) {
-    return await service.parseShipFileText(textFile);
-}
-
-async function importShipment(service: skdService, textFile: TextFile) {
-    return await service.importShipmentFileText(textFile);
-}
-
-async function writeToDataTable(tableService: AzureTableService, context: Context, parsedShipFile: any, errors: any[]) {
-    const description = `lots: ${parsedShipFile?.lots.map(l => l.lotNo).join(', ')}`;
-    const errorMessage = errors.map(err => err.message).join(', ');
-    await addActivityLogEntry({
-        importType: 'ship',
-        plantCode: parsedShipFile.plantCode,
-        sequence: parsedShipFile.sequence,
-        filename: context.bindingData.name,
-        description,
-        error: errorMessage
-    }, tableService);
-}
-
-function logResult(context: Context, errors: any[], payload: any) {
-    if (errors.length > 0) {
-        const errorMessage = errors.map(t => t.message).join(', ');
-        context.log(`Error importing ship file ${payload.plantCode}-${payload.sequence} ${errorMessage}`);
-    } else {
-        const message = `imported ship file: ${payload.plantCode}-${payload.sequence}, lot count: ${payload.lotCount}, part count: ${payload.partCount}`;
-        context.log(message);
-    }
 }
 
 function logError(context: Context, error: Error) {

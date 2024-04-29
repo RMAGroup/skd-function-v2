@@ -1,6 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
-import { getAppConfig } from "../shared/appConfig";
-import { skdService } from "../shared/skdService";
+import { getAppConfig } from "../Common/appConfig";
+import { skdService } from "../Common/skdService";
+import { delay } from "../Common/util";
 
 const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
     const { service } = initializeServices();
@@ -30,6 +31,7 @@ async function updateKitsToBuildStart(service: skdService, context: Context, pla
 
         for (const kit of kits) {
             await updateToBuildStart(service, context, kit.kitNo);
+            await delay(200);
         }
     }
 }

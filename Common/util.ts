@@ -9,4 +9,8 @@ export function omitTypenameDeep(obj) {
       return rest;
     }
     return obj;
-  }
+}
+  
+export function delay(ms = 1000) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

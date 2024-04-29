@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "inBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "incoming/{name}"
+    }
+  ],
+  "scriptFile": "../dist/HandleIncomingBomShipFiles/index.js"
+}

@@ -3018,7 +3018,7 @@ export type Query = {
   serverConfigSettings: AppSettings;
   shipmentInvoices?: Maybe<ShipmentInvoicesConnection>;
   shipmentLots?: Maybe<ShipmentLotsConnection>;
-  shipmentOverview?: Maybe<ShipmentOverviewDto>;
+  shipmentOverview?: Maybe<ResultOrOfShipmentOverviewQueryResult>;
   shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
   stations?: Maybe<StationsConnection>;
@@ -3571,7 +3571,7 @@ export type QueryShipmentLotsArgs = {
 
 
 export type QueryShipmentOverviewArgs = {
-  shipmentId: Scalars['UUID'];
+  query: ShipmentOverviewQueryInput;
 };
 
 
@@ -3815,6 +3815,14 @@ export type ResultOrOfSetPartTypeResult = {
   isFailure: Scalars['Boolean'];
   isSuccess: Scalars['Boolean'];
   payload?: Maybe<SetPartTypeResult>;
+};
+
+export type ResultOrOfShipmentOverviewQueryResult = {
+  __typename?: 'ResultOrOfShipmentOverviewQueryResult';
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean'];
+  isSuccess: Scalars['Boolean'];
+  payload?: Maybe<ShipmentOverviewQueryResult>;
 };
 
 export type ResultOrOfSyncKitComponentsResult = {
@@ -4075,22 +4083,22 @@ export type ShipmentLotsEdge = {
   node: ShipmentLot;
 };
 
-export type ShipmentOverviewDto = {
-  __typename?: 'ShipmentOverviewDTO';
+export type ShipmentOverviewQueryInput = {
+  id: Scalars['UUID'];
+};
+
+export type ShipmentOverviewQueryResult = {
+  __typename?: 'ShipmentOverviewQueryResult';
   bomId?: Maybe<Scalars['UUID']>;
   bomSequence?: Maybe<Scalars['Int']>;
-  bomShipDiffCount: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   handlingUnitCount: Scalars['Int'];
   handlingUnitReceivedCount: Scalars['Int'];
   id: Scalars['UUID'];
   invoiceCount: Scalars['Int'];
-  lotCount: Scalars['Int'];
   lotNumbers: Array<Scalars['String']>;
   lotPartCount: Scalars['Int'];
-  lotPartReceiveBomDiffCount: Scalars['Int'];
   lotPartReceivedCount: Scalars['Int'];
-  partCount: Scalars['Int'];
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
 };

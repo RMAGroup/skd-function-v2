@@ -21,19 +21,17 @@ export interface LogEntryTableEntity extends TableEntity {
     error: string
 }
 
-export type ContainerName =
-    | 'incoming'
-    | 'bom'
-    | 'bom-archive'
-    | 'ship'
-    | 'ship-archive'
-    | 'vin'
-    | 'vin-ack'
-    | 'vin-archive'
-    | 'partner-status'
-    | 'partner-status-archive'
-    | 'partner-status-ack'
-    | 'unknown-fileType'
+export enum ContainerName {
+    Incoming = 'incoming',
+    IncomingNoContent = 'incoming-no-content',
+    Bom = 'bom',
+    BomArchive = 'bom-archive',
+    Ship = 'ship',
+    ShipArchive = 'ship-archive',
+    UnknownFileType = 'unknown-fileType'
+}
+
+
 
 
 export type TextFile = {

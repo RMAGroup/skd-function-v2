@@ -1,5 +1,4 @@
 import { BlobServiceClient, ContainerClient, BlobClient } from '@azure/storage-blob'
-import { ContainerName } from './types'
 
 export class AzureBlobService<ContainerNameType extends string> {
     private blobServicClient: BlobServiceClient

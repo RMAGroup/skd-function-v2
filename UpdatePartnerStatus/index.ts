@@ -1,6 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
-import { getAppConfig } from "../shared/appConfig";
-import { skdService } from "../shared/skdService";
+import { getAppConfig } from "../Common/appConfig";
+import { skdService } from "../Common/skdService";
+import { delay } from "../Common/util";
 
 const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
     const { service } = initializeServices();
@@ -31,7 +32,10 @@ async function updateAndSyncPartnerStatusForPlants(service: skdService, context:
 
         for (const kit of updatePendingKits) {
             await updateKitPartnerStatus(service, context, kit.kitNo);
+            await delay(200);
             await syncKitToPartnerStatus(service, context, kit.kitNo);
+            // issue with Ford kit status feed, so delay to avoid rate possible limiting
+            await delay(200)
         }
     }
 }
