@@ -23,6 +23,7 @@ export interface LogEntryTableEntity extends TableEntity {
 
 export enum ContainerName {
     Incoming = 'incoming',
+    IncomingArchive = 'incoming-archive',
     IncomingNoContent = 'incoming-no-content',
     Bom = 'bom',
     BomArchive = 'bom-archive',

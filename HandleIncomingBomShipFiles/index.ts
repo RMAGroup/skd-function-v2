@@ -13,11 +13,13 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
         const fileType: FileType = getFileType(filename);
 
         if (fileText.length < 500) {
-
             blobService.saveBlob(ContainerName.IncomingNoContent, filename, fileText)
             blobService.deleteBlob(ContainerName.Incoming, filename);
             return
         }
+
+        // if the file is a BOM or SHIP file, save a copy to the incoming-archive container
+        blobService.saveBlob(ContainerName.IncomingArchive, filename, fileText)
 
         // otherwise, move the file to the appropriate container based on the file type
         switch (fileType) {
@@ -34,9 +36,11 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
                 break;
         }
 
-        // delete the file from the incoming container
-        blobService.deleteBlob(ContainerName.Incoming, filename);
+        // if exists in incoming-archive container, delete it
 
+        if (fileType !== FileType.UNKNOWN && blobService.blobExists(ContainerName.IncomingArchive, filename)) {
+            blobService.deleteBlob(ContainerName.Incoming, filename)
+        }
     } catch (error) {
         context.log(`error processing incoming file: ${context.bindingData.name}`)
         context.log(error.description)
