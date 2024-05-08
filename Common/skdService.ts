@@ -26,7 +26,6 @@ import {
   ParseShipmentFileMutationVariables,
   ParseBomFileMutation,
   ParseBomFileMutationVariables,
-  ParseBomFileResult,
   PartnerStatusUpdatePendingKitsQuery,
   PartnerStatusUpdatePendingKitsQueryVariables,
   ParseBomFileTextMutation,

@@ -4,11 +4,9 @@ export const IMPORT_BOM = gql`
 mutation imoprtBom($file: Upload!) {
   importBOM(file: $file) {
     payload {
-      items {
-        bomId
-        plantCode
-        sequence
-      }
+      bomId
+      plantCode
+      sequence
     }
     errors { description }
   }
@@ -19,11 +17,9 @@ export const IMPORT_BOM_FILE_TEXT = gql`
 mutation importBOMFileText($filename: String!, $text: String!) {
   importBOMFileText(filename: $filename, text: $text) {
     payload {
-      items {
-        bomId
-        plantCode
-        sequence
-      }
+      bomId
+      plantCode
+      sequence
     }
     errors { description }
   }
@@ -68,7 +64,7 @@ mutation importShipmentFileText($filename: String!, $text: String!){
 export const PARSE_BOM_FILE = gql`
 mutation parseBomFile($file: Upload!) {
   parseBomFile(file: $file) {
-    bomPlantSets {
+    payload {
       plantCode
       filename
       sequenceNumber
@@ -78,6 +74,7 @@ mutation parseBomFile($file: Upload!) {
         pcvCode
         lotParts {
           partNo
+          originalPartNo
           partDesc
           quantity
         }
@@ -86,13 +83,17 @@ mutation parseBomFile($file: Upload!) {
         }
       }
     }
+    errors {
+      description
+    }
   }
 }
 `
+
 export const PARSE_BOM_FILE_TEXT = gql`
 mutation parseBomFileText($filename: String!, $text: String!) {
   parseBomFileText(filename: $filename, text: $text) {
-    bomPlantSets {
+    payload {
       plantCode
       filename
       sequenceNumber
@@ -102,6 +103,7 @@ mutation parseBomFileText($filename: String!, $text: String!) {
         pcvCode
         lotParts {
           partNo
+          originalPartNo
           partDesc
           quantity
         }
@@ -109,6 +111,9 @@ mutation parseBomFileText($filename: String!, $text: String!) {
           kitNo
         }
       }
+    }
+    errors {
+      description
     }
   }
 }
