@@ -101,6 +101,10 @@ export type Bom = {
   sequence: Scalars['Int'];
 };
 
+export type BomFileQueryInput = {
+  fileName: Scalars['String'];
+};
+
 export type BomFilterInput = {
   and?: InputMaybe<Array<BomFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -2893,6 +2897,7 @@ export type Query = {
   appSettings?: Maybe<AppSettingsConnection>;
   basicKitInfo?: Maybe<BasicKitInfo>;
   bomById?: Maybe<Bom>;
+  bomFile: ResultOrOfRawBom;
   bomList?: Maybe<BomListConnection>;
   bomOverview: BomOverviewQueryResult;
   bomPartsQuantity: Array<PartQuantityDto>;
@@ -3004,6 +3009,11 @@ export type QueryBasicKitInfoArgs = {
 
 export type QueryBomByIdArgs = {
   id: Scalars['UUID'];
+};
+
+
+export type QueryBomFileArgs = {
+  request: BomFileQueryInput;
 };
 
 
