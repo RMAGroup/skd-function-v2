@@ -183,8 +183,8 @@ export type BomOverviewQueryResult = {
 export type BomOverviewQueryResultShipment = {
   __typename?: 'BomOverviewQueryResultShipment';
   plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-  shipmentId: Scalars['UUID'];
+  sequence?: Maybe<Scalars['Int']>;
+  shipmentId?: Maybe<Scalars['UUID']>;
 };
 
 export type BomSortInput = {
@@ -627,11 +627,13 @@ export type HandlingUnit = {
   code: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['UUID'];
-  parts: Array<ShipmentPart>;
+  lot: Lot;
+  lotId: Scalars['UUID'];
+  lotParts: Array<LotPart>;
   received: Array<HandlingUnitReceived>;
   removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentInvoice: ShipmentInvoice;
-  shipmentInvoiceId: Scalars['UUID'];
+  shipmentInvoice?: Maybe<ShipmentInvoice>;
+  shipmentInvoiceId?: Maybe<Scalars['UUID']>;
 };
 
 export type HandlingUnitFilterInput = {
@@ -639,8 +641,10 @@ export type HandlingUnitFilterInput = {
   code?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  lot?: InputMaybe<LotFilterInput>;
+  lotId?: InputMaybe<UuidOperationFilterInput>;
+  lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
   or?: InputMaybe<Array<HandlingUnitFilterInput>>;
-  parts?: InputMaybe<ListFilterInputTypeOfShipmentPartFilterInput>;
   received?: InputMaybe<ListFilterInputTypeOfHandlingUnitReceivedFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   shipmentInvoice?: InputMaybe<ShipmentInvoiceFilterInput>;
@@ -727,6 +731,8 @@ export type HandlingUnitSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  lot?: InputMaybe<LotSortInput>;
+  lotId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   shipmentInvoice?: InputMaybe<ShipmentInvoiceSortInput>;
   shipmentInvoiceId?: InputMaybe<SortEnumType>;
@@ -766,9 +772,10 @@ export type ImportBomResult = {
 
 export type ImportShipmentResult = {
   __typename?: 'ImportShipmentResult';
-  handlingUnitCount: Scalars['Int'];
   invoiceCount: Scalars['Int'];
+  invoice_HandlingUnitCount: Scalars['Int'];
   lotCount: Scalars['Int'];
+  lot_HandlingUnitCount: Scalars['Int'];
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
   shipmentId: Scalars['UUID'];
@@ -1381,20 +1388,6 @@ export type ListFilterInputTypeOfShipmentInvoiceFilterInput = {
   some?: InputMaybe<ShipmentInvoiceFilterInput>;
 };
 
-export type ListFilterInputTypeOfShipmentLotFilterInput = {
-  all?: InputMaybe<ShipmentLotFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<ShipmentLotFilterInput>;
-  some?: InputMaybe<ShipmentLotFilterInput>;
-};
-
-export type ListFilterInputTypeOfShipmentPartFilterInput = {
-  all?: InputMaybe<ShipmentPartFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<ShipmentPartFilterInput>;
-  some?: InputMaybe<ShipmentPartFilterInput>;
-};
-
 export type ListFilterInputTypeOfStationFilterInput = {
   all?: InputMaybe<StationFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
@@ -1407,7 +1400,9 @@ export type Lot = {
   bom?: Maybe<Bom>;
   bomId?: Maybe<Scalars['UUID']>;
   createdAt: Scalars['DateTime'];
+  handlingUnits: Array<HandlingUnit>;
   id: Scalars['UUID'];
+  invoices: Array<ShipmentInvoice>;
   kits: Array<Kit>;
   lotNo: Scalars['String'];
   lotParts: Array<LotPart>;
@@ -1417,7 +1412,8 @@ export type Lot = {
   plant: Plant;
   plantId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentLots: Array<ShipmentLot>;
+  shipment?: Maybe<Shipment>;
+  shipmentId?: Maybe<Scalars['UUID']>;
 };
 
 export type LotDto = {
@@ -1436,7 +1432,9 @@ export type LotFilterInput = {
   bom?: InputMaybe<BomFilterInput>;
   bomId?: InputMaybe<UuidOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  handlingUnits?: InputMaybe<ListFilterInputTypeOfHandlingUnitFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  invoices?: InputMaybe<ListFilterInputTypeOfShipmentInvoiceFilterInput>;
   kits?: InputMaybe<ListFilterInputTypeOfKitFilterInput>;
   lotNo?: InputMaybe<StringOperationFilterInput>;
   lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
@@ -1447,7 +1445,8 @@ export type LotFilterInput = {
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentLots?: InputMaybe<ListFilterInputTypeOfShipmentLotFilterInput>;
+  shipment?: InputMaybe<ShipmentFilterInput>;
+  shipmentId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type LotKitStatusEventInput = {
@@ -1489,23 +1488,6 @@ export type LotListDto = {
   plantCode: Scalars['String'];
 };
 
-export type LotOverviewDto = {
-  __typename?: 'LotOverviewDTO';
-  bomId: Scalars['UUID'];
-  bomSequence: Scalars['Int'];
-  createdAt: Scalars['DateTime'];
-  customReceived?: Maybe<StatusEventDto>;
-  id: Scalars['UUID'];
-  lotNo: Scalars['String'];
-  note: Scalars['String'];
-  pcvCode: Scalars['String'];
-  pcvDescription: Scalars['String'];
-  pcvId: Scalars['UUID'];
-  plantCode: Scalars['String'];
-  shipmentId: Scalars['UUID'];
-  shipmentSequence: Scalars['Int'];
-};
-
 export type LotOverviewQueryInput = {
   lotNo: Scalars['String'];
 };
@@ -1535,6 +1517,8 @@ export type LotPart = {
   __typename?: 'LotPart';
   bomQuantity: Scalars['Int'];
   createdAt: Scalars['DateTime'];
+  handlingUnit?: Maybe<HandlingUnit>;
+  handlingUnitId?: Maybe<Scalars['UUID']>;
   id: Scalars['UUID'];
   lot: Lot;
   lotId: Scalars['UUID'];
@@ -1590,6 +1574,8 @@ export type LotPartFilterInput = {
   and?: InputMaybe<Array<LotPartFilterInput>>;
   bomQuantity?: InputMaybe<IntOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  handlingUnit?: InputMaybe<HandlingUnitFilterInput>;
+  handlingUnitId?: InputMaybe<UuidOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   lot?: InputMaybe<LotFilterInput>;
   lotId?: InputMaybe<UuidOperationFilterInput>;
@@ -1646,6 +1632,8 @@ export type LotPartReceivedSortInput = {
 export type LotPartSortInput = {
   bomQuantity?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  handlingUnit?: InputMaybe<HandlingUnitSortInput>;
+  handlingUnitId?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lot?: InputMaybe<LotSortInput>;
   lotId?: InputMaybe<SortEnumType>;
@@ -1679,26 +1667,6 @@ export type LotPartsByShipmentQueryInput = {
   queryBy: LotPartsQueryBy;
 };
 
-/** A connection to a list of items. */
-export type LotPartsConnection = {
-  __typename?: 'LotPartsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<LotPartsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<LotPart>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type LotPartsEdge = {
-  __typename?: 'LotPartsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: LotPart;
-};
-
 export enum LotPartsQueryBy {
   Bom = 'BOM',
   Shipment = 'SHIPMENT'
@@ -1715,13 +1683,14 @@ export type LotPartsQueryResult = {
 
 export type LotPartsQueryResultItem = {
   __typename?: 'LotPartsQueryResultItem';
+  handlingUnitCode: Scalars['String'];
+  handlingUnitReceivedAt?: Maybe<Scalars['DateTime']>;
   partDesc: Scalars['String'];
   partNo: Scalars['String'];
   partType: Scalars['String'];
   quantity: Scalars['Int'];
   quantityReceived: Scalars['Int'];
   receivedAt?: Maybe<Scalars['DateTime']>;
-  receivedCanceled?: Maybe<Scalars['Boolean']>;
 };
 
 /** A connection to a list of items. */
@@ -1756,6 +1725,8 @@ export type LotSortInput = {
   plant?: InputMaybe<PlantSortInput>;
   plantId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
+  shipment?: InputMaybe<ShipmentSortInput>;
+  shipmentId?: InputMaybe<SortEnumType>;
 };
 
 export type LotsByKitStatusQueryInput = {
@@ -2151,7 +2122,6 @@ export type Part = {
   partType?: Maybe<PartType>;
   partTypeId?: Maybe<Scalars['UUID']>;
   removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentParts: Array<ShipmentPart>;
 };
 
 export type PartFilterInput = {
@@ -2166,7 +2136,6 @@ export type PartFilterInput = {
   partType?: InputMaybe<PartTypeFilterInput>;
   partTypeId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentParts?: InputMaybe<ListFilterInputTypeOfShipmentPartFilterInput>;
 };
 
 export type PartLotPartsQueryInput = {
@@ -2941,14 +2910,12 @@ export type Query = {
   /** Get list of kits for a given lot number */
   lotKits: LotKitsQueryResult;
   lotListByBomId: Array<LotListDto>;
-  lotOverview?: Maybe<LotOverviewDto>;
   /** Get the lot overview for a given lot number */
   lotOverview2: ResultOrOfLotOverviewQueryResult;
   /** Get the difference in lot parts between the current lot and the prior lot if it exists */
   lotPartDiff: ResultOrOfLotPartDiffQueryResult;
   lotPartInfo?: Maybe<LotPartDto>;
-  lotParts?: Maybe<LotPartsConnection>;
-  lotParts2: LotPartsQueryResult;
+  lotParts: LotPartsQueryResult;
   lotPartsByShipOrBom: ResultOrOfLotPartsByShipOrBomQueryResult;
   lotPartsReceived?: Maybe<LotPartsReceivedConnection>;
   lots?: Maybe<LotsConnection>;
@@ -2981,9 +2948,7 @@ export type Query = {
   recentShipmentFiles: Array<RecentShipmentFilesQueryResult>;
   serverConfigSettings: AppSettings;
   shipmentInvoices?: Maybe<ShipmentInvoicesConnection>;
-  shipmentLots?: Maybe<ShipmentLotsConnection>;
   shipmentOverview?: Maybe<ResultOrOfShipmentOverviewQueryResult>;
-  shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
   stations?: Maybe<StationsConnection>;
   /** @deprecated no longer used */
@@ -3283,11 +3248,6 @@ export type QueryLotListByBomIdArgs = {
 };
 
 
-export type QueryLotOverviewArgs = {
-  lotNo: Scalars['String'];
-};
-
-
 export type QueryLotOverview2Args = {
   input: LotOverviewQueryInput;
 };
@@ -3305,16 +3265,6 @@ export type QueryLotPartInfoArgs = {
 
 
 export type QueryLotPartsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<LotPartSortInput>>;
-  where?: InputMaybe<LotPartFilterInput>;
-};
-
-
-export type QueryLotParts2Args = {
   input: LotPartsQueryInput;
 };
 
@@ -3539,28 +3489,8 @@ export type QueryShipmentInvoicesArgs = {
 };
 
 
-export type QueryShipmentLotsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<ShipmentLotSortInput>>;
-  where?: InputMaybe<ShipmentLotFilterInput>;
-};
-
-
 export type QueryShipmentOverviewArgs = {
   query: ShipmentOverviewQueryInput;
-};
-
-
-export type QueryShipmentPartsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<ShipmentPartSortInput>>;
-  where?: InputMaybe<ShipmentPartFilterInput>;
 };
 
 
@@ -3996,11 +3926,11 @@ export type Shipment = {
   createdAt: Scalars['DateTime'];
   filename?: Maybe<Scalars['String']>;
   id: Scalars['UUID'];
+  lots: Array<Lot>;
   plant: Plant;
   plantId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
   sequence: Scalars['Int'];
-  shipmentLots: Array<ShipmentLot>;
 };
 
 export type ShipmentFilterInput = {
@@ -4008,12 +3938,12 @@ export type ShipmentFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   filename?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  lots?: InputMaybe<ListFilterInputTypeOfLotFilterInput>;
   or?: InputMaybe<Array<ShipmentFilterInput>>;
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
-  shipmentLots?: InputMaybe<ListFilterInputTypeOfShipmentLotFilterInput>;
 };
 
 export type ShipmentInvoice = {
@@ -4022,10 +3952,11 @@ export type ShipmentInvoice = {
   handlingUnits: Array<HandlingUnit>;
   id: Scalars['UUID'];
   invoiceNo: Scalars['String'];
+  lot: Lot;
+  lotId: Scalars['UUID'];
   removedAt?: Maybe<Scalars['DateTime']>;
   shipDate: Scalars['DateTime'];
-  shipmentLot: ShipmentLot;
-  shipmentLotId: Scalars['UUID'];
+  shipmentLotId?: Maybe<Scalars['UUID']>;
 };
 
 export type ShipmentInvoiceFilterInput = {
@@ -4034,10 +3965,11 @@ export type ShipmentInvoiceFilterInput = {
   handlingUnits?: InputMaybe<ListFilterInputTypeOfHandlingUnitFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   invoiceNo?: InputMaybe<StringOperationFilterInput>;
+  lot?: InputMaybe<LotFilterInput>;
+  lotId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ShipmentInvoiceFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   shipDate?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentLot?: InputMaybe<ShipmentLotFilterInput>;
   shipmentLotId?: InputMaybe<UuidOperationFilterInput>;
 };
 
@@ -4045,9 +3977,10 @@ export type ShipmentInvoiceSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   invoiceNo?: InputMaybe<SortEnumType>;
+  lot?: InputMaybe<LotSortInput>;
+  lotId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   shipDate?: InputMaybe<SortEnumType>;
-  shipmentLot?: InputMaybe<ShipmentLotSortInput>;
   shipmentLotId?: InputMaybe<SortEnumType>;
 };
 
@@ -4071,61 +4004,6 @@ export type ShipmentInvoicesEdge = {
   node: ShipmentInvoice;
 };
 
-export type ShipmentLot = {
-  __typename?: 'ShipmentLot';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  invoices: Array<ShipmentInvoice>;
-  lot: Lot;
-  lotId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipment: Shipment;
-  shipmentId: Scalars['UUID'];
-};
-
-export type ShipmentLotFilterInput = {
-  and?: InputMaybe<Array<ShipmentLotFilterInput>>;
-  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  invoices?: InputMaybe<ListFilterInputTypeOfShipmentInvoiceFilterInput>;
-  lot?: InputMaybe<LotFilterInput>;
-  lotId?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ShipmentLotFilterInput>>;
-  removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipment?: InputMaybe<ShipmentFilterInput>;
-  shipmentId?: InputMaybe<UuidOperationFilterInput>;
-};
-
-export type ShipmentLotSortInput = {
-  createdAt?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  lot?: InputMaybe<LotSortInput>;
-  lotId?: InputMaybe<SortEnumType>;
-  removedAt?: InputMaybe<SortEnumType>;
-  shipment?: InputMaybe<ShipmentSortInput>;
-  shipmentId?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type ShipmentLotsConnection = {
-  __typename?: 'ShipmentLotsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ShipmentLotsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ShipmentLot>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type ShipmentLotsEdge = {
-  __typename?: 'ShipmentLotsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: ShipmentLot;
-};
-
 export type ShipmentOverviewQueryInput = {
   id: Scalars['UUID'];
 };
@@ -4144,62 +4022,6 @@ export type ShipmentOverviewQueryResult = {
   lotPartReceivedCount: Scalars['Int'];
   plantCode: Scalars['String'];
   sequence: Scalars['Int'];
-};
-
-export type ShipmentPart = {
-  __typename?: 'ShipmentPart';
-  createdAt: Scalars['DateTime'];
-  handlingUnit: HandlingUnit;
-  handlingUnitId?: Maybe<Scalars['UUID']>;
-  id: Scalars['UUID'];
-  part: Part;
-  partId: Scalars['UUID'];
-  quantity: Scalars['Int'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type ShipmentPartFilterInput = {
-  and?: InputMaybe<Array<ShipmentPartFilterInput>>;
-  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  handlingUnit?: InputMaybe<HandlingUnitFilterInput>;
-  handlingUnitId?: InputMaybe<UuidOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ShipmentPartFilterInput>>;
-  part?: InputMaybe<PartFilterInput>;
-  partId?: InputMaybe<UuidOperationFilterInput>;
-  quantity?: InputMaybe<IntOperationFilterInput>;
-  removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-};
-
-export type ShipmentPartSortInput = {
-  createdAt?: InputMaybe<SortEnumType>;
-  handlingUnit?: InputMaybe<HandlingUnitSortInput>;
-  handlingUnitId?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  part?: InputMaybe<PartSortInput>;
-  partId?: InputMaybe<SortEnumType>;
-  quantity?: InputMaybe<SortEnumType>;
-  removedAt?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type ShipmentPartsConnection = {
-  __typename?: 'ShipmentPartsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ShipmentPartsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ShipmentPart>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type ShipmentPartsEdge = {
-  __typename?: 'ShipmentPartsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: ShipmentPart;
 };
 
 export type ShipmentSortInput = {
