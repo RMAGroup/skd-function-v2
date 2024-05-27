@@ -5,12 +5,6 @@
       "type": "blobTrigger",
       "direction": "in",
       "path": "ship/{name}"
-    },
-    {
-      "name": "outBlob",
-      "type": "blob",
-      "direction": "out",
-      "path": "ship-archive/{name}"
     }
   ],
   "scriptFile": "../dist/Shipment/index.js"

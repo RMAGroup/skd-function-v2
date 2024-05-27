@@ -21,8 +21,7 @@ Handle automated import and export of interface files between Ford and RMA.
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "ActivityLogTable": "ActivityLog",
-    "SkdGraphqlURI": "http://0.0.0.0:5100/graphql",
-    "EnginComponentCode": "EN"
+    "SkdGraphqlURI": "http://0.0.0.0:5100/graphql"
   }
 }
 ```
@@ -38,7 +37,6 @@ With the following content. Change the server GraphQL server endpoint if differe
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "ActivityLogTable": "ActivityLog",
     "SkdGraphqlURI": "http://0.0.0.0:5100/graphql",
-    "EnginComponentCode": "EN"
   }
 }
 ```

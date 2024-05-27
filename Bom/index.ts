@@ -4,7 +4,6 @@ import { getAppConfig } from "../Common/appConfig";
 import { AzureTableService } from "../Common/AzureTableService";
 import { ContainerName, TextFile } from "../Common/types";
 import { AzureBlobService } from "../Common/AzureBlobService";
-import { blob } from "stream/consumers";
 
 const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
 

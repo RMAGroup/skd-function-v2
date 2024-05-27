@@ -5,12 +5,6 @@
       "type": "blobTrigger",
       "direction": "in",
       "path": "bom/{name}"
-    },
-    {
-      "name": "outBlob",
-      "type": "blob",
-      "direction": "out",
-      "path": "bom-archive/{name}"
     }
   ],
   "scriptFile": "../dist/Bom/index.js"
