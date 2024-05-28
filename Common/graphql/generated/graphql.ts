@@ -3,26 +3,29 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
-  UUID: any;
-  Upload: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  Long: { input: any; output: any; }
+  UUID: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type AppSetting = {
   __typename?: 'AppSetting';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  value: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  value: Scalars['String']['output'];
 };
 
 export type AppSettingFilterInput = {
@@ -48,10 +51,10 @@ export type AppSettingSortInput = {
 /** SKD Server app settings section */
 export type AppSettings = {
   __typename?: 'AppSettings';
-  allowGraphqlIntrospection: Scalars['Boolean'];
-  dcwsServiceAddress: Scalars['String'];
-  executionTimeoutSeconds: Scalars['Int'];
-  kitStatusFeedUrl: Scalars['String'];
+  allowGraphqlIntrospection: Scalars['Boolean']['output'];
+  dcwsServiceAddress: Scalars['String']['output'];
+  executionTimeoutSeconds: Scalars['Int']['output'];
+  kitStatusFeedUrl: Scalars['String']['output'];
 };
 
 /** A connection to a list of items. */
@@ -69,35 +72,39 @@ export type AppSettingsConnection = {
 export type AppSettingsEdge = {
   __typename?: 'AppSettingsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: AppSetting;
 };
 
 export type ApplyComponentSerialFormatInput = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
 };
 
 export type BasicKitInfo = {
   __typename?: 'BasicKitInfo';
-  kitNo: Scalars['String'];
-  lotNo: Scalars['String'];
-  modelCode: Scalars['String'];
-  modelName: Scalars['String'];
-  vin: Scalars['String'];
+  kitNo: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  modelCode: Scalars['String']['output'];
+  modelName: Scalars['String']['output'];
+  vin: Scalars['String']['output'];
 };
 
 export type Bom = {
   __typename?: 'Bom';
-  createdAt: Scalars['DateTime'];
-  filename?: Maybe<Scalars['String']>;
-  id: Scalars['UUID'];
-  lotPartQuantitiesMatchShipment: Scalars['Boolean'];
+  createdAt: Scalars['DateTime']['output'];
+  filename?: Maybe<Scalars['String']['output']>;
+  id: Scalars['UUID']['output'];
+  lotPartQuantitiesMatchShipment: Scalars['Boolean']['output'];
   lots: Array<Lot>;
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
+};
+
+export type BomFileQueryInput = {
+  fileName: Scalars['String']['input'];
 };
 
 export type BomFilterInput = {
@@ -127,12 +134,12 @@ export type BomListConnection = {
 
 export type BomListDto = {
   __typename?: 'BomListDTO';
-  createdAt: Scalars['DateTime'];
-  filename: Scalars['String'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  filename: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
   lots: Array<BomList_Lot>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type BomListDtoSortInput = {
@@ -147,71 +154,39 @@ export type BomListDtoSortInput = {
 export type BomListEdge = {
   __typename?: 'BomListEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: BomListDto;
 };
 
 export type BomList_Lot = {
   __typename?: 'BomList_Lot';
-  lotNo: Scalars['String'];
-  shipmentSequence?: Maybe<Scalars['Int']>;
-};
-
-export type BomLot = {
-  __typename?: 'BomLot';
-  kits: Array<BomLotKit>;
-  lotNo: Scalars['String'];
-  lotParts: Array<BomLotPart>;
-  pcvCode: Scalars['String'];
-};
-
-export type BomLotKit = {
-  __typename?: 'BomLotKit';
-  kitNo: Scalars['String'];
-};
-
-export type BomLotPart = {
-  __typename?: 'BomLotPart';
-  lotNo: Scalars['String'];
-  originalPartNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
+  lotNo: Scalars['String']['output'];
+  shipmentSequence?: Maybe<Scalars['Int']['output']>;
 };
 
 export type BomOverviewQueryInput = {
-  bomId: Scalars['UUID'];
+  bomId: Scalars['UUID']['input'];
 };
 
 export type BomOverviewQueryResult = {
   __typename?: 'BomOverviewQueryResult';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  lotNumbers: Array<Scalars['String']>;
-  partCount: Scalars['Int'];
-  pcvCodes: Array<Scalars['String']>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  lotNumbers: Array<Scalars['String']['output']>;
+  partCount: Scalars['Int']['output'];
+  pcvCodes: Array<Scalars['String']['output']>;
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
   shipments: Array<BomOverviewQueryResultShipment>;
-  vehicleCount: Scalars['Int'];
+  vehicleCount: Scalars['Int']['output'];
 };
 
 export type BomOverviewQueryResultShipment = {
   __typename?: 'BomOverviewQueryResultShipment';
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-  shipmentId: Scalars['UUID'];
-};
-
-export type BomPlantSet = {
-  __typename?: 'BomPlantSet';
-  bomFileCreatedAt: Scalars['DateTime'];
-  filename: Scalars['String'];
-  kittingPlantCode: Scalars['String'];
-  lots: Array<BomLot>;
-  plantCode: Scalars['String'];
-  sequenceNumber: Scalars['Int'];
+  plantCode: Scalars['String']['output'];
+  sequence?: Maybe<Scalars['Int']['output']>;
+  shipmentId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type BomSortInput = {
@@ -240,28 +215,28 @@ export type BomsConnection = {
 export type BomsEdge = {
   __typename?: 'BomsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Bom;
 };
 
 export type BooleanOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Boolean']>;
-  neq?: InputMaybe<Scalars['Boolean']>;
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Component = {
   __typename?: 'Component';
-  code: Scalars['String'];
+  code: Scalars['String']['output'];
   componentSerialRule: ComponentSerialRule;
-  createdAt: Scalars['DateTime'];
-  iconURL: Scalars['String'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  iconURL: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
   kitComponents: Array<KitComponent>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   pcvComponents: Array<PcvComponent>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  requiresDcwsSubmission: Scalars['Boolean'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  requiresDcwsSubmission: Scalars['Boolean']['output'];
   stations: Array<ComponentStation>;
 };
 
@@ -283,32 +258,32 @@ export type ComponentFilterInput = {
 
 export type ComponentSerial = {
   __typename?: 'ComponentSerial';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   dcwsResponses: Array<DcwsResponse>;
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['output'];
   kitComponent: KitComponent;
-  kitComponentId: Scalars['UUID'];
-  original_Serial1?: Maybe<Scalars['String']>;
-  original_Serial2?: Maybe<Scalars['String']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  serial1: Scalars['String'];
-  serial2: Scalars['String'];
-  verifiedAt?: Maybe<Scalars['DateTime']>;
+  kitComponentId: Scalars['UUID']['output'];
+  original_Serial1?: Maybe<Scalars['String']['output']>;
+  original_Serial2?: Maybe<Scalars['String']['output']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  serial1: Scalars['String']['output'];
+  serial2: Scalars['String']['output'];
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ComponentSerialDto = {
   __typename?: 'ComponentSerialDTO';
-  componentCode: Scalars['String'];
-  componentName: Scalars['String'];
-  componentSerialId: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  serial1: Scalars['String'];
-  serial2: Scalars['String'];
-  stationCode: Scalars['String'];
-  stationName: Scalars['String'];
-  verifiedAt?: Maybe<Scalars['DateTime']>;
-  vin: Scalars['String'];
+  componentCode: Scalars['String']['output'];
+  componentName: Scalars['String']['output'];
+  componentSerialId: Scalars['UUID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  serial1: Scalars['String']['output'];
+  serial2: Scalars['String']['output'];
+  stationCode: Scalars['String']['output'];
+  stationName: Scalars['String']['output'];
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
+  vin: Scalars['String']['output'];
 };
 
 export type ComponentSerialFilterInput = {
@@ -328,10 +303,10 @@ export type ComponentSerialFilterInput = {
 };
 
 export type ComponentSerialInput = {
-  kitComponentId: Scalars['UUID'];
-  replace?: Scalars['Boolean'];
-  serial1: Scalars['String'];
-  serial2?: Scalars['String'];
+  kitComponentId: Scalars['UUID']['input'];
+  replace?: Scalars['Boolean']['input'];
+  serial1: Scalars['String']['input'];
+  serial2?: Scalars['String']['input'];
 };
 
 export enum ComponentSerialRule {
@@ -377,7 +352,7 @@ export type ComponentSerialsConnection = {
 export type ComponentSerialsEdge = {
   __typename?: 'ComponentSerialsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: ComponentSerial;
 };
@@ -396,13 +371,13 @@ export type ComponentSortInput = {
 export type ComponentStation = {
   __typename?: 'ComponentStation';
   component: Component;
-  componentId: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  saveCDCComponent: Scalars['Boolean'];
+  componentId: Scalars['UUID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  saveCDCComponent: Scalars['Boolean']['output'];
   station: Station;
-  stationId: Scalars['UUID'];
+  stationId: Scalars['UUID']['output'];
 };
 
 export type ComponentStationFilterInput = {
@@ -420,15 +395,15 @@ export type ComponentStationFilterInput = {
 
 export type ComponentStationMapping = {
   __typename?: 'ComponentStationMapping';
-  componentCode: Scalars['String'];
-  saveCDCComponent: Scalars['Boolean'];
-  stationCode: Scalars['String'];
+  componentCode: Scalars['String']['output'];
+  saveCDCComponent: Scalars['Boolean']['output'];
+  stationCode: Scalars['String']['output'];
 };
 
 export type ComponentStationMappingInput = {
-  componentCode: Scalars['String'];
-  saveCDCComponent: Scalars['Boolean'];
-  stationCode: Scalars['String'];
+  componentCode: Scalars['String']['input'];
+  saveCDCComponent: Scalars['Boolean']['input'];
+  stationCode: Scalars['String']['input'];
 };
 
 export type ComponentStationMappingsInput = {
@@ -461,7 +436,7 @@ export type ComponentStationsConnection = {
 export type ComponentStationsEdge = {
   __typename?: 'ComponentStationsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: ComponentStation;
 };
@@ -481,42 +456,42 @@ export type ComponentsConnection = {
 export type ComponentsEdge = {
   __typename?: 'ComponentsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Component;
 };
 
 export type DateTimeOperationFilterInput = {
-  eq?: InputMaybe<Scalars['DateTime']>;
-  gt?: InputMaybe<Scalars['DateTime']>;
-  gte?: InputMaybe<Scalars['DateTime']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  lt?: InputMaybe<Scalars['DateTime']>;
-  lte?: InputMaybe<Scalars['DateTime']>;
-  neq?: InputMaybe<Scalars['DateTime']>;
-  ngt?: InputMaybe<Scalars['DateTime']>;
-  ngte?: InputMaybe<Scalars['DateTime']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  nlt?: InputMaybe<Scalars['DateTime']>;
-  nlte?: InputMaybe<Scalars['DateTime']>;
+  eq?: InputMaybe<Scalars['DateTime']['input']>;
+  gt?: InputMaybe<Scalars['DateTime']['input']>;
+  gte?: InputMaybe<Scalars['DateTime']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  lt?: InputMaybe<Scalars['DateTime']['input']>;
+  lte?: InputMaybe<Scalars['DateTime']['input']>;
+  neq?: InputMaybe<Scalars['DateTime']['input']>;
+  ngt?: InputMaybe<Scalars['DateTime']['input']>;
+  ngte?: InputMaybe<Scalars['DateTime']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  nlt?: InputMaybe<Scalars['DateTime']['input']>;
+  nlte?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type DcwsComponentResponseInput = {
-  errorMessage: Scalars['String'];
-  kitComponentId: Scalars['UUID'];
-  responseCode: Scalars['String'];
+  errorMessage: Scalars['String']['input'];
+  kitComponentId: Scalars['UUID']['input'];
+  responseCode: Scalars['String']['input'];
 };
 
 export type DcwsResponse = {
   __typename?: 'DcwsResponse';
   componentSerial: ComponentSerial;
-  componentSerialId: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  dcwsErrorMessage?: Maybe<Scalars['String']>;
-  dcwsProcessExcptionCode: Scalars['String'];
-  id: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  submissionAccepted: Scalars['Boolean'];
+  componentSerialId: Scalars['UUID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  dcwsErrorMessage?: Maybe<Scalars['String']['output']>;
+  dcwsProcessExcptionCode: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  submissionAccepted: Scalars['Boolean']['output'];
 };
 
 export type DcwsResponseFilterInput = {
@@ -558,21 +533,21 @@ export type DcwsResponsesConnection = {
 export type DcwsResponsesEdge = {
   __typename?: 'DcwsResponsesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: DcwsResponse;
 };
 
 export type Dealer = {
   __typename?: 'Dealer';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   kits: Array<Kit>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type DealerFilterInput = {
@@ -613,15 +588,15 @@ export type DealersConnection = {
 export type DealersEdge = {
   __typename?: 'DealersEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Dealer;
 };
 
 export type Error = {
   __typename?: 'Error';
-  code: Scalars['String'];
-  description: Scalars['String'];
+  code: Scalars['String']['output'];
+  description: Scalars['String']['output'];
 };
 
 export enum FordInterfaceFileType {
@@ -633,8 +608,8 @@ export enum FordInterfaceFileType {
 }
 
 export type GetPcvsByPlantQueryInput = {
-  first?: Scalars['Int'];
-  plantCode: Scalars['String'];
+  first?: Scalars['Int']['input'];
+  plantCode: Scalars['String']['input'];
 };
 
 export type GetPcvsByPlantQueryResult = {
@@ -644,21 +619,23 @@ export type GetPcvsByPlantQueryResult = {
 
 export type Hu_Part = {
   __typename?: 'HU_Part';
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
 };
 
 export type HandlingUnit = {
   __typename?: 'HandlingUnit';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  parts: Array<ShipmentPart>;
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  lot: Lot;
+  lotId: Scalars['UUID']['output'];
+  lotParts: Array<LotPart>;
   received: Array<HandlingUnitReceived>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentInvoice: ShipmentInvoice;
-  shipmentInvoiceId: Scalars['UUID'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipmentInvoice?: Maybe<ShipmentInvoice>;
+  shipmentInvoiceId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type HandlingUnitFilterInput = {
@@ -666,8 +643,10 @@ export type HandlingUnitFilterInput = {
   code?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  lot?: InputMaybe<LotFilterInput>;
+  lotId?: InputMaybe<UuidOperationFilterInput>;
+  lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
   or?: InputMaybe<Array<HandlingUnitFilterInput>>;
-  parts?: InputMaybe<ListFilterInputTypeOfShipmentPartFilterInput>;
   received?: InputMaybe<ListFilterInputTypeOfHandlingUnitReceivedFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   shipmentInvoice?: InputMaybe<ShipmentInvoiceFilterInput>;
@@ -676,40 +655,40 @@ export type HandlingUnitFilterInput = {
 
 export type HandlingUnitInfoPayload = {
   __typename?: 'HandlingUnitInfoPayload';
-  code?: Maybe<Scalars['String']>;
-  invoiceNo?: Maybe<Scalars['String']>;
-  lotNo?: Maybe<Scalars['String']>;
-  partCount: Scalars['Int'];
+  code?: Maybe<Scalars['String']['output']>;
+  invoiceNo?: Maybe<Scalars['String']['output']>;
+  lotNo?: Maybe<Scalars['String']['output']>;
+  partCount: Scalars['Int']['output'];
   parts: Array<Hu_Part>;
-  pcvCode?: Maybe<Scalars['String']>;
-  pcvDescription?: Maybe<Scalars['String']>;
-  plantCode: Scalars['String'];
-  receivedAt?: Maybe<Scalars['DateTime']>;
-  receivedRemovedAt?: Maybe<Scalars['DateTime']>;
-  shipmentId: Scalars['UUID'];
-  shipmentSequence: Scalars['Int'];
+  pcvCode?: Maybe<Scalars['String']['output']>;
+  pcvDescription?: Maybe<Scalars['String']['output']>;
+  plantCode: Scalars['String']['output'];
+  receivedAt?: Maybe<Scalars['DateTime']['output']>;
+  receivedRemovedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipmentId: Scalars['UUID']['output'];
+  shipmentSequence: Scalars['Int']['output'];
 };
 
 export type HandlingUnitOverview = {
   __typename?: 'HandlingUnitOverview';
-  createdAt: Scalars['DateTime'];
-  handlingUnitCode: Scalars['String'];
-  invoiceNo: Scalars['String'];
-  lotNo: Scalars['String'];
-  partCount: Scalars['Int'];
-  plantCode: Scalars['String'];
-  receiveCancledAt?: Maybe<Scalars['DateTime']>;
-  receivedAt?: Maybe<Scalars['DateTime']>;
-  shipmentSequence: Scalars['Int'];
+  createdAt: Scalars['DateTime']['output'];
+  handlingUnitCode: Scalars['String']['output'];
+  invoiceNo: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  partCount: Scalars['Int']['output'];
+  plantCode: Scalars['String']['output'];
+  receiveCancledAt?: Maybe<Scalars['DateTime']['output']>;
+  receivedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipmentSequence: Scalars['Int']['output'];
 };
 
 export type HandlingUnitReceived = {
   __typename?: 'HandlingUnitReceived';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   handlingUnit: HandlingUnit;
-  handlingUnitId: Scalars['UUID'];
-  id: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  handlingUnitId: Scalars['UUID']['output'];
+  id: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -727,7 +706,7 @@ export type HandlingUnitReceivedConnection = {
 export type HandlingUnitReceivedEdge = {
   __typename?: 'HandlingUnitReceivedEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: HandlingUnitReceived;
 };
@@ -754,6 +733,8 @@ export type HandlingUnitSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  lot?: InputMaybe<LotSortInput>;
+  lotId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   shipmentInvoice?: InputMaybe<ShipmentInvoiceSortInput>;
   shipmentInvoiceId?: InputMaybe<SortEnumType>;
@@ -774,89 +755,85 @@ export type HandlingUnitsConnection = {
 export type HandlingUnitsEdge = {
   __typename?: 'HandlingUnitsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: HandlingUnit;
 };
 
 export type ICategory = {
-  code: Scalars['String'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type ImportBomResult = {
   __typename?: 'ImportBomResult';
-  items: Array<ImportBomResultItem>;
-};
-
-export type ImportBomResultItem = {
-  __typename?: 'ImportBomResultItem';
-  bomId: Scalars['UUID'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  bomId: Scalars['UUID']['output'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type ImportShipmentResult = {
   __typename?: 'ImportShipmentResult';
-  handlingUnitCount: Scalars['Int'];
-  invoiceCount: Scalars['Int'];
-  lotCount: Scalars['Int'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-  shipmentId: Scalars['UUID'];
+  invoiceCount: Scalars['Int']['output'];
+  invoice_HandlingUnitCount: Scalars['Int']['output'];
+  lotCount: Scalars['Int']['output'];
+  lot_HandlingUnitCount: Scalars['Int']['output'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
+  shipmentId: Scalars['UUID']['output'];
 };
 
 export type IntOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Int']>;
-  gt?: InputMaybe<Scalars['Int']>;
-  gte?: InputMaybe<Scalars['Int']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  lt?: InputMaybe<Scalars['Int']>;
-  lte?: InputMaybe<Scalars['Int']>;
-  neq?: InputMaybe<Scalars['Int']>;
-  ngt?: InputMaybe<Scalars['Int']>;
-  ngte?: InputMaybe<Scalars['Int']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  nlt?: InputMaybe<Scalars['Int']>;
-  nlte?: InputMaybe<Scalars['Int']>;
+  eq?: InputMaybe<Scalars['Int']['input']>;
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  neq?: InputMaybe<Scalars['Int']['input']>;
+  ngt?: InputMaybe<Scalars['Int']['input']>;
+  ngte?: InputMaybe<Scalars['Int']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  nlt?: InputMaybe<Scalars['Int']['input']>;
+  nlte?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ItemCountDto = {
   __typename?: 'ItemCountDTO';
-  code: Scalars['String'];
-  count: Scalars['Int'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Kit = {
   __typename?: 'Kit';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   dealer?: Maybe<Dealer>;
-  dealerId?: Maybe<Scalars['UUID']>;
-  id: Scalars['UUID'];
+  dealerId?: Maybe<Scalars['UUID']['output']>;
+  id: Scalars['UUID']['output'];
   kitComponents: Array<KitComponent>;
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['output'];
   kitStatusEvents: Array<KitStatusEvent>;
   kitVins: Array<KitVin>;
   lot: Lot;
-  lotId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  vin: Scalars['String'];
+  lotId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  vin: Scalars['String']['output'];
 };
 
 export type KitComponent = {
   __typename?: 'KitComponent';
   component: Component;
-  componentId: Scalars['UUID'];
+  componentId: Scalars['UUID']['output'];
   componentSerials: Array<ComponentSerial>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   kit: Kit;
-  kitId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  kitId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
   station: Station;
-  stationId: Scalars['UUID'];
-  verifiedAt?: Maybe<Scalars['DateTime']>;
+  stationId: Scalars['UUID']['output'];
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type KitComponentFilterInput = {
@@ -877,10 +854,10 @@ export type KitComponentFilterInput = {
 
 export type KitComponentSerialInfo = {
   __typename?: 'KitComponentSerialInfo';
-  componentCode: Scalars['String'];
-  componentIconURL: Scalars['String'];
-  componentName: Scalars['String'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  componentCode: Scalars['String']['output'];
+  componentIconURL: Scalars['String']['output'];
+  componentName: Scalars['String']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
   stations: Array<StatcionSerialInfo>;
 };
 
@@ -912,18 +889,18 @@ export type KitComponentsConnection = {
 export type KitComponentsEdge = {
   __typename?: 'KitComponentsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: KitComponent;
 };
 
 export type KitCurrentStatusResponse = {
   __typename?: 'KitCurrentStatusResponse';
-  kitNumber?: Maybe<Scalars['String']>;
-  lotNumber?: Maybe<Scalars['String']>;
-  plantGsdb?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-  statusDate?: Maybe<Scalars['String']>;
+  kitNumber?: Maybe<Scalars['String']['output']>;
+  lotNumber?: Maybe<Scalars['String']['output']>;
+  plantGsdb?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  statusDate?: Maybe<Scalars['String']['output']>;
 };
 
 export type KitFilterInput = {
@@ -945,16 +922,16 @@ export type KitFilterInput = {
 
 export type KitInfoDto = {
   __typename?: 'KitInfoDTO';
-  eventDtate?: Maybe<Scalars['DateTime']>;
-  id: Scalars['UUID'];
-  kitNo: Scalars['String'];
+  eventDtate?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['UUID']['output'];
+  kitNo: Scalars['String']['output'];
   kitStatusCode?: Maybe<KitStatusCode>;
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
   partnerStatusCode?: Maybe<PartnerStatusCode>;
-  partnerStatusPending: Scalars['Boolean'];
-  series: Scalars['String'];
-  vin?: Maybe<Scalars['String']>;
+  partnerStatusPending: Scalars['Boolean']['output'];
+  series: Scalars['String']['output'];
+  vin?: Maybe<Scalars['String']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -972,25 +949,25 @@ export type KitListConnection = {
 export type KitListEdge = {
   __typename?: 'KitListEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: KitListItemDto;
 };
 
 export type KitListItemDto = {
   __typename?: 'KitListItemDTO';
-  id: Scalars['UUID'];
-  imported?: Maybe<Scalars['DateTime']>;
-  kitNo: Scalars['String'];
-  lastKitStatusEvent?: Maybe<Scalars['String']>;
-  lastKitStatusEventDate?: Maybe<Scalars['DateTime']>;
-  lotNo: Scalars['String'];
-  modelCode: Scalars['String'];
-  modelName: Scalars['String'];
-  requiredComponentCount?: Maybe<Scalars['Int']>;
-  scannedComponentCount?: Maybe<Scalars['Int']>;
-  verifiedComponentCount?: Maybe<Scalars['Int']>;
-  vin: Scalars['String'];
+  id: Scalars['UUID']['output'];
+  imported?: Maybe<Scalars['DateTime']['output']>;
+  kitNo: Scalars['String']['output'];
+  lastKitStatusEvent?: Maybe<Scalars['String']['output']>;
+  lastKitStatusEventDate?: Maybe<Scalars['DateTime']['output']>;
+  lotNo: Scalars['String']['output'];
+  modelCode: Scalars['String']['output'];
+  modelName: Scalars['String']['output'];
+  requiredComponentCount?: Maybe<Scalars['Int']['output']>;
+  scannedComponentCount?: Maybe<Scalars['Int']['output']>;
+  verifiedComponentCount?: Maybe<Scalars['Int']['output']>;
+  vin: Scalars['String']['output'];
 };
 
 export type KitListItemDtoSortInput = {
@@ -1009,21 +986,21 @@ export type KitListItemDtoSortInput = {
 };
 
 export type KitOverviewQueryInput = {
-  vinOrKitNo: Scalars['String'];
+  vinOrKitNo: Scalars['String']['input'];
 };
 
 export type KitOverviewQueryResult = {
   __typename?: 'KitOverviewQueryResult';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   currentKitStatusCode?: Maybe<KitStatusCode>;
-  currentKitStatusDate?: Maybe<Scalars['DateTime']>;
-  description: Scalars['String'];
-  kitNo: Scalars['String'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  modelYear: Scalars['String'];
-  pcvCode: Scalars['String'];
-  vin: Scalars['String'];
+  currentKitStatusDate?: Maybe<Scalars['DateTime']['output']>;
+  description: Scalars['String']['output'];
+  kitNo: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  modelYear: Scalars['String']['output'];
+  pcvCode: Scalars['String']['output'];
+  vin: Scalars['String']['output'];
 };
 
 export type KitSortInput = {
@@ -1056,24 +1033,24 @@ export type KitStatusCodeOperationFilterInput = {
 
 export type KitStatusDto = {
   __typename?: 'KitStatusDTO';
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['output'];
   kitStatusItems: Array<StatusEventDto>;
-  lotNo: Scalars['String'];
-  vin: Scalars['String'];
+  lotNo: Scalars['String']['output'];
+  vin: Scalars['String']['output'];
 };
 
 export type KitStatusEvent = {
   __typename?: 'KitStatusEvent';
-  createdAt: Scalars['DateTime'];
-  eventDate: Scalars['DateTime'];
-  eventNote?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime']['output'];
+  eventDate: Scalars['DateTime']['output'];
+  eventNote?: Maybe<Scalars['String']['output']>;
   eventType: KitStatusEventType;
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['output'];
   kit: Kit;
-  kitId: Scalars['UUID'];
-  kitStatusEventTypeId: Scalars['UUID'];
-  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  kitId: Scalars['UUID']['output'];
+  kitStatusEventTypeId: Scalars['UUID']['output'];
+  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type KitStatusEventFilterInput = {
@@ -1092,11 +1069,11 @@ export type KitStatusEventFilterInput = {
 };
 
 export type KitStatusEventInput = {
-  dealerCode: Scalars['String'];
+  dealerCode: Scalars['String']['input'];
   eventCode: KitStatusCode;
-  eventDate: Scalars['DateTime'];
-  eventNote: Scalars['String'];
-  kitNo: Scalars['String'];
+  eventDate: Scalars['DateTime']['input'];
+  eventNote: Scalars['String']['input'];
+  kitNo: Scalars['String']['input'];
 };
 
 export type KitStatusEventSortInput = {
@@ -1115,12 +1092,12 @@ export type KitStatusEventSortInput = {
 export type KitStatusEventType = {
   __typename?: 'KitStatusEventType';
   code: KitStatusCode;
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
   partnerStatusCode: PartnerStatusCode;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
 };
 
 export type KitStatusEventTypeFilterInput = {
@@ -1160,7 +1137,7 @@ export type KitStatusEventTypesConnection = {
 export type KitStatusEventTypesEdge = {
   __typename?: 'KitStatusEventTypesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: KitStatusEventType;
 };
@@ -1180,19 +1157,19 @@ export type KitStatusEventsConnection = {
 export type KitStatusEventsEdge = {
   __typename?: 'KitStatusEventsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: KitStatusEvent;
 };
 
 export type KitVin = {
   __typename?: 'KitVin';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   kit: Kit;
-  kitId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  vin: Scalars['String'];
+  kitId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  vin: Scalars['String']['output'];
 };
 
 export type KitVinFilterInput = {
@@ -1207,8 +1184,8 @@ export type KitVinFilterInput = {
 };
 
 export type KitVinInput = {
-  kitNo: Scalars['String'];
-  vin: Scalars['String'];
+  kitNo: Scalars['String']['input'];
+  vin: Scalars['String']['input'];
 };
 
 export type KitVinSortInput = {
@@ -1235,7 +1212,7 @@ export type KitVinsConnection = {
 export type KitVinsEdge = {
   __typename?: 'KitVinsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: KitVin;
 };
@@ -1255,7 +1232,7 @@ export type KitsByCurrentKitStatusConnection = {
 export type KitsByCurrentKitStatusEdge = {
   __typename?: 'KitsByCurrentKitStatusEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Kit;
 };
@@ -1275,161 +1252,147 @@ export type KitsConnection = {
 export type KitsEdge = {
   __typename?: 'KitsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Kit;
 };
 
 export type ListFilterInputTypeOfBomFilterInput = {
   all?: InputMaybe<BomFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<BomFilterInput>;
   some?: InputMaybe<BomFilterInput>;
 };
 
 export type ListFilterInputTypeOfComponentSerialFilterInput = {
   all?: InputMaybe<ComponentSerialFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ComponentSerialFilterInput>;
   some?: InputMaybe<ComponentSerialFilterInput>;
 };
 
 export type ListFilterInputTypeOfComponentStationFilterInput = {
   all?: InputMaybe<ComponentStationFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ComponentStationFilterInput>;
   some?: InputMaybe<ComponentStationFilterInput>;
 };
 
 export type ListFilterInputTypeOfDcwsResponseFilterInput = {
   all?: InputMaybe<DcwsResponseFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<DcwsResponseFilterInput>;
   some?: InputMaybe<DcwsResponseFilterInput>;
 };
 
 export type ListFilterInputTypeOfDealerFilterInput = {
   all?: InputMaybe<DealerFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<DealerFilterInput>;
   some?: InputMaybe<DealerFilterInput>;
 };
 
 export type ListFilterInputTypeOfHandlingUnitFilterInput = {
   all?: InputMaybe<HandlingUnitFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<HandlingUnitFilterInput>;
   some?: InputMaybe<HandlingUnitFilterInput>;
 };
 
 export type ListFilterInputTypeOfHandlingUnitReceivedFilterInput = {
   all?: InputMaybe<HandlingUnitReceivedFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<HandlingUnitReceivedFilterInput>;
   some?: InputMaybe<HandlingUnitReceivedFilterInput>;
 };
 
 export type ListFilterInputTypeOfKitComponentFilterInput = {
   all?: InputMaybe<KitComponentFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<KitComponentFilterInput>;
   some?: InputMaybe<KitComponentFilterInput>;
 };
 
 export type ListFilterInputTypeOfKitFilterInput = {
   all?: InputMaybe<KitFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<KitFilterInput>;
   some?: InputMaybe<KitFilterInput>;
 };
 
 export type ListFilterInputTypeOfKitStatusEventFilterInput = {
   all?: InputMaybe<KitStatusEventFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<KitStatusEventFilterInput>;
   some?: InputMaybe<KitStatusEventFilterInput>;
 };
 
 export type ListFilterInputTypeOfKitVinFilterInput = {
   all?: InputMaybe<KitVinFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<KitVinFilterInput>;
   some?: InputMaybe<KitVinFilterInput>;
 };
 
 export type ListFilterInputTypeOfLotFilterInput = {
   all?: InputMaybe<LotFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<LotFilterInput>;
   some?: InputMaybe<LotFilterInput>;
 };
 
 export type ListFilterInputTypeOfLotPartFilterInput = {
   all?: InputMaybe<LotPartFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<LotPartFilterInput>;
   some?: InputMaybe<LotPartFilterInput>;
 };
 
 export type ListFilterInputTypeOfLotPartReceivedFilterInput = {
   all?: InputMaybe<LotPartReceivedFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<LotPartReceivedFilterInput>;
   some?: InputMaybe<LotPartReceivedFilterInput>;
 };
 
 export type ListFilterInputTypeOfPcvFilterInput = {
   all?: InputMaybe<PcvFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<PcvFilterInput>;
   some?: InputMaybe<PcvFilterInput>;
 };
 
 export type ListFilterInputTypeOfPartFilterInput = {
   all?: InputMaybe<PartFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<PartFilterInput>;
   some?: InputMaybe<PartFilterInput>;
 };
 
 export type ListFilterInputTypeOfPcvComponentFilterInput = {
   all?: InputMaybe<PcvComponentFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<PcvComponentFilterInput>;
   some?: InputMaybe<PcvComponentFilterInput>;
 };
 
 export type ListFilterInputTypeOfShipmentFilterInput = {
   all?: InputMaybe<ShipmentFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ShipmentFilterInput>;
   some?: InputMaybe<ShipmentFilterInput>;
 };
 
 export type ListFilterInputTypeOfShipmentInvoiceFilterInput = {
   all?: InputMaybe<ShipmentInvoiceFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ShipmentInvoiceFilterInput>;
   some?: InputMaybe<ShipmentInvoiceFilterInput>;
 };
 
-export type ListFilterInputTypeOfShipmentLotFilterInput = {
-  all?: InputMaybe<ShipmentLotFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<ShipmentLotFilterInput>;
-  some?: InputMaybe<ShipmentLotFilterInput>;
-};
-
-export type ListFilterInputTypeOfShipmentPartFilterInput = {
-  all?: InputMaybe<ShipmentPartFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<ShipmentPartFilterInput>;
-  some?: InputMaybe<ShipmentPartFilterInput>;
-};
-
 export type ListFilterInputTypeOfStationFilterInput = {
   all?: InputMaybe<StationFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<StationFilterInput>;
   some?: InputMaybe<StationFilterInput>;
 };
@@ -1437,30 +1400,33 @@ export type ListFilterInputTypeOfStationFilterInput = {
 export type Lot = {
   __typename?: 'Lot';
   bom?: Maybe<Bom>;
-  bomId?: Maybe<Scalars['UUID']>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  bomId?: Maybe<Scalars['UUID']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  handlingUnits: Array<HandlingUnit>;
+  id: Scalars['UUID']['output'];
+  invoices: Array<ShipmentInvoice>;
   kits: Array<Kit>;
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['output'];
   lotParts: Array<LotPart>;
-  note?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']['output']>;
   pcv: Pcv;
-  pcvId: Scalars['UUID'];
+  pcvId: Scalars['UUID']['output'];
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentLots: Array<ShipmentLot>;
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipment?: Maybe<Shipment>;
+  shipmentId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type LotDto = {
   __typename?: 'LotDTO';
-  createdAt: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  modelBody: Scalars['String'];
-  modelCode: Scalars['String'];
-  modelDesc: Scalars['String'];
-  modelSeries: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  modelBody: Scalars['String']['output'];
+  modelCode: Scalars['String']['output'];
+  modelDesc: Scalars['String']['output'];
+  modelSeries: Scalars['String']['output'];
 };
 
 export type LotFilterInput = {
@@ -1468,7 +1434,9 @@ export type LotFilterInput = {
   bom?: InputMaybe<BomFilterInput>;
   bomId?: InputMaybe<UuidOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  handlingUnits?: InputMaybe<ListFilterInputTypeOfHandlingUnitFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  invoices?: InputMaybe<ListFilterInputTypeOfShipmentInvoiceFilterInput>;
   kits?: InputMaybe<ListFilterInputTypeOfKitFilterInput>;
   lotNo?: InputMaybe<StringOperationFilterInput>;
   lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
@@ -1479,18 +1447,19 @@ export type LotFilterInput = {
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentLots?: InputMaybe<ListFilterInputTypeOfShipmentLotFilterInput>;
+  shipment?: InputMaybe<ShipmentFilterInput>;
+  shipmentId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type LotKitStatusEventInput = {
   eventCode: KitStatusCode;
-  eventDate: Scalars['DateTime'];
-  eventNote: Scalars['String'];
-  lotNo: Scalars['String'];
+  eventDate: Scalars['DateTime']['input'];
+  eventNote: Scalars['String']['input'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type LotKitsQueryInput = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type LotKitsQueryResult = {
@@ -1500,111 +1469,96 @@ export type LotKitsQueryResult = {
 
 export type LotKitsQueryResultItem = {
   __typename?: 'LotKitsQueryResultItem';
-  kitNo: Scalars['String'];
-  kitStatusCode?: Maybe<Scalars['String']>;
-  kitStatusCreatedAt?: Maybe<Scalars['DateTime']>;
-  kitStatusEventDate?: Maybe<Scalars['DateTime']>;
-  model: Scalars['String'];
-  partnerStatusCode?: Maybe<Scalars['String']>;
-  requiredComponentCount: Scalars['Int'];
-  verifiedComponentCount: Scalars['Int'];
-  vin: Scalars['String'];
+  kitNo: Scalars['String']['output'];
+  kitStatusCode?: Maybe<Scalars['String']['output']>;
+  kitStatusCreatedAt?: Maybe<Scalars['DateTime']['output']>;
+  kitStatusEventDate?: Maybe<Scalars['DateTime']['output']>;
+  model: Scalars['String']['output'];
+  partnerStatusCode?: Maybe<Scalars['String']['output']>;
+  requiredComponentCount: Scalars['Int']['output'];
+  verifiedComponentCount: Scalars['Int']['output'];
+  vin: Scalars['String']['output'];
 };
 
 export type LotListDto = {
   __typename?: 'LotListDTO';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  kitCount: Scalars['Int'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  kitCount: Scalars['Int']['output'];
   kitStatusCode?: Maybe<KitStatusCode>;
-  lotNo: Scalars['String'];
-  plantCode: Scalars['String'];
-};
-
-export type LotOverviewDto = {
-  __typename?: 'LotOverviewDTO';
-  bomId: Scalars['UUID'];
-  bomSequence: Scalars['Int'];
-  createdAt: Scalars['DateTime'];
-  customReceived?: Maybe<StatusEventDto>;
-  id: Scalars['UUID'];
-  lotNo: Scalars['String'];
-  note: Scalars['String'];
-  pcvCode: Scalars['String'];
-  pcvDescription: Scalars['String'];
-  pcvId: Scalars['UUID'];
-  plantCode: Scalars['String'];
-  shipmentId: Scalars['UUID'];
-  shipmentSequence: Scalars['Int'];
+  lotNo: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
 };
 
 export type LotOverviewQueryInput = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type LotOverviewQueryResult = {
   __typename?: 'LotOverviewQueryResult';
-  bomId?: Maybe<Scalars['UUID']>;
-  bomSequence?: Maybe<Scalars['Int']>;
-  createdAt: Scalars['DateTime'];
-  drive: Scalars['String'];
-  engine: Scalars['String'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  paint: Scalars['String'];
-  pcvCode: Scalars['String'];
-  plantCode: Scalars['String'];
-  priorLotNo?: Maybe<Scalars['String']>;
-  series: Scalars['String'];
-  shipmentId?: Maybe<Scalars['UUID']>;
-  shipmentSequence?: Maybe<Scalars['Int']>;
-  subModel: Scalars['String'];
-  transmission: Scalars['String'];
-  trim: Scalars['String'];
+  bomId?: Maybe<Scalars['UUID']['output']>;
+  bomSequence?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  drive: Scalars['String']['output'];
+  engine: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  paint: Scalars['String']['output'];
+  pcvCode: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
+  priorLotNo?: Maybe<Scalars['String']['output']>;
+  series: Scalars['String']['output'];
+  shipmentId?: Maybe<Scalars['UUID']['output']>;
+  shipmentSequence?: Maybe<Scalars['Int']['output']>;
+  subModel: Scalars['String']['output'];
+  transmission: Scalars['String']['output'];
+  trim: Scalars['String']['output'];
 };
 
 export type LotPart = {
   __typename?: 'LotPart';
-  bomQuantity: Scalars['Int'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  bomQuantity: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  handlingUnit?: Maybe<HandlingUnit>;
+  handlingUnitId?: Maybe<Scalars['UUID']['output']>;
+  id: Scalars['UUID']['output'];
   lot: Lot;
-  lotId: Scalars['UUID'];
+  lotId: Scalars['UUID']['output'];
   part: Part;
-  partId: Scalars['UUID'];
+  partId: Scalars['UUID']['output'];
   received: Array<LotPartReceived>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentQuantity: Scalars['Int'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipmentQuantity: Scalars['Int']['output'];
 };
 
 export type LotPartDto = {
   __typename?: 'LotPartDTO';
-  bomQuantity: Scalars['Int'];
-  importDate: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
-  receivedDate?: Maybe<Scalars['DateTime']>;
-  receivedQuantity: Scalars['Int'];
-  removedDate?: Maybe<Scalars['DateTime']>;
-  shipmentQuantity: Scalars['Int'];
+  bomQuantity: Scalars['Int']['output'];
+  importDate: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
+  receivedDate?: Maybe<Scalars['DateTime']['output']>;
+  receivedQuantity: Scalars['Int']['output'];
+  removedDate?: Maybe<Scalars['DateTime']['output']>;
+  shipmentQuantity: Scalars['Int']['output'];
 };
 
 export type LotPartDiffItem = {
   __typename?: 'LotPartDiffItem';
   diffType: LotPartDiffType;
-  firstLotNo: Scalars['String'];
-  firstLotQuantity: Scalars['Int'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
-  secondLotNo: Scalars['String'];
-  secondLotQuantity: Scalars['Int'];
+  firstLotNo: Scalars['String']['output'];
+  firstLotQuantity: Scalars['Int']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
+  secondLotNo: Scalars['String']['output'];
+  secondLotQuantity: Scalars['Int']['output'];
 };
 
 export type LotPartDiffQueryInput = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type LotPartDiffQueryResult = {
@@ -1622,6 +1576,8 @@ export type LotPartFilterInput = {
   and?: InputMaybe<Array<LotPartFilterInput>>;
   bomQuantity?: InputMaybe<IntOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  handlingUnit?: InputMaybe<HandlingUnitFilterInput>;
+  handlingUnitId?: InputMaybe<UuidOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   lot?: InputMaybe<LotFilterInput>;
   lotId?: InputMaybe<UuidOperationFilterInput>;
@@ -1635,24 +1591,24 @@ export type LotPartFilterInput = {
 
 export type LotPartReceived = {
   __typename?: 'LotPartReceived';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   lotPart: LotPart;
-  lotPartId: Scalars['UUID'];
-  quantity: Scalars['Int'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  lotPartId: Scalars['UUID']['output'];
+  quantity: Scalars['Int']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type LotPartReceivedDto = {
   __typename?: 'LotPartReceivedDTO';
-  bomQuantity: Scalars['Int'];
-  createdAt: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  receivedQuantity: Scalars['Int'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentQuantity: Scalars['Int'];
+  bomQuantity: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  receivedQuantity: Scalars['Int']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipmentQuantity: Scalars['Int']['output'];
 };
 
 export type LotPartReceivedFilterInput = {
@@ -1678,6 +1634,8 @@ export type LotPartReceivedSortInput = {
 export type LotPartSortInput = {
   bomQuantity?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  handlingUnit?: InputMaybe<HandlingUnitSortInput>;
+  handlingUnitId?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lot?: InputMaybe<LotSortInput>;
   lotId?: InputMaybe<SortEnumType>;
@@ -1694,41 +1652,21 @@ export type LotPartsByShipOrBomQueryResult = {
 
 export type LotPartsByShipOrBomQueryResultItem = {
   __typename?: 'LotPartsByShipOrBomQueryResultItem';
-  bomQuantity: Scalars['Int'];
-  importDate: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
-  receivedDate?: Maybe<Scalars['DateTime']>;
-  receivedQuantity: Scalars['Int'];
-  removedDate?: Maybe<Scalars['DateTime']>;
-  shipmentQuantity: Scalars['Int'];
+  bomQuantity: Scalars['Int']['output'];
+  importDate: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
+  receivedDate?: Maybe<Scalars['DateTime']['output']>;
+  receivedQuantity: Scalars['Int']['output'];
+  removedDate?: Maybe<Scalars['DateTime']['output']>;
+  shipmentQuantity: Scalars['Int']['output'];
 };
 
 export type LotPartsByShipmentQueryInput = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
   queryBy: LotPartsQueryBy;
-};
-
-/** A connection to a list of items. */
-export type LotPartsConnection = {
-  __typename?: 'LotPartsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<LotPartsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<LotPart>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type LotPartsEdge = {
-  __typename?: 'LotPartsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: LotPart;
 };
 
 export enum LotPartsQueryBy {
@@ -1737,7 +1675,7 @@ export enum LotPartsQueryBy {
 }
 
 export type LotPartsQueryInput = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type LotPartsQueryResult = {
@@ -1747,13 +1685,14 @@ export type LotPartsQueryResult = {
 
 export type LotPartsQueryResultItem = {
   __typename?: 'LotPartsQueryResultItem';
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
-  quantity: Scalars['Int'];
-  quantityReceived: Scalars['Int'];
-  receivedAt?: Maybe<Scalars['DateTime']>;
-  receivedCanceled?: Maybe<Scalars['Boolean']>;
+  handlingUnitCode: Scalars['String']['output'];
+  handlingUnitReceivedAt?: Maybe<Scalars['DateTime']['output']>;
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
+  quantityReceived: Scalars['Int']['output'];
+  receivedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -1771,7 +1710,7 @@ export type LotPartsReceivedConnection = {
 export type LotPartsReceivedEdge = {
   __typename?: 'LotPartsReceivedEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: LotPartReceived;
 };
@@ -1788,20 +1727,22 @@ export type LotSortInput = {
   plant?: InputMaybe<PlantSortInput>;
   plantId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
+  shipment?: InputMaybe<ShipmentSortInput>;
+  shipmentId?: InputMaybe<SortEnumType>;
 };
 
 export type LotsByKitStatusQueryInput = {
   kitStatusCode: KitStatusCode;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 export type LotsByKitStatusQueryResult = {
   __typename?: 'LotsByKitStatusQueryResult';
-  eventDate: Scalars['DateTime'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  modelYear: Scalars['String'];
-  pcvCode: Scalars['String'];
+  eventDate: Scalars['DateTime']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  modelYear: Scalars['String']['output'];
+  pcvCode: Scalars['String']['output'];
 };
 
 /** A connection to a list of items. */
@@ -1819,7 +1760,7 @@ export type LotsConnection = {
 export type LotsEdge = {
   __typename?: 'LotsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Lot;
 };
@@ -1837,23 +1778,22 @@ export type Mutation = {
   createLotKitStatusEvents: ResultOrOfLot;
   createLotPartQuantityReceived: ResultOrOfLotPartDto;
   createPlant: ResultOrOfPlantOverviewDto;
-  /** Import BOM given the BomPlantSet input */
+  /** Import BOM given the RawBom input */
   importBOM: ResultOrOfImportBomResult;
-  /** Import BOM given the BomPlantSet input */
+  /** Import BOM given the filename and text */
   importBOMFileText: ResultOrOfImportBomResult;
   /** Import shipment given the ShipFile input */
   importShipment: ResultOrOfImportShipmentResult;
   /** Import shipment given the ShipFile input */
   importShipmentFileText: ResultOrOfImportShipmentResult;
   /** Parse a BOM file and return a ParseBomFileResult object */
-  parseBomFile: ParseBomFileResult;
-  /** Parse a BOM file and return a ParseBomFileResult object */
-  parseBomFileText: ParseBomFileResult;
+  parseBomFile: ResultOrOfRawBom;
+  /** Parse a BOM file and return a RawBom object */
+  parseBomFileText: ResultOrOfRawBom;
   /** Parses a PCV xlsx file and returns a list of PCV, and Component code records */
   parsePcvsXlsx: ResultOrOfParsePcvsXlxsResult;
   /** Parse a shipment file and return a ShipFile object */
   parseShipmentFile: ShipFile;
-  /** Parse a shipment file and return a ShipFile object */
   parseShipmentFileText: ShipFile;
   parseStationsXlsx: ResultOrOfParseStationsXlsxCommandResult;
   removeAllComponentStationMappings: ResultOrOfRemoveAllComponentStationMappingsPayload;
@@ -1871,7 +1811,7 @@ export type Mutation = {
    * This will mark the existing VIN as removed and add a new VIN.
    */
   setKitVin: ResultOrOfKit;
-  /** Update Part */
+  /** Update Part Types */
   setPartType: ResultOrOfSetPartTypeResult;
   /**
    * Update kit component stations mappings to match the component station mappings template
@@ -1905,7 +1845,7 @@ export type MutationCaptureComponentSerialArgs = {
 
 
 export type MutationCreateBuildStartEventArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
@@ -1935,57 +1875,57 @@ export type MutationCreatePlantArgs = {
 
 
 export type MutationImportBomArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationImportBomFileTextArgs = {
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 };
 
 
 export type MutationImportShipmentArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationImportShipmentFileTextArgs = {
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 };
 
 
 export type MutationParseBomFileArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationParseBomFileTextArgs = {
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 };
 
 
 export type MutationParsePcvsXlsxArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationParseShipmentFileArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationParseShipmentFileTextArgs = {
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 };
 
 
 export type MutationParseStationsXlsxArgs = {
-  file: Scalars['Upload'];
-  worksheetNumber: Scalars['Int'];
+  file: Scalars['Upload']['input'];
+  worksheetNumber: Scalars['Int']['input'];
 };
 
 
@@ -2040,40 +1980,40 @@ export type MutationUpdatePartnerStatusArgs = {
 
 
 export type MutationVerifyComponentSerialArgs = {
-  kitComponentId: Scalars['UUID'];
+  kitComponentId: Scalars['UUID']['input'];
 };
 
 export type Pcv = {
   __typename?: 'PCV';
-  body: Scalars['String'];
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id: Scalars['UUID'];
+  body: Scalars['String']['output'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
   lots: Array<Lot>;
-  model: Scalars['String'];
-  modelYear: Scalars['String'];
+  model: Scalars['String']['output'];
+  modelYear: Scalars['String']['output'];
   pcvComponents: Array<PcvComponent>;
   pcvDrive?: Maybe<PcvDrive>;
-  pcvDriveId?: Maybe<Scalars['UUID']>;
+  pcvDriveId?: Maybe<Scalars['UUID']['output']>;
   pcvEngine?: Maybe<PcvEngine>;
-  pcvEngineId?: Maybe<Scalars['UUID']>;
+  pcvEngineId?: Maybe<Scalars['UUID']['output']>;
   pcvModel?: Maybe<PcvModel>;
-  pcvModelId?: Maybe<Scalars['UUID']>;
+  pcvModelId?: Maybe<Scalars['UUID']['output']>;
   pcvPaint?: Maybe<PcvPaint>;
-  pcvPaintId?: Maybe<Scalars['UUID']>;
+  pcvPaintId?: Maybe<Scalars['UUID']['output']>;
   pcvSeries?: Maybe<PcvSeries>;
-  pcvSeriesId?: Maybe<Scalars['UUID']>;
+  pcvSeriesId?: Maybe<Scalars['UUID']['output']>;
   pcvSubmodel?: Maybe<PcvSubmodel>;
-  pcvSubmodelId?: Maybe<Scalars['UUID']>;
+  pcvSubmodelId?: Maybe<Scalars['UUID']['output']>;
   pcvTransmission?: Maybe<PcvTransmission>;
-  pcvTransmissionId?: Maybe<Scalars['UUID']>;
+  pcvTransmissionId?: Maybe<Scalars['UUID']['output']>;
   pcvTrim?: Maybe<PcvTrim>;
-  pcvTrimId?: Maybe<Scalars['UUID']>;
+  pcvTrimId?: Maybe<Scalars['UUID']['output']>;
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  series: Scalars['String'];
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  series: Scalars['String']['output'];
 };
 
 export type PcvFilterInput = {
@@ -2144,24 +2084,18 @@ export type PcvSortInput = {
 export type PageInfo = {
   __typename?: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars['String']['output']>;
   /** Indicates whether more edges exist following the set defined by the clients arguments. */
-  hasNextPage: Scalars['Boolean'];
+  hasNextPage: Scalars['Boolean']['output'];
   /** Indicates whether more edges exist prior the set defined by the clients arguments. */
-  hasPreviousPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['String']>;
-};
-
-export type ParseBomFileResult = {
-  __typename?: 'ParseBomFileResult';
-  bomPlantSets: Array<BomPlantSet>;
-  errors: Array<Scalars['String']>;
+  startCursor?: Maybe<Scalars['String']['output']>;
 };
 
 export type ParsePcvsXlxsResult = {
   __typename?: 'ParsePcvsXlxsResult';
-  componentCodes: Array<Scalars['String']>;
+  componentCodes: Array<Scalars['String']['output']>;
   pcvData: Array<PcvDataFromXlsx>;
 };
 
@@ -2172,25 +2106,24 @@ export type ParseStationsXlsxCommandResult = {
 
 export type ParsedStation = {
   __typename?: 'ParsedStation';
-  code: Scalars['String'];
-  componentCodes: Scalars['String'];
-  exists: Scalars['Boolean'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  code: Scalars['String']['output'];
+  componentCodes: Scalars['String']['output'];
+  exists: Scalars['Boolean']['output'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type Part = {
   __typename?: 'Part';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   lotParts: Array<LotPart>;
-  originalPartNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
+  originalPartNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
   partType?: Maybe<PartType>;
-  partTypeId?: Maybe<Scalars['UUID']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipmentParts: Array<ShipmentPart>;
+  partTypeId?: Maybe<Scalars['UUID']['output']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PartFilterInput = {
@@ -2205,47 +2138,46 @@ export type PartFilterInput = {
   partType?: InputMaybe<PartTypeFilterInput>;
   partTypeId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentParts?: InputMaybe<ListFilterInputTypeOfShipmentPartFilterInput>;
 };
 
 export type PartLotPartsQueryInput = {
-  partNo: Scalars['String'];
-  plantCode: Scalars['String'];
+  partNo: Scalars['String']['input'];
+  plantCode: Scalars['String']['input'];
 };
 
 export type PartLotPartsQueryResult = {
   __typename?: 'PartLotPartsQueryResult';
   items: Array<PartLotPartsQueryResultItem>;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['output'];
 };
 
 export type PartLotPartsQueryResultItem = {
   __typename?: 'PartLotPartsQueryResultItem';
-  bomQuantity: Scalars['Int'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  shipQuantity: Scalars['Int'];
+  bomQuantity: Scalars['Int']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  shipQuantity: Scalars['Int']['output'];
 };
 
 export type PartOverviewQueryInput = {
-  partNo: Scalars['String'];
+  partNo: Scalars['String']['input'];
 };
 
 export type PartOverviewQueryResult = {
   __typename?: 'PartOverviewQueryResult';
-  createdAt: Scalars['DateTime'];
-  lotCount: Scalars['Int'];
-  originalPartNo: Scalars['String'];
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  lotCount: Scalars['Int']['output'];
+  originalPartNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
 };
 
 export type PartQuantityDto = {
   __typename?: 'PartQuantityDTO';
-  partDesc: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
 };
 
 export type PartSortInput = {
@@ -2261,12 +2193,12 @@ export type PartSortInput = {
 
 export type PartType = {
   __typename?: 'PartType';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  isPhysicalPart: Scalars['Boolean'];
-  name: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  isPhysicalPart: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
   parts: Array<Part>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PartTypeFilterInput = {
@@ -2303,7 +2235,7 @@ export type PartTypesConnection = {
 export type PartTypesEdge = {
   __typename?: 'PartTypesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PartType;
 };
@@ -2340,7 +2272,7 @@ export type PartsConnection = {
 export type PartsEdge = {
   __typename?: 'PartsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Part;
 };
@@ -2348,12 +2280,12 @@ export type PartsEdge = {
 export type PcvComponent = {
   __typename?: 'PcvComponent';
   component: Component;
-  componentId: Scalars['UUID'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  componentId: Scalars['UUID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   pcv: Pcv;
-  pcvId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
+  pcvId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvComponentFilterInput = {
@@ -2393,36 +2325,36 @@ export type PcvComponentsConnection = {
 export type PcvComponentsEdge = {
   __typename?: 'PcvComponentsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvComponent;
 };
 
 export type PcvDataFromXlsx = {
   __typename?: 'PcvDataFromXlsx';
-  componentCodes: Array<Scalars['String']>;
-  drive: Scalars['String'];
-  engine: Scalars['String'];
-  exists: Scalars['Boolean'];
-  model: Scalars['String'];
-  modelYear: Scalars['String'];
-  paint: Scalars['String'];
-  pcv: Scalars['String'];
-  plantCode: Scalars['String'];
-  series: Scalars['String'];
-  submodel: Scalars['String'];
-  transmission: Scalars['String'];
-  trim: Scalars['String'];
+  componentCodes: Array<Scalars['String']['output']>;
+  drive: Scalars['String']['output'];
+  engine: Scalars['String']['output'];
+  exists: Scalars['Boolean']['output'];
+  model: Scalars['String']['output'];
+  modelYear: Scalars['String']['output'];
+  paint: Scalars['String']['output'];
+  pcv: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
+  series: Scalars['String']['output'];
+  submodel: Scalars['String']['output'];
+  transmission: Scalars['String']['output'];
+  trim: Scalars['String']['output'];
 };
 
 export type PcvDrive = ICategory & {
   __typename?: 'PcvDrive';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvDriveFilterInput = {
@@ -2459,19 +2391,19 @@ export type PcvDrivesConnection = {
 export type PcvDrivesEdge = {
   __typename?: 'PcvDrivesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvDrive;
 };
 
 export type PcvEngine = ICategory & {
   __typename?: 'PcvEngine';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvEngineFilterInput = {
@@ -2508,37 +2440,37 @@ export type PcvEnginesConnection = {
 export type PcvEnginesEdge = {
   __typename?: 'PcvEnginesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvEngine;
 };
 
 export type PcvItem = {
   __typename?: 'PcvItem';
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  drive?: Maybe<Scalars['String']>;
-  engine?: Maybe<Scalars['String']>;
-  lotCount: Scalars['Int'];
-  model?: Maybe<Scalars['String']>;
-  modelYear?: Maybe<Scalars['String']>;
-  paint?: Maybe<Scalars['String']>;
-  pcvCode: Scalars['String'];
-  plantCode: Scalars['String'];
-  series?: Maybe<Scalars['String']>;
-  submodel?: Maybe<Scalars['String']>;
-  transmission?: Maybe<Scalars['String']>;
-  trim?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  drive?: Maybe<Scalars['String']['output']>;
+  engine?: Maybe<Scalars['String']['output']>;
+  lotCount: Scalars['Int']['output'];
+  model?: Maybe<Scalars['String']['output']>;
+  modelYear?: Maybe<Scalars['String']['output']>;
+  paint?: Maybe<Scalars['String']['output']>;
+  pcvCode: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
+  series?: Maybe<Scalars['String']['output']>;
+  submodel?: Maybe<Scalars['String']['output']>;
+  transmission?: Maybe<Scalars['String']['output']>;
+  trim?: Maybe<Scalars['String']['output']>;
 };
 
 export type PcvModel = ICategory & {
   __typename?: 'PcvModel';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvModelFilterInput = {
@@ -2575,19 +2507,19 @@ export type PcvModelsConnection = {
 export type PcvModelsEdge = {
   __typename?: 'PcvModelsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvModel;
 };
 
 export type PcvPaint = ICategory & {
   __typename?: 'PcvPaint';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -2605,7 +2537,7 @@ export type PcvPaintConnection = {
 export type PcvPaintEdge = {
   __typename?: 'PcvPaintEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvPaint;
 };
@@ -2631,12 +2563,12 @@ export type PcvPaintSortInput = {
 
 export type PcvSeries = ICategory & {
   __typename?: 'PcvSeries';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -2654,7 +2586,7 @@ export type PcvSeriesConnection = {
 export type PcvSeriesEdge = {
   __typename?: 'PcvSeriesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvSeries;
 };
@@ -2680,12 +2612,12 @@ export type PcvSeriesSortInput = {
 
 export type PcvSubmodel = ICategory & {
   __typename?: 'PcvSubmodel';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvSubmodelFilterInput = {
@@ -2722,19 +2654,19 @@ export type PcvSubmodelsConnection = {
 export type PcvSubmodelsEdge = {
   __typename?: 'PcvSubmodelsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvSubmodel;
 };
 
 export type PcvTransmission = ICategory & {
   __typename?: 'PcvTransmission';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PcvTransmissionFilterInput = {
@@ -2771,19 +2703,19 @@ export type PcvTransmissionsConnection = {
 export type PcvTransmissionsEdge = {
   __typename?: 'PcvTransmissionsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvTransmission;
 };
 
 export type PcvTrim = ICategory & {
   __typename?: 'PcvTrim';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A connection to a list of items. */
@@ -2801,7 +2733,7 @@ export type PcvTrimConnection = {
 export type PcvTrimEdge = {
   __typename?: 'PcvTrimEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: PcvTrim;
 };
@@ -2840,7 +2772,7 @@ export type PcvsConnection = {
 export type PcvsEdge = {
   __typename?: 'PcvsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Pcv;
 };
@@ -2848,15 +2780,15 @@ export type PcvsEdge = {
 export type Plant = {
   __typename?: 'Plant';
   boms: Array<Bom>;
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   dealers: Array<Dealer>;
-  id: Scalars['UUID'];
-  kittingPlantCode: Scalars['String'];
+  id: Scalars['UUID']['output'];
+  kittingPlantCode: Scalars['String']['output'];
   lots: Array<Lot>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   pcVs: Array<Pcv>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
   shipments: Array<Shipment>;
   stations: Array<Station>;
 };
@@ -2879,17 +2811,17 @@ export type PlantFilterInput = {
 };
 
 export type PlantInput = {
-  code: Scalars['String'];
-  kittingPlantCode: Scalars['String'];
-  name: Scalars['String'];
+  code: Scalars['String']['input'];
+  kittingPlantCode: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type PlantOverviewDto = {
   __typename?: 'PlantOverviewDTO';
-  code: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  name: Scalars['String'];
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type PlantSortInput = {
@@ -2916,19 +2848,19 @@ export type PlantsConnection = {
 export type PlantsEdge = {
   __typename?: 'PlantsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Plant;
 };
 
 export type PvinFeedLayoutData = {
   __typename?: 'PvinFeedLayoutData';
-  buildDate: Scalars['String'];
-  kdPlantGsdb: Scalars['String'];
-  kitNumber: Scalars['String'];
-  lotNumber: Scalars['String'];
-  partnerGsdb: Scalars['String'];
-  physicalVin?: Maybe<Scalars['String']>;
+  buildDate: Scalars['String']['output'];
+  kdPlantGsdb: Scalars['String']['output'];
+  kitNumber: Scalars['String']['output'];
+  lotNumber: Scalars['String']['output'];
+  partnerGsdb: Scalars['String']['output'];
+  physicalVin?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -2936,6 +2868,7 @@ export type Query = {
   appSettings?: Maybe<AppSettingsConnection>;
   basicKitInfo?: Maybe<BasicKitInfo>;
   bomById?: Maybe<Bom>;
+  bomFile: ResultOrOfRawBom;
   bomList?: Maybe<BomListConnection>;
   bomOverview: BomOverviewQueryResult;
   bomPartsQuantity: Array<PartQuantityDto>;
@@ -2950,14 +2883,14 @@ export type Query = {
   componentStations?: Maybe<ComponentStationsConnection>;
   components?: Maybe<ComponentsConnection>;
   dcwsResponses?: Maybe<DcwsResponsesConnection>;
-  dcwsServiceVersion: Scalars['String'];
+  dcwsServiceVersion: Scalars['String']['output'];
   dealers?: Maybe<DealersConnection>;
   fordInterfaceFileType: FordInterfaceFileType;
   handlingUnitInfo?: Maybe<HandlingUnitInfoPayload>;
   handlingUnitOverviews: Array<HandlingUnitOverview>;
   handlingUnitReceived?: Maybe<HandlingUnitReceivedConnection>;
   handlingUnits?: Maybe<HandlingUnitsConnection>;
-  info: Scalars['String'];
+  info: Scalars['String']['output'];
   kitById?: Maybe<Kit>;
   kitByKitNo?: Maybe<Kit>;
   kitComponentSerialInfo?: Maybe<KitComponentSerialInfo>;
@@ -2979,14 +2912,12 @@ export type Query = {
   /** Get list of kits for a given lot number */
   lotKits: LotKitsQueryResult;
   lotListByBomId: Array<LotListDto>;
-  lotOverview?: Maybe<LotOverviewDto>;
   /** Get the lot overview for a given lot number */
   lotOverview2: ResultOrOfLotOverviewQueryResult;
   /** Get the difference in lot parts between the current lot and the prior lot if it exists */
   lotPartDiff: ResultOrOfLotPartDiffQueryResult;
   lotPartInfo?: Maybe<LotPartDto>;
-  lotParts?: Maybe<LotPartsConnection>;
-  lotParts2: LotPartsQueryResult;
+  lotParts: LotPartsQueryResult;
   lotPartsByShipOrBom: ResultOrOfLotPartsByShipOrBomQueryResult;
   lotPartsReceived?: Maybe<LotPartsReceivedConnection>;
   lots?: Maybe<LotsConnection>;
@@ -3011,15 +2942,15 @@ export type Query = {
   pcvTrim?: Maybe<PcvTrimConnection>;
   pcvs?: Maybe<PcvsConnection>;
   pcvsByPlant: GetPcvsByPlantQueryResult;
-  pingDcwsService: Scalars['Boolean'];
+  pingDcwsService: Scalars['Boolean']['output'];
   planBuildVinPendingKits: Array<KitInfoDto>;
   plants?: Maybe<PlantsConnection>;
+  recentBomFiles: Array<RecentBomFilesQueryResult>;
   recentLotPartsReceived: Array<LotPartReceivedDto>;
+  recentShipmentFiles: Array<RecentShipmentFilesQueryResult>;
   serverConfigSettings: AppSettings;
   shipmentInvoices?: Maybe<ShipmentInvoicesConnection>;
-  shipmentLots?: Maybe<ShipmentLotsConnection>;
   shipmentOverview?: Maybe<ResultOrOfShipmentOverviewQueryResult>;
-  shipmentParts?: Maybe<ShipmentPartsConnection>;
   shipments?: Maybe<ShipmentsConnection>;
   stations?: Maybe<StationsConnection>;
   /** @deprecated no longer used */
@@ -3029,32 +2960,37 @@ export type Query = {
 
 
 export type QueryAppSettingsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<AppSettingSortInput>>;
   where?: InputMaybe<AppSettingFilterInput>;
 };
 
 
 export type QueryBasicKitInfoArgs = {
-  vin: Scalars['String'];
+  vin: Scalars['String']['input'];
 };
 
 
 export type QueryBomByIdArgs = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
+};
+
+
+export type QueryBomFileArgs = {
+  request: BomFileQueryInput;
 };
 
 
 export type QueryBomListArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<BomListDtoSortInput>>;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
@@ -3064,153 +3000,153 @@ export type QueryBomOverviewArgs = {
 
 
 export type QueryBomPartsQuantityArgs = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
 };
 
 
 export type QueryBomsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<BomSortInput>>;
   where?: InputMaybe<BomFilterInput>;
 };
 
 
 export type QueryBuildStartPendingKitsArgs = {
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
 export type QueryComponentByIdArgs = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
 };
 
 
 export type QueryComponentSerialsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ComponentSerialSortInput>>;
   where?: InputMaybe<ComponentSerialFilterInput>;
 };
 
 
 export type QueryComponentStationsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ComponentStationSortInput>>;
   where?: InputMaybe<ComponentStationFilterInput>;
 };
 
 
 export type QueryComponentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ComponentSortInput>>;
   where?: InputMaybe<ComponentFilterInput>;
 };
 
 
 export type QueryDcwsResponsesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<DcwsResponseSortInput>>;
   where?: InputMaybe<DcwsResponseFilterInput>;
 };
 
 
 export type QueryDealersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<DealerSortInput>>;
   where?: InputMaybe<DealerFilterInput>;
 };
 
 
 export type QueryFordInterfaceFileTypeArgs = {
-  filename: Scalars['String'];
+  filename: Scalars['String']['input'];
 };
 
 
 export type QueryHandlingUnitInfoArgs = {
-  huCode: Scalars['String'];
+  huCode: Scalars['String']['input'];
 };
 
 
 export type QueryHandlingUnitOverviewsArgs = {
-  shipmentId: Scalars['UUID'];
+  shipmentId: Scalars['UUID']['input'];
 };
 
 
 export type QueryHandlingUnitReceivedArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<HandlingUnitReceivedSortInput>>;
   where?: InputMaybe<HandlingUnitReceivedFilterInput>;
 };
 
 
 export type QueryHandlingUnitsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<HandlingUnitSortInput>>;
   where?: InputMaybe<HandlingUnitFilterInput>;
 };
 
 
 export type QueryKitByIdArgs = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
 };
 
 
 export type QueryKitByKitNoArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryKitComponentSerialInfoArgs = {
-  componentCode: Scalars['String'];
-  kitNo: Scalars['String'];
+  componentCode: Scalars['String']['input'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryKitComponentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitComponentSortInput>>;
   where?: InputMaybe<KitComponentFilterInput>;
 };
 
 
 export type QueryKitCurrentStatusArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryKitListArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitListItemDtoSortInput>>;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
@@ -3220,87 +3156,87 @@ export type QueryKitOverviewArgs = {
 
 
 export type QueryKitStatusArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryKitStatusEventTypesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitStatusEventTypeSortInput>>;
   where?: InputMaybe<KitStatusEventTypeFilterInput>;
 };
 
 
 export type QueryKitStatusEventsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitStatusEventSortInput>>;
   where?: InputMaybe<KitStatusEventFilterInput>;
 };
 
 
 export type QueryKitStatusEventsByDateArgs = {
-  fromDate: Scalars['DateTime'];
+  fromDate: Scalars['DateTime']['input'];
   kitStatusCode?: InputMaybe<KitStatusCode>;
-  plantCode: Scalars['String'];
-  toDate: Scalars['DateTime'];
+  plantCode: Scalars['String']['input'];
+  toDate: Scalars['DateTime']['input'];
 };
 
 
 export type QueryKitVinsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitVinSortInput>>;
   where?: InputMaybe<KitVinFilterInput>;
 };
 
 
 export type QueryKitsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitSortInput>>;
   where?: InputMaybe<KitFilterInput>;
 };
 
 
 export type QueryKitsByCurrentKitStatusArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
   eventCode?: InputMaybe<KitStatusCode>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitSortInput>>;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
   where?: InputMaybe<KitFilterInput>;
 };
 
 
 export type QueryKitsByKitStatusCountArgs = {
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
 export type QueryKitsByLotArgs = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 
 export type QueryLotByLotNoArgs = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 
 export type QueryLotInfoArgs = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 
@@ -3310,12 +3246,7 @@ export type QueryLotKitsArgs = {
 
 
 export type QueryLotListByBomIdArgs = {
-  id: Scalars['UUID'];
-};
-
-
-export type QueryLotOverviewArgs = {
-  lotNo: Scalars['String'];
+  id: Scalars['UUID']['input'];
 };
 
 
@@ -3330,22 +3261,12 @@ export type QueryLotPartDiffArgs = {
 
 
 export type QueryLotPartInfoArgs = {
-  lotNo: Scalars['String'];
-  partNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
+  partNo: Scalars['String']['input'];
 };
 
 
 export type QueryLotPartsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<LotPartSortInput>>;
-  where?: InputMaybe<LotPartFilterInput>;
-};
-
-
-export type QueryLotParts2Args = {
   input: LotPartsQueryInput;
 };
 
@@ -3356,20 +3277,20 @@ export type QueryLotPartsByShipOrBomArgs = {
 
 
 export type QueryLotPartsReceivedArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<LotPartReceivedSortInput>>;
   where?: InputMaybe<LotPartReceivedFilterInput>;
 };
 
 
 export type QueryLotsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<LotSortInput>>;
   where?: InputMaybe<LotFilterInput>;
 };
@@ -3391,135 +3312,135 @@ export type QueryPartOverviewArgs = {
 
 
 export type QueryPartTypesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PartTypeSortInput>>;
   where?: InputMaybe<PartTypeFilterInput>;
 };
 
 
 export type QueryPartnerKitCurrentStatusArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryPartnerKitPhysicalVinArgs = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 
 export type QueryPartnerStatusUpdatePendingKitsArgs = {
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
 export type QueryPartsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PartSortInput>>;
   where?: InputMaybe<PartFilterInput>;
 };
 
 
 export type QueryPcvComponentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvComponentSortInput>>;
   where?: InputMaybe<PcvComponentFilterInput>;
 };
 
 
 export type QueryPcvDrivesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvDriveSortInput>>;
   where?: InputMaybe<PcvDriveFilterInput>;
 };
 
 
 export type QueryPcvEnginesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvEngineSortInput>>;
   where?: InputMaybe<PcvEngineFilterInput>;
 };
 
 
 export type QueryPcvModelsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvModelSortInput>>;
   where?: InputMaybe<PcvModelFilterInput>;
 };
 
 
 export type QueryPcvPaintArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvPaintSortInput>>;
   where?: InputMaybe<PcvPaintFilterInput>;
 };
 
 
 export type QueryPcvSeriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvSeriesSortInput>>;
   where?: InputMaybe<PcvSeriesFilterInput>;
 };
 
 
 export type QueryPcvSubmodelsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvSubmodelSortInput>>;
   where?: InputMaybe<PcvSubmodelFilterInput>;
 };
 
 
 export type QueryPcvTransmissionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvTransmissionSortInput>>;
   where?: InputMaybe<PcvTransmissionFilterInput>;
 };
 
 
 export type QueryPcvTrimArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvTrimSortInput>>;
   where?: InputMaybe<PcvTrimFilterInput>;
 };
 
 
 export type QueryPcvsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvSortInput>>;
   where?: InputMaybe<PcvFilterInput>;
 };
@@ -3531,42 +3452,42 @@ export type QueryPcvsByPlantArgs = {
 
 
 export type QueryPlanBuildVinPendingKitsArgs = {
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 };
 
 
 export type QueryPlantsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PlantSortInput>>;
   where?: InputMaybe<PlantFilterInput>;
 };
 
 
+export type QueryRecentBomFilesArgs = {
+  input: RecentBomFilesQueryInput;
+};
+
+
 export type QueryRecentLotPartsReceivedArgs = {
-  count?: Scalars['Int'];
+  count?: Scalars['Int']['input'];
+};
+
+
+export type QueryRecentShipmentFilesArgs = {
+  input: RecentShipmentFilesQueryInput;
 };
 
 
 export type QueryShipmentInvoicesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ShipmentInvoiceSortInput>>;
   where?: InputMaybe<ShipmentInvoiceFilterInput>;
-};
-
-
-export type QueryShipmentLotsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<ShipmentLotSortInput>>;
-  where?: InputMaybe<ShipmentLotFilterInput>;
 };
 
 
@@ -3575,39 +3496,29 @@ export type QueryShipmentOverviewArgs = {
 };
 
 
-export type QueryShipmentPartsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<Array<ShipmentPartSortInput>>;
-  where?: InputMaybe<ShipmentPartFilterInput>;
-};
-
-
 export type QueryShipmentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ShipmentSortInput>>;
   where?: InputMaybe<ShipmentFilterInput>;
 };
 
 
 export type QueryStationsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<StationSortInput>>;
   where?: InputMaybe<StationFilterInput>;
 };
 
 
 export type QueryVehicleComponentByVinAndComponentArgs = {
-  componentCode: Scalars['String'];
-  vin: Scalars['String'];
+  componentCode: Scalars['String']['input'];
+  vin: Scalars['String']['input'];
 };
 
 
@@ -3615,261 +3526,325 @@ export type QueryVinAllocationArgs = {
   input: VinAllocationQueryInput;
 };
 
+export type RawBom = {
+  __typename?: 'RawBom';
+  bomFileCreatedAt: Scalars['DateTime']['output'];
+  filename: Scalars['String']['output'];
+  kittingPlantCode: Scalars['String']['output'];
+  lots: Array<RawBomLot>;
+  plantCode: Scalars['String']['output'];
+  sequenceNumber: Scalars['Int']['output'];
+};
+
+export type RawBomLot = {
+  __typename?: 'RawBomLot';
+  kits: Array<RawBomLotKit>;
+  lotNo: Scalars['String']['output'];
+  lotParts: Array<RawBomLotPart>;
+  pcvCode: Scalars['String']['output'];
+};
+
+export type RawBomLotKit = {
+  __typename?: 'RawBomLotKit';
+  kitNo: Scalars['String']['output'];
+};
+
+export type RawBomLotPart = {
+  __typename?: 'RawBomLotPart';
+  lotNo: Scalars['String']['output'];
+  originalPartNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
+};
+
 export type ReceiveHandlingUnitInput = {
-  handlingUnitCode: Scalars['String'];
-  remove?: Scalars['Boolean'];
+  handlingUnitCode: Scalars['String']['input'];
+  remove?: Scalars['Boolean']['input'];
 };
 
 export type ReceiveHandlingUnitPayload = {
   __typename?: 'ReceiveHandlingUnitPayload';
-  code?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  invoiceNo?: Maybe<Scalars['String']>;
-  lotNo?: Maybe<Scalars['String']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
+  code?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
+  invoiceNo?: Maybe<Scalars['String']['output']>;
+  lotNo?: Maybe<Scalars['String']['output']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ReceiveLotPartInput = {
-  lotNo: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
+  lotNo: Scalars['String']['input'];
+  partNo: Scalars['String']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
+export type RecentBomFilesQueryInput = {
+  count: Scalars['Int']['input'];
+};
+
+export type RecentBomFilesQueryResult = {
+  __typename?: 'RecentBomFilesQueryResult';
+  fileName: Scalars['String']['output'];
+  lastModifiedAt: Scalars['DateTime']['output'];
+  lengthBytes: Scalars['Long']['output'];
+  lotNumbers: Array<Scalars['String']['output']>;
+};
+
+export type RecentShipmentFilesQueryInput = {
+  count: Scalars['Int']['input'];
+};
+
+export type RecentShipmentFilesQueryResult = {
+  __typename?: 'RecentShipmentFilesQueryResult';
+  fileName: Scalars['String']['output'];
+  lastModifiedAt: Scalars['DateTime']['output'];
+  lengthBytes: Scalars['Long']['output'];
+  lotNumbers: Array<Scalars['String']['output']>;
 };
 
 export type RemoveAllComponentStationMappingsPayload = {
   __typename?: 'RemoveAllComponentStationMappingsPayload';
-  removedCount: Scalars['Int'];
+  removedCount: Scalars['Int']['output'];
 };
 
 export type ResultOrOfComponentSerialDto = {
   __typename?: 'ResultOrOfComponentSerialDTO';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ComponentSerialDto>;
 };
 
 export type ResultOrOfDcwsResponse = {
   __typename?: 'ResultOrOfDcwsResponse';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<DcwsResponse>;
 };
 
 export type ResultOrOfImportBomResult = {
   __typename?: 'ResultOrOfImportBomResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ImportBomResult>;
 };
 
 export type ResultOrOfImportShipmentResult = {
   __typename?: 'ResultOrOfImportShipmentResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ImportShipmentResult>;
 };
 
 export type ResultOrOfKit = {
   __typename?: 'ResultOrOfKit';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<Kit>;
 };
 
 export type ResultOrOfKitStatusEvent = {
   __typename?: 'ResultOrOfKitStatusEvent';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<KitStatusEvent>;
 };
 
 export type ResultOrOfLot = {
   __typename?: 'ResultOrOfLot';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<Lot>;
 };
 
 export type ResultOrOfLotOverviewQueryResult = {
   __typename?: 'ResultOrOfLotOverviewQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<LotOverviewQueryResult>;
 };
 
 export type ResultOrOfLotPartDto = {
   __typename?: 'ResultOrOfLotPartDTO';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<LotPartDto>;
 };
 
 export type ResultOrOfLotPartDiffQueryResult = {
   __typename?: 'ResultOrOfLotPartDiffQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<LotPartDiffQueryResult>;
 };
 
 export type ResultOrOfLotPartsByShipOrBomQueryResult = {
   __typename?: 'ResultOrOfLotPartsByShipOrBomQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<LotPartsByShipOrBomQueryResult>;
 };
 
 export type ResultOrOfParsePcvsXlxsResult = {
   __typename?: 'ResultOrOfParsePcvsXlxsResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ParsePcvsXlxsResult>;
 };
 
 export type ResultOrOfParseStationsXlsxCommandResult = {
   __typename?: 'ResultOrOfParseStationsXlsxCommandResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ParseStationsXlsxCommandResult>;
 };
 
 export type ResultOrOfPartLotPartsQueryResult = {
   __typename?: 'ResultOrOfPartLotPartsQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<PartLotPartsQueryResult>;
 };
 
 export type ResultOrOfPartOverviewQueryResult = {
   __typename?: 'ResultOrOfPartOverviewQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<PartOverviewQueryResult>;
 };
 
 export type ResultOrOfPlantOverviewDto = {
   __typename?: 'ResultOrOfPlantOverviewDTO';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<PlantOverviewDto>;
+};
+
+export type ResultOrOfRawBom = {
+  __typename?: 'ResultOrOfRawBom';
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<RawBom>;
 };
 
 export type ResultOrOfReceiveHandlingUnitPayload = {
   __typename?: 'ResultOrOfReceiveHandlingUnitPayload';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ReceiveHandlingUnitPayload>;
 };
 
 export type ResultOrOfRemoveAllComponentStationMappingsPayload = {
   __typename?: 'ResultOrOfRemoveAllComponentStationMappingsPayload';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<RemoveAllComponentStationMappingsPayload>;
 };
 
 export type ResultOrOfSavePcvResult = {
   __typename?: 'ResultOrOfSavePcvResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<SavePcvResult>;
 };
 
 export type ResultOrOfSaveStationCommandResult = {
   __typename?: 'ResultOrOfSaveStationCommandResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<SaveStationCommandResult>;
 };
 
 export type ResultOrOfSetComponentStationMappingsPayload = {
   __typename?: 'ResultOrOfSetComponentStationMappingsPayload';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<SetComponentStationMappingsPayload>;
 };
 
 export type ResultOrOfSetPartTypeResult = {
   __typename?: 'ResultOrOfSetPartTypeResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<SetPartTypeResult>;
 };
 
 export type ResultOrOfShipmentOverviewQueryResult = {
   __typename?: 'ResultOrOfShipmentOverviewQueryResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<ShipmentOverviewQueryResult>;
 };
 
 export type ResultOrOfSyncKitComponentsResult = {
   __typename?: 'ResultOrOfSyncKitComponentsResult';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<SyncKitComponentsResult>;
 };
 
 export type ResultOrOfUpdateKitVinPayload = {
   __typename?: 'ResultOrOfUpdateKitVinPayload';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<UpdateKitVinPayload>;
 };
 
 export type ResultOrOfUpdatePartnerStatusPayload = {
   __typename?: 'ResultOrOfUpdatePartnerStatusPayload';
   errors: Array<Error>;
-  isFailure: Scalars['Boolean'];
-  isSuccess: Scalars['Boolean'];
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<UpdatePartnerStatusPayload>;
 };
 
 export type SavePcvInput = {
-  componentCodes: Array<Scalars['String']>;
-  modelYear: Scalars['String'];
-  pcvCode: Scalars['String'];
-  pcvDrive: Scalars['String'];
-  pcvEngine: Scalars['String'];
-  pcvModel: Scalars['String'];
-  pcvPaint: Scalars['String'];
-  pcvSeries: Scalars['String'];
-  pcvSubmodel: Scalars['String'];
-  pcvTransmission: Scalars['String'];
-  pcvTrim: Scalars['String'];
-  plantCode: Scalars['String'];
+  componentCodes: Array<Scalars['String']['input']>;
+  modelYear: Scalars['String']['input'];
+  pcvCode: Scalars['String']['input'];
+  pcvDrive: Scalars['String']['input'];
+  pcvEngine: Scalars['String']['input'];
+  pcvModel: Scalars['String']['input'];
+  pcvPaint: Scalars['String']['input'];
+  pcvSeries: Scalars['String']['input'];
+  pcvSubmodel: Scalars['String']['input'];
+  pcvTransmission: Scalars['String']['input'];
+  pcvTrim: Scalars['String']['input'];
+  plantCode: Scalars['String']['input'];
 };
 
 export type SavePcvResult = {
   __typename?: 'SavePcvResult';
-  id: Scalars['UUID'];
-  modelYear: Scalars['String'];
-  pcvCode: Scalars['String'];
-  pcvComponentCodes: Array<Scalars['String']>;
+  id: Scalars['UUID']['output'];
+  modelYear: Scalars['String']['output'];
+  pcvCode: Scalars['String']['output'];
+  pcvComponentCodes: Array<Scalars['String']['output']>;
   pcvDrive?: Maybe<ICategory>;
   pcvEngine?: Maybe<ICategory>;
   pcvModel?: Maybe<ICategory>;
@@ -3878,23 +3853,23 @@ export type SavePcvResult = {
   pcvSubmodel?: Maybe<ICategory>;
   pcvTransmission?: Maybe<ICategory>;
   pcvTrim?: Maybe<ICategory>;
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['output'];
 };
 
 export type SaveStationCommandInput = {
-  code: Scalars['String'];
-  componentCodes: Array<Scalars['String']>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  code: Scalars['String']['input'];
+  componentCodes: Array<Scalars['String']['input']>;
+  plantCode: Scalars['String']['input'];
+  sequence: Scalars['Int']['input'];
 };
 
 export type SaveStationCommandResult = {
   __typename?: 'SaveStationCommandResult';
-  code: Scalars['String'];
-  componentCodes: Array<Scalars['String']>;
-  id: Scalars['UUID'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  code: Scalars['String']['output'];
+  componentCodes: Array<Scalars['String']['output']>;
+  id: Scalars['UUID']['output'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type SetComponentStationMappingsPayload = {
@@ -3903,61 +3878,61 @@ export type SetComponentStationMappingsPayload = {
 };
 
 export type SetPartTypeCommandInput = {
-  partDescription: Scalars['String'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
+  partDescription: Scalars['String']['input'];
+  partNo: Scalars['String']['input'];
+  partType: Scalars['String']['input'];
 };
 
 export type SetPartTypeResult = {
   __typename?: 'SetPartTypeResult';
-  partDescription: Scalars['String'];
-  partId: Scalars['UUID'];
-  partNo: Scalars['String'];
-  partType: Scalars['String'];
+  partDescription: Scalars['String']['output'];
+  partId: Scalars['UUID']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
 };
 
 export type ShipFile = {
   __typename?: 'ShipFile';
-  created: Scalars['DateTime'];
-  filename: Scalars['String'];
+  created: Scalars['DateTime']['output'];
+  filename: Scalars['String']['output'];
   lots: Array<ShipFileLot>;
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type ShipFileInvoice = {
   __typename?: 'ShipFileInvoice';
-  invoiceNo: Scalars['String'];
+  invoiceNo: Scalars['String']['output'];
   parts: Array<ShipFilePart>;
-  shipDate: Scalars['DateTime'];
+  shipDate: Scalars['DateTime']['output'];
 };
 
 export type ShipFileLot = {
   __typename?: 'ShipFileLot';
   invoices: Array<ShipFileInvoice>;
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['output'];
 };
 
 export type ShipFilePart = {
   __typename?: 'ShipFilePart';
-  customerPartDesc: Scalars['String'];
-  customerPartNo: Scalars['String'];
-  handlingUnitCode: Scalars['String'];
-  originalPartNo: Scalars['String'];
-  partNo: Scalars['String'];
-  quantity: Scalars['Int'];
+  customerPartDesc: Scalars['String']['output'];
+  customerPartNo: Scalars['String']['output'];
+  handlingUnitCode: Scalars['String']['output'];
+  originalPartNo: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
 };
 
 export type Shipment = {
   __typename?: 'Shipment';
-  createdAt: Scalars['DateTime'];
-  filename?: Maybe<Scalars['String']>;
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  filename?: Maybe<Scalars['String']['output']>;
+  id: Scalars['UUID']['output'];
+  lots: Array<Lot>;
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
-  shipmentLots: Array<ShipmentLot>;
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
 };
 
 export type ShipmentFilterInput = {
@@ -3965,24 +3940,25 @@ export type ShipmentFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   filename?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  lots?: InputMaybe<ListFilterInputTypeOfLotFilterInput>;
   or?: InputMaybe<Array<ShipmentFilterInput>>;
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   sequence?: InputMaybe<IntOperationFilterInput>;
-  shipmentLots?: InputMaybe<ListFilterInputTypeOfShipmentLotFilterInput>;
 };
 
 export type ShipmentInvoice = {
   __typename?: 'ShipmentInvoice';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   handlingUnits: Array<HandlingUnit>;
-  id: Scalars['UUID'];
-  invoiceNo: Scalars['String'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipDate: Scalars['DateTime'];
-  shipmentLot: ShipmentLot;
-  shipmentLotId: Scalars['UUID'];
+  id: Scalars['UUID']['output'];
+  invoiceNo: Scalars['String']['output'];
+  lot: Lot;
+  lotId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  shipDate: Scalars['DateTime']['output'];
+  shipmentLotId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type ShipmentInvoiceFilterInput = {
@@ -3991,10 +3967,11 @@ export type ShipmentInvoiceFilterInput = {
   handlingUnits?: InputMaybe<ListFilterInputTypeOfHandlingUnitFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   invoiceNo?: InputMaybe<StringOperationFilterInput>;
+  lot?: InputMaybe<LotFilterInput>;
+  lotId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ShipmentInvoiceFilterInput>>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
   shipDate?: InputMaybe<DateTimeOperationFilterInput>;
-  shipmentLot?: InputMaybe<ShipmentLotFilterInput>;
   shipmentLotId?: InputMaybe<UuidOperationFilterInput>;
 };
 
@@ -4002,9 +3979,10 @@ export type ShipmentInvoiceSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   invoiceNo?: InputMaybe<SortEnumType>;
+  lot?: InputMaybe<LotSortInput>;
+  lotId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
   shipDate?: InputMaybe<SortEnumType>;
-  shipmentLot?: InputMaybe<ShipmentLotSortInput>;
   shipmentLotId?: InputMaybe<SortEnumType>;
 };
 
@@ -4023,140 +4001,29 @@ export type ShipmentInvoicesConnection = {
 export type ShipmentInvoicesEdge = {
   __typename?: 'ShipmentInvoicesEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: ShipmentInvoice;
 };
 
-export type ShipmentLot = {
-  __typename?: 'ShipmentLot';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
-  invoices: Array<ShipmentInvoice>;
-  lot: Lot;
-  lotId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  shipment: Shipment;
-  shipmentId: Scalars['UUID'];
-};
-
-export type ShipmentLotFilterInput = {
-  and?: InputMaybe<Array<ShipmentLotFilterInput>>;
-  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  invoices?: InputMaybe<ListFilterInputTypeOfShipmentInvoiceFilterInput>;
-  lot?: InputMaybe<LotFilterInput>;
-  lotId?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ShipmentLotFilterInput>>;
-  removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  shipment?: InputMaybe<ShipmentFilterInput>;
-  shipmentId?: InputMaybe<UuidOperationFilterInput>;
-};
-
-export type ShipmentLotSortInput = {
-  createdAt?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  lot?: InputMaybe<LotSortInput>;
-  lotId?: InputMaybe<SortEnumType>;
-  removedAt?: InputMaybe<SortEnumType>;
-  shipment?: InputMaybe<ShipmentSortInput>;
-  shipmentId?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type ShipmentLotsConnection = {
-  __typename?: 'ShipmentLotsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ShipmentLotsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ShipmentLot>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type ShipmentLotsEdge = {
-  __typename?: 'ShipmentLotsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: ShipmentLot;
-};
-
 export type ShipmentOverviewQueryInput = {
-  id: Scalars['UUID'];
+  id: Scalars['UUID']['input'];
 };
 
 export type ShipmentOverviewQueryResult = {
   __typename?: 'ShipmentOverviewQueryResult';
-  bomId?: Maybe<Scalars['UUID']>;
-  bomSequence?: Maybe<Scalars['Int']>;
-  createdAt: Scalars['DateTime'];
-  handlingUnitCount: Scalars['Int'];
-  handlingUnitReceivedCount: Scalars['Int'];
-  id: Scalars['UUID'];
-  invoiceCount: Scalars['Int'];
-  lotNumbers: Array<Scalars['String']>;
-  lotPartCount: Scalars['Int'];
-  lotPartReceivedCount: Scalars['Int'];
-  plantCode: Scalars['String'];
-  sequence: Scalars['Int'];
-};
-
-export type ShipmentPart = {
-  __typename?: 'ShipmentPart';
-  createdAt: Scalars['DateTime'];
-  handlingUnit: HandlingUnit;
-  handlingUnitId?: Maybe<Scalars['UUID']>;
-  id: Scalars['UUID'];
-  part: Part;
-  partId: Scalars['UUID'];
-  quantity: Scalars['Int'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type ShipmentPartFilterInput = {
-  and?: InputMaybe<Array<ShipmentPartFilterInput>>;
-  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  handlingUnit?: InputMaybe<HandlingUnitFilterInput>;
-  handlingUnitId?: InputMaybe<UuidOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ShipmentPartFilterInput>>;
-  part?: InputMaybe<PartFilterInput>;
-  partId?: InputMaybe<UuidOperationFilterInput>;
-  quantity?: InputMaybe<IntOperationFilterInput>;
-  removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-};
-
-export type ShipmentPartSortInput = {
-  createdAt?: InputMaybe<SortEnumType>;
-  handlingUnit?: InputMaybe<HandlingUnitSortInput>;
-  handlingUnitId?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  part?: InputMaybe<PartSortInput>;
-  partId?: InputMaybe<SortEnumType>;
-  quantity?: InputMaybe<SortEnumType>;
-  removedAt?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type ShipmentPartsConnection = {
-  __typename?: 'ShipmentPartsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ShipmentPartsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ShipmentPart>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type ShipmentPartsEdge = {
-  __typename?: 'ShipmentPartsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: ShipmentPart;
+  bomId?: Maybe<Scalars['UUID']['output']>;
+  bomSequence?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  handlingUnitCount: Scalars['Int']['output'];
+  handlingUnitReceivedCount: Scalars['Int']['output'];
+  id: Scalars['UUID']['output'];
+  invoiceCount: Scalars['Int']['output'];
+  lotNumbers: Array<Scalars['String']['output']>;
+  lotPartCount: Scalars['Int']['output'];
+  lotPartReceivedCount: Scalars['Int']['output'];
+  plantCode: Scalars['String']['output'];
+  sequence: Scalars['Int']['output'];
 };
 
 export type ShipmentSortInput = {
@@ -4184,7 +4051,7 @@ export type ShipmentsConnection = {
 export type ShipmentsEdge = {
   __typename?: 'ShipmentsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Shipment;
 };
@@ -4196,28 +4063,28 @@ export enum SortEnumType {
 
 export type StatcionSerialInfo = {
   __typename?: 'StatcionSerialInfo';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  kitComponentId: Scalars['UUID'];
-  serial1?: Maybe<Scalars['String']>;
-  serial2?: Maybe<Scalars['String']>;
-  stationCode: Scalars['String'];
-  stationName: Scalars['String'];
-  stationSequence: Scalars['Int'];
-  verifiedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  kitComponentId: Scalars['UUID']['output'];
+  serial1?: Maybe<Scalars['String']['output']>;
+  serial2?: Maybe<Scalars['String']['output']>;
+  stationCode: Scalars['String']['output'];
+  stationName: Scalars['String']['output'];
+  stationSequence: Scalars['Int']['output'];
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type Station = {
   __typename?: 'Station';
-  code: Scalars['String'];
+  code: Scalars['String']['output'];
   components: Array<ComponentStation>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['UUID'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['UUID']['output'];
   kitComponents: Array<KitComponent>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   plant: Plant;
-  plantId: Scalars['UUID'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
+  plantId: Scalars['UUID']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
 };
 
 export type StationFilterInput = {
@@ -4261,35 +4128,35 @@ export type StationsConnection = {
 export type StationsEdge = {
   __typename?: 'StationsEdge';
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Station;
 };
 
 export type StatusEventDto = {
   __typename?: 'StatusEventDTO';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  eventDate?: Maybe<Scalars['DateTime']>;
-  eventNote?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  eventDate?: Maybe<Scalars['DateTime']['output']>;
+  eventNote?: Maybe<Scalars['String']['output']>;
   eventType: KitStatusCode;
-  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']>;
-  removedAt?: Maybe<Scalars['DateTime']>;
-  sequence: Scalars['Int'];
+  partnerStatusUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
 };
 
 export type StringOperationFilterInput = {
   and?: InputMaybe<Array<StringOperationFilterInput>>;
-  contains?: InputMaybe<Scalars['String']>;
-  endsWith?: InputMaybe<Scalars['String']>;
-  eq?: InputMaybe<Scalars['String']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  ncontains?: InputMaybe<Scalars['String']>;
-  nendsWith?: InputMaybe<Scalars['String']>;
-  neq?: InputMaybe<Scalars['String']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  nstartsWith?: InputMaybe<Scalars['String']>;
+  contains?: InputMaybe<Scalars['String']['input']>;
+  endsWith?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ncontains?: InputMaybe<Scalars['String']['input']>;
+  nendsWith?: InputMaybe<Scalars['String']['input']>;
+  neq?: InputMaybe<Scalars['String']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  nstartsWith?: InputMaybe<Scalars['String']['input']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
-  startsWith?: InputMaybe<Scalars['String']>;
+  startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SyncKitComponentsResult = {
@@ -4299,47 +4166,47 @@ export type SyncKitComponentsResult = {
 
 export type SyncKitComponentsResultItem = {
   __typename?: 'SyncKitComponentsResultItem';
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['output'];
 };
 
 export type UpdateKitVinInput = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 export type UpdateKitVinPayload = {
   __typename?: 'UpdateKitVinPayload';
-  kitNo: Scalars['String'];
-  vin?: Maybe<Scalars['String']>;
+  kitNo: Scalars['String']['output'];
+  vin?: Maybe<Scalars['String']['output']>;
 };
 
 export type UpdatePartnerStatusInput = {
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 };
 
 export type UpdatePartnerStatusPayload = {
   __typename?: 'UpdatePartnerStatusPayload';
-  kitNo: Scalars['String'];
-  message: Scalars['String'];
+  kitNo: Scalars['String']['output'];
+  message: Scalars['String']['output'];
   updatedStatuses: Array<PartnerStatusCode>;
 };
 
 export type UuidOperationFilterInput = {
-  eq?: InputMaybe<Scalars['UUID']>;
-  gt?: InputMaybe<Scalars['UUID']>;
-  gte?: InputMaybe<Scalars['UUID']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']>>>;
-  lt?: InputMaybe<Scalars['UUID']>;
-  lte?: InputMaybe<Scalars['UUID']>;
-  neq?: InputMaybe<Scalars['UUID']>;
-  ngt?: InputMaybe<Scalars['UUID']>;
-  ngte?: InputMaybe<Scalars['UUID']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']>>>;
-  nlt?: InputMaybe<Scalars['UUID']>;
-  nlte?: InputMaybe<Scalars['UUID']>;
+  eq?: InputMaybe<Scalars['UUID']['input']>;
+  gt?: InputMaybe<Scalars['UUID']['input']>;
+  gte?: InputMaybe<Scalars['UUID']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  lt?: InputMaybe<Scalars['UUID']['input']>;
+  lte?: InputMaybe<Scalars['UUID']['input']>;
+  neq?: InputMaybe<Scalars['UUID']['input']>;
+  ngt?: InputMaybe<Scalars['UUID']['input']>;
+  ngte?: InputMaybe<Scalars['UUID']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  nlt?: InputMaybe<Scalars['UUID']['input']>;
+  nlte?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 export type VinAllocationQueryInput = {
-  lotNo: Scalars['String'];
+  lotNo: Scalars['String']['input'];
 };
 
 export type VinAllocationQueryResult = {
@@ -4349,80 +4216,80 @@ export type VinAllocationQueryResult = {
 
 export type VinAllocationQueryResultItem = {
   __typename?: 'VinAllocationQueryResultItem';
-  drive?: Maybe<Scalars['String']>;
-  engine?: Maybe<Scalars['String']>;
-  handlingUnitCount: Scalars['Int'];
-  kitNo: Scalars['String'];
-  lotNo: Scalars['String'];
-  model: Scalars['String'];
-  modelYear: Scalars['String'];
-  paint?: Maybe<Scalars['String']>;
-  pcvCode: Scalars['String'];
-  plabBuildDate?: Maybe<Scalars['DateTime']>;
-  plantCode: Scalars['String'];
-  series?: Maybe<Scalars['String']>;
-  shipmentSequence: Scalars['Int'];
-  subModel?: Maybe<Scalars['String']>;
-  transmission?: Maybe<Scalars['String']>;
-  trim?: Maybe<Scalars['String']>;
-  vin: Scalars['String'];
+  drive?: Maybe<Scalars['String']['output']>;
+  engine?: Maybe<Scalars['String']['output']>;
+  handlingUnitCount: Scalars['Int']['output'];
+  kitNo: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  modelYear: Scalars['String']['output'];
+  paint?: Maybe<Scalars['String']['output']>;
+  pcvCode: Scalars['String']['output'];
+  plabBuildDate?: Maybe<Scalars['DateTime']['output']>;
+  plantCode: Scalars['String']['output'];
+  series?: Maybe<Scalars['String']['output']>;
+  shipmentSequence: Scalars['Int']['output'];
+  subModel?: Maybe<Scalars['String']['output']>;
+  transmission?: Maybe<Scalars['String']['output']>;
+  trim?: Maybe<Scalars['String']['output']>;
+  vin: Scalars['String']['output'];
 };
 
 export type ImoprtBomMutationVariables = Exact<{
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 }>;
 
 
-export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'ResultOrOfImportBomResult', payload?: { __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
+export type ImoprtBomMutation = { __typename?: 'Mutation', importBOM: { __typename?: 'ResultOrOfImportBomResult', payload?: { __typename?: 'ImportBomResult', bomId: any, plantCode: string, sequence: number } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
 
 export type ImportBomFileTextMutationVariables = Exact<{
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 }>;
 
 
-export type ImportBomFileTextMutation = { __typename?: 'Mutation', importBOMFileText: { __typename?: 'ResultOrOfImportBomResult', payload?: { __typename?: 'ImportBomResult', items: Array<{ __typename?: 'ImportBomResultItem', bomId: any, plantCode: string, sequence: number }> } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
+export type ImportBomFileTextMutation = { __typename?: 'Mutation', importBOMFileText: { __typename?: 'ResultOrOfImportBomResult', payload?: { __typename?: 'ImportBomResult', bomId: any, plantCode: string, sequence: number } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
 
 export type ImportShipmentMutationVariables = Exact<{
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 }>;
 
 
 export type ImportShipmentMutation = { __typename?: 'Mutation', importShipment: { __typename?: 'ResultOrOfImportShipmentResult', payload?: { __typename?: 'ImportShipmentResult', shipmentId: any, plantCode: string, sequence: number, lotCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
 
 export type ImportShipmentFileTextMutationVariables = Exact<{
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 }>;
 
 
 export type ImportShipmentFileTextMutation = { __typename?: 'Mutation', importShipmentFileText: { __typename?: 'ResultOrOfImportShipmentResult', payload?: { __typename?: 'ImportShipmentResult', shipmentId: any, plantCode: string, sequence: number, lotCount: number } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
 
 export type ParseBomFileMutationVariables = Exact<{
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 }>;
 
 
-export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ParseBomFileResult', bomPlantSets: Array<{ __typename?: 'BomPlantSet', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'BomLot', lotNo: string, pcvCode: string, lotParts: Array<{ __typename?: 'BomLotPart', partNo: string, partDesc: string, quantity: number }>, kits: Array<{ __typename?: 'BomLotKit', kitNo: string }> }> }> } };
+export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ResultOrOfRawBom', isSuccess: boolean, payload?: { __typename?: 'RawBom', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'RawBomLot', lotNo: string }> } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
 
 export type ParseBomFileTextMutationVariables = Exact<{
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 }>;
 
 
-export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ParseBomFileResult', bomPlantSets: Array<{ __typename?: 'BomPlantSet', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'BomLot', lotNo: string, pcvCode: string, lotParts: Array<{ __typename?: 'BomLotPart', partNo: string, partDesc: string, quantity: number }>, kits: Array<{ __typename?: 'BomLotKit', kitNo: string }> }> }> } };
+export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ResultOrOfRawBom', isFailure: boolean, isSuccess: boolean, errors: Array<{ __typename?: 'Error', description: string }>, payload?: { __typename?: 'RawBom', bomFileCreatedAt: any, filename: string, kittingPlantCode: string, plantCode: string, sequenceNumber: number, lots: Array<{ __typename?: 'RawBomLot', lotNo: string }> } | null } };
 
 export type ParseShipmentFileMutationVariables = Exact<{
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 }>;
 
 
 export type ParseShipmentFileMutation = { __typename?: 'Mutation', parseShipmentFile: { __typename?: 'ShipFile', sequence: number, plantCode: string, created: any, filename: string, lots: Array<{ __typename?: 'ShipFileLot', lotNo: string, invoices: Array<{ __typename?: 'ShipFileInvoice', invoiceNo: string, shipDate: any, parts: Array<{ __typename?: 'ShipFilePart', partNo: string, handlingUnitCode: string, customerPartNo: string, customerPartDesc: string, quantity: number }> }> }> } };
 
 export type ParseShipmentFileTextMutationVariables = Exact<{
-  filename: Scalars['String'];
-  text: Scalars['String'];
+  filename: Scalars['String']['input'];
+  text: Scalars['String']['input'];
 }>;
 
 
@@ -4443,7 +4310,7 @@ export type SyncKitStatusToPartnerStatusMutationVariables = Exact<{
 export type SyncKitStatusToPartnerStatusMutation = { __typename?: 'Mutation', syncKitToPartnerStatus: { __typename?: 'ResultOrOfUpdatePartnerStatusPayload', payload?: { __typename?: 'UpdatePartnerStatusPayload', kitNo: string, updatedStatuses: Array<PartnerStatusCode> } | null, errors: Array<{ __typename?: 'Error', code: string, description: string }> } };
 
 export type CreateBuildStartEventMutationVariables = Exact<{
-  kitNo: Scalars['String'];
+  kitNo: Scalars['String']['input'];
 }>;
 
 
@@ -4462,28 +4329,28 @@ export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 export type PlantsQuery = { __typename?: 'Query', plants?: { __typename?: 'PlantsConnection', nodes?: Array<{ __typename?: 'Plant', code: string, name: string, kittingPlantCode: string, createdAt: any }> | null } | null };
 
 export type FordInterfaceFileTypeQueryVariables = Exact<{
-  filename: Scalars['String'];
+  filename: Scalars['String']['input'];
 }>;
 
 
 export type FordInterfaceFileTypeQuery = { __typename?: 'Query', fordInterfaceFileType: FordInterfaceFileType };
 
 export type BuildStartPendingKitsQueryVariables = Exact<{
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 }>;
 
 
 export type BuildStartPendingKitsQuery = { __typename?: 'Query', buildStartPendingKits: Array<{ __typename?: 'KitInfoDTO', id: any, kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, kitStatusCode?: KitStatusCode | null, partnerStatusCode?: PartnerStatusCode | null }> };
 
 export type PartnerStatusUpdatePendingKitsQueryVariables = Exact<{
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 }>;
 
 
 export type PartnerStatusUpdatePendingKitsQuery = { __typename?: 'Query', partnerStatusUpdatePendingKits: Array<{ __typename?: 'KitInfoDTO', kitNo: string, lotNo: string, vin?: string | null, model: string, series: string, eventDtate?: any | null, partnerStatusCode?: PartnerStatusCode | null, kitStatusCode?: KitStatusCode | null, partnerStatusPending: boolean }> };
 
 export type PlanBuildVinPendingKitsQueryVariables = Exact<{
-  plantCode: Scalars['String'];
+  plantCode: Scalars['String']['input'];
 }>;
 
 

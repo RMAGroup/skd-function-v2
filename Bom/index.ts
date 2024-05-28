@@ -15,6 +15,10 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
 
     try {
 
+        const parsedBom = await service.parseBomFileText({ filename: context.bindingData.name, text: inBlob.toString() });
+
+        context.log(`parsed bom file ${parsedBom.payload.plantCode}  ${parsedBom.payload.sequenceNumber}  ${parsedBom.payload.kittingPlantCode} Lots: ${parsedBom.payload.lots.length}`);
+
         // mport
         const textFile: TextFile = { filename: context.bindingData.name, text: inBlob.toString() };
         const errors = await importBom(service, textFile);

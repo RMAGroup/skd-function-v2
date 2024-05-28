@@ -71,21 +71,12 @@ mutation parseBomFile($file: Upload!) {
       kittingPlantCode
       lots {
         lotNo
-        pcvCode
-        lotParts {
-          partNo
-          originalPartNo
-          partDesc
-          quantity
-        }
-        kits {
-          kitNo
-        }
       }
     }
     errors {
       description
     }
+    isSuccess
   }
 }
 `
@@ -93,28 +84,22 @@ mutation parseBomFile($file: Upload!) {
 export const PARSE_BOM_FILE_TEXT = gql`
 mutation parseBomFileText($filename: String!, $text: String!) {
   parseBomFileText(filename: $filename, text: $text) {
-    payload {
-      plantCode
-      filename
-      sequenceNumber
-      kittingPlantCode
-      lots {
-        lotNo
-        pcvCode
-        lotParts {
-          partNo
-          originalPartNo
-          partDesc
-          quantity
-        }
-        kits {
-          kitNo
-        }
-      }
-    }
+    isFailure
+    isSuccess
     errors {
       description
     }
+    payload {
+      bomFileCreatedAt
+      filename
+      kittingPlantCode
+      plantCode
+      sequenceNumber
+      lots {
+        lotNo
+      }
+    }
+    isSuccess
   }
 }
 `
