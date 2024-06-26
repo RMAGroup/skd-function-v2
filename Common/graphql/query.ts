@@ -19,49 +19,5 @@ query fordInterfaceFileType($filename: String!) {
 }
 `
 
-export const BUILD_START_PENDING_KITS = gql`
-query buildStartPendingKits($plantCode: String!) {
-  buildStartPendingKits(plantCode: $plantCode) {
-    id
-    kitNo
-    lotNo
-    vin
-    model
-    series
-    kitStatusCode
-    partnerStatusCode
-  }
-}
-`
 
-export const GET_PARTNER_STATUS_UPDATE_PENDING_KITS = gql`
-query partnerStatusUpdatePendingKits($plantCode: String!){
-  partnerStatusUpdatePendingKits(plantCode: $plantCode) {
-    kitNo
-    lotNo
-    vin
-    model
-    series
-    eventDtate
-    partnerStatusCode
-    kitStatusCode
-    partnerStatusPending  
-  }
-}
-`
 
-export const PLAN_BUILD_VIN_PENDING_KITS = gql`
-query planBuildVinPendingKits($plantCode: String!) {
-  planBuildVinPendingKits(plantCode: $plantCode) {
-    id
-    kitNo
-    lotNo
-    vin
-    model
-    series
-    kitStatusCode
-    partnerStatusCode
-    partnerStatusPending
-  }
-}
-`

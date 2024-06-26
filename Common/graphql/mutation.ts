@@ -155,57 +155,9 @@ mutation parseShipmentFileText($filename: String!, $text: String!) {
 `
 
 
-export const UPDATE_PARTNER_STATUS = gql`
-mutation updatePartnerStatus($input: UpdatePartnerStatusInput!) {
-  updatePartnerStatus(input: $input) {
-    payload {
-      kitNo
-      updatedStatuses
-    }
-    errors {
-      code
-      description
-    }
-  }
-}
-`
-
-export const SYNC_KIT_STATUS_TO_PARTNER_STATUS = gql`
-mutation syncKitStatusToPartnerStatus($input: UpdatePartnerStatusInput!) {
-  syncKitToPartnerStatus(input: $input) {
-    payload {
-      kitNo
-      updatedStatuses
-    }
-    errors {
-      code
-      description
-    }
-  }
-}
-`
-
-export const CREATE_BUILD_START_EVENT = gql`
-
-mutation createBuildStartEvent($kitNo: String!) {
-  createBuildStartEvent(kitNo: $kitNo) {
-    payload {
-      id
-      kitId
-      eventDate
-    }
-    errors {
-      code
-      description
-    }
-  }
-}
-
-`
-
 export const UPDATE_KIT_VIN = gql`
-mutation updateKitVin($input: UpdateKitVinInput!) {
-  updateKitVin(input: $input) {
+mutation setKitVin($input: SetKitVinCommandInput!) {
+  setKitVin(input: $input) {
     payload {
       vin
       kitNo
