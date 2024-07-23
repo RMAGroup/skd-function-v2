@@ -13,11 +13,6 @@ query plants {
 }
 `
 
-export const FORD_INTERFACE_FILETYPE = gql`
-query fordInterfaceFileType($filename: String!) {
-  fordInterfaceFileType(filename: $filename) 
-}
-`
 
 
 

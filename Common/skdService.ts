@@ -4,8 +4,6 @@ import {
   ImportShipmentMutationVariables,
   PlantsQuery,
   PlantsQueryVariables,
-  FordInterfaceFileTypeQuery,
-  FordInterfaceFileTypeQueryVariables,
   ImoprtBomMutation,
   ImoprtBomMutationVariables,
   ParseShipmentFileMutation,
@@ -22,11 +20,10 @@ import {
   ParseShipmentFileTextMutationVariables,
 } from './graphql/generated/graphql';
 
-import { IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT, PARSE_SHIP_FILE, PARSE_SHIP_FILE_TEXT, UPDATE_KIT_VIN } from './graphql/mutation';
+import { IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT, PARSE_SHIP_FILE, PARSE_SHIP_FILE_TEXT } from './graphql/mutation';
 
 import {
   PLANTS,
-  FORD_INTERFACE_FILETYPE,
 } from './graphql/query';
 import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
 import { TextFile } from './types';
@@ -148,16 +145,6 @@ export class skdService {
     return result.data.parseShipmentFileText
   }
 
-  getFordInerfaceFileType = async (filename: string) => {
-    const result = await this.client.query<FordInterfaceFileTypeQuery, FordInterfaceFileTypeQueryVariables>(
-      FORD_INTERFACE_FILETYPE,
-      {
-        filename
-      }
-    ).toPromise()
-    const r = result.data.fordInterfaceFileType
-    return r;
-  }
 
 }
 

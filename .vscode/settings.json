@@ -5,5 +5,12 @@
     "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "npm prune (functions)",
-    "cSpell.enabled": false
+    "cSpell.enabled": false,
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "latex",
+        "plaintext"
+    ]
 }

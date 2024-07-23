@@ -155,17 +155,4 @@ mutation parseShipmentFileText($filename: String!, $text: String!) {
 `
 
 
-export const UPDATE_KIT_VIN = gql`
-mutation setKitVin($input: SetKitVinCommandInput!) {
-  setKitVin(input: $input) {
-    payload {
-      vin
-      kitNo
-    }
-    errors {
-      code
-      description
-    }
-  }
-}
-`
+
