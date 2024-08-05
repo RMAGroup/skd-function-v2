@@ -1,15 +1,23 @@
-import { AzureFunction, Context } from "@azure/functions"
+import { app, InvocationContext } from "@azure/functions";
 import { getAppConfig } from "../Common/appConfig";
 import { AzureBlobService } from "../Common/AzureBlobService";
 import { ContainerName } from "../Common/types";
 
-const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
+app.storageBlob('Incoming', {
+    path: 'incoming/{name}',
+    connection: 'AzureWebJobsStorage',
+    handler: Incoming
+});
+
+export async function Incoming(blob: Buffer, context: InvocationContext): Promise<void> {
 
     try {
+        context.log(`******** processing incoming file: ******** `);
+        context.log(context.triggerMetadata.name);
         const appConfig = getAppConfig();
         const blobService = new AzureBlobService<ContainerName>(appConfig.AzureWebJobsStorage)
-        const filename = context.bindingData.name;
-        const fileText = inBlob.toString();
+        const filename = context.triggerMetadata.name as string
+        const fileText = blob.toString();
         const fileType: FileType = getFileType(filename);
 
         if (fileText.length < 500) {
@@ -42,7 +50,7 @@ const blobTrigger: AzureFunction = async function (context: Context, inBlob: any
             blobService.deleteBlob(ContainerName.Incoming, filename)
         }
     } catch (error) {
-        context.log(`error processing incoming file: ${context.bindingData.name}`)
+        context.log(`error processing incoming file: ${context.triggerMetadata.name}`)
         context.log(error.description)
         throw error
     }
@@ -55,14 +63,12 @@ enum FileType {
 }
 
 function getFileType(filename: string): FileType {
-    if (/\.SHIP_/.test(filename)) {
+    if (/\.SHIP(_|.)/.test(filename)) {
         return FileType.SHIP;
     }
-    if (/\.BOM_/.test(filename)) {
+    if (/\.BOM(_|.)/.test(filename)) {
         return FileType.BOM;
     }
     return FileType.UNKNOWN;
 }
 
-
-export default blobTrigger;

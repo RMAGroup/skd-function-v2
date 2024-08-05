@@ -1,14 +1,20 @@
-import { AzureFunction, Context } from "@azure/functions";
 import { getAppConfig } from "../Common/appConfig";
 import { AzureTableService } from "../Common/AzureTableService";
 import { skdService } from "../Common/skdService";
 import { ContainerName, TextFile } from "../Common/types";
+import { app, InvocationContext } from "@azure/functions";
 import { AzureBlobService } from "../Common/AzureBlobService";
 
-const blobTrigger: AzureFunction = async function (context: Context, inBlob: any): Promise<void> {
+app.storageBlob('Shipment', {
+    path: 'ship/{name}',
+    connection: 'AzureWebJobsStorage',
+    handler: Shipment
+});
+
+export async function Shipment(blob: Buffer, context: InvocationContext): Promise<void> {
 
     const { service } = initializeServices();
-    const textFile: TextFile = toTextFile(context, inBlob);
+    const textFile: TextFile = toTextFile(context, blob);
     const appCOnfig = getAppConfig();
     const blobService = new AzureBlobService<ContainerName>(appCOnfig.AzureWebJobsStorage)
 
@@ -39,14 +45,14 @@ function initializeServices() {
     return { appConfig, service, tableService };
 }
 
-function toTextFile(context: Context, inBlob: any): TextFile {
-    return { filename: context.bindingData.name, text: inBlob.toString() };
+function toTextFile(context: InvocationContext, inBlob: Buffer): TextFile {
+    return { filename: context.triggerMetadata.name as string, text: inBlob.toString() };
 }
 
-function logError(context: Context, error: Error) {
-    context.log(`error importing ship file: ${context.bindingData.name}`);
+function logError(context: InvocationContext, error: Error) {
+    context.log(`error importing ship file: ${context.triggerMetadata.name}`);
     context.log(error.message);
     throw error;
 }
 
-export default blobTrigger;
+

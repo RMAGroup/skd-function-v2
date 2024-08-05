@@ -1,31 +1,33 @@
 {
-  "name": "skd-function-2",
+  "name": "skd-function",
   "version": "",
+  "main": "dist/functions/*.js",
   "scripts": {
     "build": "tsc",
-    "build:production": "npm run prestart && npm prune --production",
-    "watch": "tsc --w",
-    "prestart": "npm run build && func extensions install",
-    "start:host": "func start",
-    "start": "npm-run-all --parallel start:host watch",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start --inspect=9229",
     "test": "echo \"No tests yet...\"",
     "codegen": "graphql-codegen --config codegen.ts --watch"
   },
-  "description": "",
+  "dependencies": {
+    "@azure/functions": "^4.0.0"
+  },
   "devDependencies": {
+    "azure-functions-core-tools": "^4.x",
+    "@types/node": "18.x",
+    "rimraf": "^5.0.0",
     "@azure/data-tables": "^13.2.2",
-    "@azure/functions": "^3.5.1",
-    "@azure/storage-blob": "^12.0.0",
+    "@azure/storage-blob": "^12.24.0",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-operations": "^4.0.1",
-    "@types/node": "16.x",
     "@urql/core": "^4.0.7",
-    "azure-functions-core-tools": "^4.x",
     "graphql": "^16.6.0",
     "isomorphic-fetch": "^3.0.0",
     "node-fetch": "^3.3.1",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.9.0"
+    "typescript": "^4.0.0"
   }
 }
