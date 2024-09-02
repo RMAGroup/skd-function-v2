@@ -6,8 +6,6 @@ import {
   PlantsQueryVariables,
   ImoprtBomMutation,
   ImoprtBomMutationVariables,
-  ParseShipmentFileMutation,
-  ParseShipmentFileMutationVariables,
   ParseBomFileMutation,
   ParseBomFileMutationVariables,
   ParseBomFileTextMutation,
@@ -16,11 +14,9 @@ import {
   ImportBomFileTextMutationVariables,
   ImportShipmentFileTextMutation,
   ImportShipmentFileTextMutationVariables,
-  ParseShipmentFileTextMutation,
-  ParseShipmentFileTextMutationVariables,
 } from './graphql/generated/graphql';
 
-import { IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT, PARSE_SHIP_FILE, PARSE_SHIP_FILE_TEXT } from './graphql/mutation';
+import { IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT } from './graphql/mutation';
 
 import {
   PLANTS,
@@ -108,12 +104,12 @@ export class skdService {
     const result = await this.client.mutation<ImportShipmentFileTextMutation, ImportShipmentFileTextMutationVariables>(
       IMPORT_SHIPMENT_FILE_TEXT,
       {
-        filename: textFile.filename,
-        text: textFile.text
+        fileName: textFile.filename,
+        fileText: textFile.text
       }
     ).toPromise()
 
-    return result.data.importShipmentFileText
+    return result.data.importShipmentText
   }
 
   getPlants = async () => {
@@ -125,25 +121,7 @@ export class skdService {
     return result.data.plants.nodes
   }
 
-  parseShipFile = async (file: File) => {
-    const result = await this.client.mutation<ParseShipmentFileMutation, ParseShipmentFileMutationVariables>(
-      PARSE_SHIP_FILE,
-      {
-        file
-      },
-    ).toPromise()
-    return result.data.parseShipmentFile
-  }
-  parseShipFileText = async (file: TextFile) => {
-    const result = await this.client.mutation<ParseShipmentFileTextMutation, ParseShipmentFileTextMutationVariables>(
-      PARSE_SHIP_FILE_TEXT,
-      {
-        filename: file.filename,
-        text: file.text
-      },
-    ).toPromise()
-    return result.data.parseShipmentFileText
-  }
+  
 
 
 }

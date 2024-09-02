@@ -34,7 +34,7 @@ mutation importShipment($file: Upload!){
       shipmentId
       plantCode
       sequence
-      lotCount
+      lotNos
     }
     errors {
       code
@@ -45,16 +45,15 @@ mutation importShipment($file: Upload!){
 `
 
 export const IMPORT_SHIPMENT_FILE_TEXT = gql`
-mutation importShipmentFileText($filename: String!, $text: String!){
-  importShipmentFileText(filename: $filename, text: $text) {
+mutation importShipmentFileText($fileName: String!, $fileText: String!){
+  importShipmentText(fileName: $fileName, fileText: $fileText) {
     payload {
       shipmentId
       plantCode
       sequence
-      lotCount
+      lotNos
     }
     errors {
-      code
       description
     }
   }
@@ -104,55 +103,8 @@ mutation parseBomFileText($filename: String!, $text: String!) {
 }
 `
 
-export const PARSE_SHIP_FILE = gql`
-mutation parseShipmentFile($file: Upload!) {
-  parseShipmentFile(file: $file) {
-    sequence
-    plantCode
-    created
-    filename
-    lots {
-      lotNo
-      invoices {
-        invoiceNo
-        shipDate
-        parts {
-          partNo
-          handlingUnitCode
-          customerPartNo
-          customerPartDesc
-          quantity
-        }
-      }
-    }
-  }
-}
-`
 
-export const PARSE_SHIP_FILE_TEXT = gql`
-mutation parseShipmentFileText($filename: String!, $text: String!) {
-  parseShipmentFileText(filename: $filename, text: $text) {
-    sequence
-    plantCode
-    created
-    filename
-    lots {
-      lotNo
-      invoices {
-        invoiceNo
-        shipDate
-        parts {
-          partNo
-          handlingUnitCode
-          customerPartNo
-          customerPartDesc
-          quantity
-        }
-      }
-    }
-  }
-}
-`
+
 
 
 
