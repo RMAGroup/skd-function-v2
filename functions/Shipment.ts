@@ -14,25 +14,31 @@ app.storageBlob('Shipment', {
 export async function Shipment(blob: Buffer, context: InvocationContext): Promise<void> {
 
     const { service } = initializeServices();
-    const textFile: TextFile = toTextFile(context, blob);
     const appCOnfig = getAppConfig();
     const blobService = new AzureBlobService<ContainerName>(appCOnfig.AzureWebJobsStorage)
 
-    // save to archive
-    blobService.saveBlob(ContainerName.ShipArchive, textFile.filename, textFile.text);
+    context.log(`Writing to ${ContainerName.ShipArchive}: ${context.triggerMetadata.name}`);
+    blobService.saveBlob(ContainerName.ShipArchive, context.triggerMetadata.name as string, blob.toString());
 
     try {
-        
+        const textFile: TextFile = { filename: context.triggerMetadata.name as string, text: blob.toString() };
+
         // import ship file
         const result = await service.importShipmentFileText(textFile);
 
-        // log
+        // if errors, log and return
         if (result.errors.length > 0) {
             const errorMessage = result.errors.map(t => t.description).join(', ');
             context.log(`Error importing ship file ${textFile.filename} ${errorMessage}`);
-        } else {
-            context.log(`imported ship file: ${textFile.filename}}`);
+            return
         }
+
+        // delete 
+        context.log(`Deleting from ${ContainerName.Ship}: ${context.triggerMetadata.name}`);
+        blobService.deleteBlob(ContainerName.Ship, context.triggerMetadata.name as string);
+    
+        context.log(`imported ship file: ${textFile.filename}}`);
+
     } catch (error) {
         logError(context, error);
     }
@@ -43,10 +49,6 @@ function initializeServices() {
     const service = new skdService(appConfig.SkdGraphqlURI);
     const tableService = new AzureTableService(appConfig.AzureWebJobsStorage);
     return { appConfig, service, tableService };
-}
-
-function toTextFile(context: InvocationContext, inBlob: Buffer): TextFile {
-    return { filename: context.triggerMetadata.name as string, text: inBlob.toString() };
 }
 
 function logError(context: InvocationContext, error: Error) {

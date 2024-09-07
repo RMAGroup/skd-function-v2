@@ -16,7 +16,8 @@ export async function Bom(blob: Buffer, context: InvocationContext): Promise<voi
     const { service } = initializeServices();
     const appCOnfig = getAppConfig();
     const blobService = new AzureBlobService<ContainerName>(appCOnfig.AzureWebJobsStorage)
-    // save to archive  
+
+    context.log(`Writing to ${ContainerName.BomArchive}: ${context.triggerMetadata.name}`);
     blobService.saveBlob(ContainerName.BomArchive, context.triggerMetadata.name as string, blob.toString());
 
     try {
@@ -29,13 +30,18 @@ export async function Bom(blob: Buffer, context: InvocationContext): Promise<voi
         const textFile: TextFile = { filename: context.triggerMetadata.name as string, text: blob.toString() };
         const errors = await importBom(service, textFile);
 
-        // Log
+        // if errors, log and return
         if (errors.length > 0) {
             const errorMessage = errors.map(err => err.description).join(', ');
             context.log(`bom import error: ${errorMessage}`);
-        } else {
-            context.log(`imported bom file ${context.triggerMetadata.name}`);
+            return
         }
+        
+        context.log(`imported bom file ${context.triggerMetadata.name}`);
+
+        context.log(`Deleting from ${ContainerName.Bom}: ${context.triggerMetadata.name}`);
+        blobService.deleteBlob(ContainerName.Bom, context.triggerMetadata.name as string);
+    
     } catch (error) {
         logError(context, error);
     }
