@@ -212,13 +212,19 @@ export type BomOverviewQueryResult = {
   __typename?: 'BomOverviewQueryResult';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['UUID']['output'];
-  lotNumbers: Array<Scalars['String']['output']>;
+  lots: Array<BomOverviewQueryResultLot>;
   partCount: Scalars['Int']['output'];
   pcvCodes: Array<Scalars['String']['output']>;
   plantCode: Scalars['String']['output'];
   sequence: Scalars['Int']['output'];
   shipments: Array<BomOverviewQueryResultShipment>;
   vehicleCount: Scalars['Int']['output'];
+};
+
+export type BomOverviewQueryResultLot = {
+  __typename?: 'BomOverviewQueryResultLot';
+  lotNo: Scalars['String']['output'];
+  sequenceByPlant: Scalars['Int']['output'];
 };
 
 export type BomOverviewQueryResultShipment = {
@@ -430,6 +436,7 @@ export type ComponentSerialsByDateQueryResult = {
   model: Scalars['String']['output'];
   plantCode: Scalars['String']['output'];
   removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequenceByPlant: Scalars['Int']['output'];
   serial1: Scalars['String']['output'];
   serial2: Scalars['String']['output'];
   stationCode: Scalars['String']['output'];
@@ -446,26 +453,6 @@ export type ComponentSerialsByKitQueryResult = {
   __typename?: 'ComponentSerialsByKitQueryResult';
   items: Array<ComponentSerialByKitQueryResultItem>;
   kitNo: Scalars['String']['output'];
-};
-
-/** A connection to a list of items. */
-export type ComponentSerialsConnection = {
-  __typename?: 'ComponentSerialsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ComponentSerialsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ComponentSerial>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type ComponentSerialsEdge = {
-  __typename?: 'ComponentSerialsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: ComponentSerial;
 };
 
 export type ComponentSortInput = {
@@ -1060,6 +1047,7 @@ export type KitComponentSerialInfo = {
   componentCode: Scalars['String']['output'];
   componentIconURL: Scalars['String']['output'];
   componentName: Scalars['String']['output'];
+  componentSerialRule: ComponentSerialRule;
   stations: Array<StatcionSerialInfo>;
 };
 
@@ -1156,10 +1144,12 @@ export type KitOverviewQueryResult = {
   dealerName: Scalars['String']['output'];
   kitNo: Scalars['String']['output'];
   lotNo: Scalars['String']['output'];
+  lotSequnceByPlant: Scalars['Int']['output'];
   model: Scalars['String']['output'];
   modelDescription: Scalars['String']['output'];
   modelYear: Scalars['String']['output'];
   pcvCode: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
   vin: Scalars['String']['output'];
 };
 
@@ -1592,12 +1582,12 @@ export type Lot = {
   kits: Array<Kit>;
   lotNo: Scalars['String']['output'];
   lotParts: Array<LotPart>;
-  note?: Maybe<Scalars['String']['output']>;
   pcv: Pcv;
   pcvId: Scalars['UUID']['output'];
   plant: Plant;
   plantId: Scalars['UUID']['output'];
   removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequenceByPlant: Scalars['Int']['output'];
   shipment?: Maybe<Shipment>;
   shipmentId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -1632,13 +1622,13 @@ export type LotFilterInput = {
   kits?: InputMaybe<ListFilterInputTypeOfKitFilterInput>;
   lotNo?: InputMaybe<StringOperationFilterInput>;
   lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
-  note?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<LotFilterInput>>;
   pcv?: InputMaybe<PcvFilterInput>;
   pcvId?: InputMaybe<UuidOperationFilterInput>;
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  sequenceByPlant?: InputMaybe<IntOperationFilterInput>;
   shipment?: InputMaybe<ShipmentFilterInput>;
   shipmentId?: InputMaybe<UuidOperationFilterInput>;
 };
@@ -1653,12 +1643,12 @@ export type LotInput = {
   kits: Array<KitInput>;
   lotNo: Scalars['String']['input'];
   lotParts: Array<LotPartInput>;
-  note?: InputMaybe<Scalars['String']['input']>;
   pcv: PcvInput;
   pcvId: Scalars['UUID']['input'];
   plant: PlantInput;
   plantId: Scalars['UUID']['input'];
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  sequenceByPlant: Scalars['Int']['input'];
   shipment?: InputMaybe<ShipmentInput>;
   shipmentId?: InputMaybe<Scalars['UUID']['input']>;
 };
@@ -1728,6 +1718,8 @@ export type LotOverviewQueryResult = {
   pcvCode: Scalars['String']['output'];
   plantCode: Scalars['String']['output'];
   priorLotNo?: Maybe<Scalars['String']['output']>;
+  priorLotSequenceByPlant?: Maybe<Scalars['Int']['output']>;
+  sequenceByPlant: Scalars['Int']['output'];
   series: Scalars['String']['output'];
   shipmentId?: Maybe<Scalars['UUID']['output']>;
   shipmentSequence?: Maybe<Scalars['Int']['output']>;
@@ -1964,12 +1956,12 @@ export type LotSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lotNo?: InputMaybe<SortEnumType>;
-  note?: InputMaybe<SortEnumType>;
   pcv?: InputMaybe<PcvSortInput>;
   pcvId?: InputMaybe<SortEnumType>;
   plant?: InputMaybe<PlantSortInput>;
   plantId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
+  sequenceByPlant?: InputMaybe<SortEnumType>;
   shipment?: InputMaybe<ShipmentSortInput>;
   shipmentId?: InputMaybe<SortEnumType>;
 };
@@ -3311,7 +3303,6 @@ export type Query = {
   bomPartsQuantity: Array<PartQuantityDto>;
   boms?: Maybe<BomsConnection>;
   componentById?: Maybe<Component>;
-  componentSerials?: Maybe<ComponentSerialsConnection>;
   componentSerialsByDate?: Maybe<ResultOrOfListOfComponentSerialsByDateQueryResult>;
   componentSerialsByKit: ResultOrOfComponentSerialsByKitQueryResult;
   componentStations?: Maybe<ComponentStationsConnection>;
@@ -3346,7 +3337,7 @@ export type Query = {
   lotKits: LotKitsQueryResult;
   lotListByBomId: Array<LotListDto>;
   /** Get the lot overview for a given lot number */
-  lotOverview2: ResultOrOfLotOverviewQueryResult;
+  lotOverview: ResultOrOfLotOverviewQueryResult;
   /** Get the difference in lot parts between the current lot and the prior lot if it exists */
   lotPartDiff: ResultOrOfLotPartDiffQueryResult;
   lotPartInfo?: Maybe<LotPartDto>;
@@ -3454,16 +3445,6 @@ export type QueryBomsArgs = {
 
 export type QueryComponentByIdArgs = {
   id: Scalars['UUID']['input'];
-};
-
-
-export type QueryComponentSerialsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<ComponentSerialSortInput>>;
-  where?: InputMaybe<ComponentSerialFilterInput>;
 };
 
 
@@ -3683,7 +3664,7 @@ export type QueryLotListByBomIdArgs = {
 };
 
 
-export type QueryLotOverview2Args = {
+export type QueryLotOverviewArgs = {
   input: LotOverviewQueryInput;
 };
 
@@ -4053,6 +4034,7 @@ export type RecentComponentSerialsQueryResult = {
   model: Scalars['String']['output'];
   plantCode: Scalars['String']['output'];
   removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequenceByPlant: Scalars['Int']['output'];
   serial1: Scalars['String']['output'];
   serial2: Scalars['String']['output'];
   stationCode: Scalars['String']['output'];
@@ -4659,11 +4641,17 @@ export type ShipmentOverviewQueryResult = {
   handlingUnitReceivedCount: Scalars['Int']['output'];
   id: Scalars['UUID']['output'];
   invoiceCount: Scalars['Int']['output'];
-  lotNumbers: Array<Scalars['String']['output']>;
   lotPartCount: Scalars['Int']['output'];
   lotPartReceivedCount: Scalars['Int']['output'];
+  lots: Array<ShipmentOverviewQueryResultLot>;
   plantCode: Scalars['String']['output'];
   sequence: Scalars['Int']['output'];
+};
+
+export type ShipmentOverviewQueryResultLot = {
+  __typename?: 'ShipmentOverviewQueryResultLot';
+  lotNo: Scalars['String']['output'];
+  sequenceByPlant: Scalars['Int']['output'];
 };
 
 export type ShipmentSortInput = {
