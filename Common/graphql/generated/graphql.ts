@@ -178,6 +178,7 @@ export type BomListDto = {
   id: Scalars['UUID']['output'];
   lots: Array<BomList_Lot>;
   plantCode: Scalars['String']['output'];
+  revisedTargetShipDate?: Maybe<Scalars['DateTime']['output']>;
   sequence: Scalars['Int']['output'];
 };
 
@@ -186,6 +187,7 @@ export type BomListDtoSortInput = {
   filename?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   plantCode?: InputMaybe<SortEnumType>;
+  revisedTargetShipDate?: InputMaybe<SortEnumType>;
   sequence?: InputMaybe<SortEnumType>;
 };
 
@@ -422,8 +424,9 @@ export type ComponentSerialSortInput = {
 };
 
 export type ComponentSerialsByDateQueryInput = {
-  date: Scalars['DateTime']['input'];
+  fromDate: Scalars['DateTime']['input'];
   plantCode: Scalars['String']['input'];
+  toDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type ComponentSerialsByDateQueryResult = {
@@ -1582,14 +1585,17 @@ export type Lot = {
   kits: Array<Kit>;
   lotNo: Scalars['String']['output'];
   lotParts: Array<LotPart>;
+  marketTerritory: Scalars['String']['output'];
   pcv: Pcv;
   pcvId: Scalars['UUID']['output'];
   plant: Plant;
   plantId: Scalars['UUID']['output'];
   removedAt?: Maybe<Scalars['DateTime']['output']>;
+  revisedTargetShipDate?: Maybe<Scalars['DateTime']['output']>;
   sequenceByPlant: Scalars['Int']['output'];
   shipment?: Maybe<Shipment>;
   shipmentId?: Maybe<Scalars['UUID']['output']>;
+  vehicleLine: Scalars['String']['output'];
 };
 
 
@@ -1622,15 +1628,18 @@ export type LotFilterInput = {
   kits?: InputMaybe<ListFilterInputTypeOfKitFilterInput>;
   lotNo?: InputMaybe<StringOperationFilterInput>;
   lotParts?: InputMaybe<ListFilterInputTypeOfLotPartFilterInput>;
+  marketTerritory?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<LotFilterInput>>;
   pcv?: InputMaybe<PcvFilterInput>;
   pcvId?: InputMaybe<UuidOperationFilterInput>;
   plant?: InputMaybe<PlantFilterInput>;
   plantId?: InputMaybe<UuidOperationFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  revisedTargetShipDate?: InputMaybe<DateTimeOperationFilterInput>;
   sequenceByPlant?: InputMaybe<IntOperationFilterInput>;
   shipment?: InputMaybe<ShipmentFilterInput>;
   shipmentId?: InputMaybe<UuidOperationFilterInput>;
+  vehicleLine?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type LotInput = {
@@ -1643,14 +1652,17 @@ export type LotInput = {
   kits: Array<KitInput>;
   lotNo: Scalars['String']['input'];
   lotParts: Array<LotPartInput>;
+  marketTerritory: Scalars['String']['input'];
   pcv: PcvInput;
   pcvId: Scalars['UUID']['input'];
   plant: PlantInput;
   plantId: Scalars['UUID']['input'];
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  revisedTargetShipDate?: InputMaybe<Scalars['DateTime']['input']>;
   sequenceByPlant: Scalars['Int']['input'];
   shipment?: InputMaybe<ShipmentInput>;
   shipmentId?: InputMaybe<Scalars['UUID']['input']>;
+  vehicleLine: Scalars['String']['input'];
 };
 
 export type LotKitSerialQueryInput = {
@@ -1713,12 +1725,14 @@ export type LotOverviewQueryResult = {
   handlingUnitCount: Scalars['Int']['output'];
   handlingUnitReceivedCount: Scalars['Int']['output'];
   lotNo: Scalars['String']['output'];
+  marketTerritory: Scalars['String']['output'];
   model: Scalars['String']['output'];
   paint: Scalars['String']['output'];
   pcvCode: Scalars['String']['output'];
   plantCode: Scalars['String']['output'];
   priorLotNo?: Maybe<Scalars['String']['output']>;
   priorLotSequenceByPlant?: Maybe<Scalars['Int']['output']>;
+  revisedTargetShipDate?: Maybe<Scalars['DateTime']['output']>;
   sequenceByPlant: Scalars['Int']['output'];
   series: Scalars['String']['output'];
   shipmentId?: Maybe<Scalars['UUID']['output']>;
@@ -1726,6 +1740,7 @@ export type LotOverviewQueryResult = {
   subModel: Scalars['String']['output'];
   transmission: Scalars['String']['output'];
   trim: Scalars['String']['output'];
+  vehicleLine: Scalars['String']['output'];
 };
 
 export type LotPart = {
@@ -1956,14 +1971,17 @@ export type LotSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lotNo?: InputMaybe<SortEnumType>;
+  marketTerritory?: InputMaybe<SortEnumType>;
   pcv?: InputMaybe<PcvSortInput>;
   pcvId?: InputMaybe<SortEnumType>;
   plant?: InputMaybe<PlantSortInput>;
   plantId?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
+  revisedTargetShipDate?: InputMaybe<SortEnumType>;
   sequenceByPlant?: InputMaybe<SortEnumType>;
   shipment?: InputMaybe<ShipmentSortInput>;
   shipmentId?: InputMaybe<SortEnumType>;
+  vehicleLine?: InputMaybe<SortEnumType>;
 };
 
 export type LotsByKitStatusQueryInput = {
@@ -2014,17 +2032,19 @@ export type Mutation = {
   importShipment: ResultOrOfImportShipmentCommandResult;
   importShipmentText: ResultOrOfImportShipmentCommandResult;
   /** Parse a BOM file and return a ParseBomFileResult object */
-  parseBomFile: ResultOrOfRawBom;
+  parseBomFile: ResultOrOfParsedBom;
   /** Parse a BOM file and return a ParseBomFileResult object */
-  parseBomFileText: ResultOrOfRawBom;
+  parseBomFileText: ResultOrOfParsedBom;
   /** Parses a PCV xlsx file and returns a list of PCV, and Component code records */
   parsePcvsXlsx: ResultOrOfParsePcvsXlxsResult;
   parseStationsXlsx: ResultOrOfParseStationsXlsxCommandResult;
   /** Given a lot if the kits don't have a VIN, process them */
   processKitVinByLot: ResultOrOfListOfAssignKitVinCommandResult;
+  processPendingBuildStart: ResultOrOfProcessPendingBuildStartCommandResult;
   /** Find all plan build kits that have not been assigned VINs and process them */
   processPendingKitVins: ResultOrOfListOfAssignVinsCommandResult;
   processPendingPartnerStatus: ResultOrOfProcessPendingPartnerStatusCommandResult;
+  processPendingSerials: ResultOrOfProcessPendingSerialsCommandResult;
   remapComponentSerialStations: ResultOrOfRemapComponentSerialStationsCommandResult;
   removeAllComponentStationMappings: ResultOrOfRemoveAllComponentStationMappingsPayload;
   saveDcwsComponentResponse: ResultOrOfDcwsResponse;
@@ -2114,8 +2134,18 @@ export type MutationProcessKitVinByLotArgs = {
 };
 
 
+export type MutationProcessPendingBuildStartArgs = {
+  input: ProcessPendingBuildStartCommandInput;
+};
+
+
 export type MutationProcessPendingKitVinsArgs = {
   input: AssignVinsCommnadInput;
+};
+
+
+export type MutationProcessPendingSerialsArgs = {
+  input: ProcessPendingSerialsCommandInput;
 };
 
 
@@ -2321,6 +2351,42 @@ export type ParseStationsXlsxCommandResult = {
   stations: Array<ParsedStation>;
 };
 
+export type ParsedBom = {
+  __typename?: 'ParsedBOM';
+  bomFileCreatedAt: Scalars['DateTime']['output'];
+  filename: Scalars['String']['output'];
+  kittingPlantCode: Scalars['String']['output'];
+  lots: Array<ParsedBomLot>;
+  plantCode: Scalars['String']['output'];
+  sequenceNumber: Scalars['Int']['output'];
+};
+
+export type ParsedBomLot = {
+  __typename?: 'ParsedBOMLot';
+  kits: Array<ParsedBomLotKit>;
+  lotNo: Scalars['String']['output'];
+  lotParts: Array<ParsedBomLotPart>;
+  marketTerritory: Scalars['String']['output'];
+  pcvCode: Scalars['String']['output'];
+  revisedTargetShipDate: Scalars['String']['output'];
+  vehicleLine: Scalars['String']['output'];
+};
+
+export type ParsedBomLotKit = {
+  __typename?: 'ParsedBomLotKit';
+  kitNo: Scalars['String']['output'];
+};
+
+export type ParsedBomLotPart = {
+  __typename?: 'ParsedBomLotPart';
+  commodityCode: Scalars['String']['output'];
+  lotNo: Scalars['String']['output'];
+  originalPartNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
+};
+
 export type ParsedShipment = {
   __typename?: 'ParsedShipment';
   dateCreated: Scalars['DateTime']['output'];
@@ -2328,6 +2394,10 @@ export type ParsedShipment = {
   kittingPlantCode: Scalars['String']['output'];
   lots: Array<ParsedShipmentLot>;
   sequence: Scalars['Int']['output'];
+};
+
+export type ParsedShipmentFileQueryInput = {
+  fileName: Scalars['String']['input'];
 };
 
 export type ParsedShipmentHandlingUnit = {
@@ -3286,9 +3356,34 @@ export type PlantsEdge = {
   node: Plant;
 };
 
+export type ProcessPendingBuildStartCommandInput = {
+  plantCode?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProcessPendingBuildStartCommandResult = {
+  __typename?: 'ProcessPendingBuildStartCommandResult';
+  items: Array<ProcessPendingBuildStartCommandResultItem>;
+};
+
+export type ProcessPendingBuildStartCommandResultItem = {
+  __typename?: 'ProcessPendingBuildStartCommandResultItem';
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  kitNo: Scalars['String']['output'];
+};
+
 export type ProcessPendingPartnerStatusCommandResult = {
   __typename?: 'ProcessPendingPartnerStatusCommandResult';
   kitNumbers: Array<Scalars['String']['output']>;
+};
+
+export type ProcessPendingSerialsCommandInput = {
+  ignoreComponentCodes: Array<Scalars['String']['input']>;
+  plantCode?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProcessPendingSerialsCommandResult = {
+  __typename?: 'ProcessPendingSerialsCommandResult';
+  processedItems: Array<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -3296,7 +3391,7 @@ export type Query = {
   appSettings?: Maybe<AppSettingsConnection>;
   basicKitInfo?: Maybe<BasicKitInfo>;
   bomById?: Maybe<Bom>;
-  bomFile: ResultOrOfRawBom;
+  bomFile: ResultOrOfParsedBom;
   bomFileText: ResultOrOfBomFileTextQueryResult;
   bomList?: Maybe<BomListConnection>;
   bomOverview: BomOverviewQueryResult;
@@ -3347,6 +3442,7 @@ export type Query = {
   lots?: Maybe<LotsConnection>;
   lotsByKitStatus: Array<LotsByKitStatusQueryResult>;
   parseShimpentFile: ResultOrOfParsedShipment;
+  parsedShipmentFile: ResultOrOfParsedShipment;
   partLotParts: ResultOrOfPartLotPartsQueryResult;
   partOverview: ResultOrOfPartOverviewQueryResult;
   partTypes?: Maybe<PartTypesConnection>;
@@ -3720,6 +3816,11 @@ export type QueryParseShimpentFileArgs = {
 };
 
 
+export type QueryParsedShipmentFileArgs = {
+  input: ParsedShipmentFileQueryInput;
+};
+
+
 export type QueryPartLotPartsArgs = {
   input: PartLotPartsQueryInput;
 };
@@ -3952,39 +4053,6 @@ export type QueryStationsArgs = {
 
 export type QueryVinAllocationArgs = {
   input: VinAllocationQueryInput;
-};
-
-export type RawBom = {
-  __typename?: 'RawBom';
-  bomFileCreatedAt: Scalars['DateTime']['output'];
-  filename: Scalars['String']['output'];
-  kittingPlantCode: Scalars['String']['output'];
-  lots: Array<RawBomLot>;
-  plantCode: Scalars['String']['output'];
-  sequenceNumber: Scalars['Int']['output'];
-};
-
-export type RawBomLot = {
-  __typename?: 'RawBomLot';
-  kits: Array<RawBomLotKit>;
-  lotNo: Scalars['String']['output'];
-  lotParts: Array<RawBomLotPart>;
-  pcvCode: Scalars['String']['output'];
-};
-
-export type RawBomLotKit = {
-  __typename?: 'RawBomLotKit';
-  kitNo: Scalars['String']['output'];
-};
-
-export type RawBomLotPart = {
-  __typename?: 'RawBomLotPart';
-  commodityCode: Scalars['String']['output'];
-  lotNo: Scalars['String']['output'];
-  originalPartNo: Scalars['String']['output'];
-  partDesc: Scalars['String']['output'];
-  partNo: Scalars['String']['output'];
-  quantity: Scalars['Int']['output'];
 };
 
 export type ReceiveHandlingUnitInput = {
@@ -4277,6 +4345,15 @@ export type ResultOrOfParseStationsXlsxCommandResult = {
   payload?: Maybe<ParseStationsXlsxCommandResult>;
 };
 
+export type ResultOrOfParsedBom = {
+  __typename?: 'ResultOrOfParsedBOM';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<ParsedBom>;
+};
+
 export type ResultOrOfParsedShipment = {
   __typename?: 'ResultOrOfParsedShipment';
   errorMessage: Scalars['String']['output'];
@@ -4340,6 +4417,15 @@ export type ResultOrOfPendingVinAssignmentsQueryResult = {
   payload?: Maybe<PendingVinAssignmentsQueryResult>;
 };
 
+export type ResultOrOfProcessPendingBuildStartCommandResult = {
+  __typename?: 'ResultOrOfProcessPendingBuildStartCommandResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<ProcessPendingBuildStartCommandResult>;
+};
+
 export type ResultOrOfProcessPendingPartnerStatusCommandResult = {
   __typename?: 'ResultOrOfProcessPendingPartnerStatusCommandResult';
   errorMessage: Scalars['String']['output'];
@@ -4349,13 +4435,13 @@ export type ResultOrOfProcessPendingPartnerStatusCommandResult = {
   payload?: Maybe<ProcessPendingPartnerStatusCommandResult>;
 };
 
-export type ResultOrOfRawBom = {
-  __typename?: 'ResultOrOfRawBom';
+export type ResultOrOfProcessPendingSerialsCommandResult = {
+  __typename?: 'ResultOrOfProcessPendingSerialsCommandResult';
   errorMessage: Scalars['String']['output'];
   errors: Array<Error>;
   isFailure: Scalars['Boolean']['output'];
   isSuccess: Scalars['Boolean']['output'];
-  payload?: Maybe<RawBom>;
+  payload?: Maybe<ProcessPendingSerialsCommandResult>;
 };
 
 export type ResultOrOfReceiveHandlingUnitPayload = {
@@ -4908,7 +4994,7 @@ export type ParseBomFileMutationVariables = Exact<{
 }>;
 
 
-export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ResultOrOfRawBom', isSuccess: boolean, payload?: { __typename?: 'RawBom', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'RawBomLot', lotNo: string }> } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
+export type ParseBomFileMutation = { __typename?: 'Mutation', parseBomFile: { __typename?: 'ResultOrOfParsedBOM', isSuccess: boolean, payload?: { __typename?: 'ParsedBOM', plantCode: string, filename: string, sequenceNumber: number, kittingPlantCode: string, lots: Array<{ __typename?: 'ParsedBOMLot', lotNo: string }> } | null, errors: Array<{ __typename?: 'Error', description: string }> } };
 
 export type ParseBomFileTextMutationVariables = Exact<{
   filename: Scalars['String']['input'];
@@ -4916,7 +5002,7 @@ export type ParseBomFileTextMutationVariables = Exact<{
 }>;
 
 
-export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ResultOrOfRawBom', isFailure: boolean, isSuccess: boolean, errors: Array<{ __typename?: 'Error', description: string }>, payload?: { __typename?: 'RawBom', bomFileCreatedAt: any, filename: string, kittingPlantCode: string, plantCode: string, sequenceNumber: number, lots: Array<{ __typename?: 'RawBomLot', lotNo: string }> } | null } };
+export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ResultOrOfParsedBOM', isFailure: boolean, isSuccess: boolean, errors: Array<{ __typename?: 'Error', description: string }>, payload?: { __typename?: 'ParsedBOM', bomFileCreatedAt: any, filename: string, kittingPlantCode: string, plantCode: string, sequenceNumber: number, lots: Array<{ __typename?: 'ParsedBOMLot', lotNo: string }> } | null } };
 
 export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
 
