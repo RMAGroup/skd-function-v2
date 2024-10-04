@@ -18,9 +18,6 @@ import {
 
 import { IMPORT_BOM, IMPORT_BOM_FILE_TEXT, IMPORT_SHIPMENT, IMPORT_SHIPMENT_FILE_TEXT, PARSE_BOM_FILE, PARSE_BOM_FILE_TEXT } from './graphql/mutation';
 
-import {
-  PLANTS,
-} from './graphql/query';
 import { Client, createClient, dedupExchange, fetchExchange } from '@urql/core';
 import { TextFile } from './types';
 //#endregion
@@ -111,18 +108,6 @@ export class skdService {
 
     return result.data.importShipmentText
   }
-
-  getPlants = async () => {
-    const result = await this.client.query<PlantsQuery, PlantsQueryVariables>(
-      PLANTS,
-      {}
-    ).toPromise();
-
-    return result.data.plants.nodes
-  }
-
-  
-
 
 }
 
