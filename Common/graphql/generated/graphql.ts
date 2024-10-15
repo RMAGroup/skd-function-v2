@@ -57,10 +57,10 @@ export type AppSettingSortInput = {
 };
 
 /** A connection to a list of items. */
-export type AppSettingsConnection = {
-  __typename?: 'AppSettingsConnection';
+export type AppSettingsProjectionConnection = {
+  __typename?: 'AppSettingsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<AppSettingsEdge>>;
+  edges?: Maybe<Array<AppSettingsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<AppSetting>>;
   /** Information to aid in pagination. */
@@ -68,8 +68,8 @@ export type AppSettingsConnection = {
 };
 
 /** An edge in a connection. */
-export type AppSettingsEdge = {
-  __typename?: 'AppSettingsEdge';
+export type AppSettingsProjectionEdge = {
+  __typename?: 'AppSettingsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -248,10 +248,10 @@ export type BomSortInput = {
 };
 
 /** A connection to a list of items. */
-export type BomsConnection = {
-  __typename?: 'BomsConnection';
+export type BomsProjectionConnection = {
+  __typename?: 'BomsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<BomsEdge>>;
+  edges?: Maybe<Array<BomsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Bom>>;
   /** Information to aid in pagination. */
@@ -259,8 +259,8 @@ export type BomsConnection = {
 };
 
 /** An edge in a connection. */
-export type BomsEdge = {
-  __typename?: 'BomsEdge';
+export type BomsProjectionEdge = {
+  __typename?: 'BomsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -274,47 +274,50 @@ export type BooleanOperationFilterInput = {
 
 export type Component = {
   __typename?: 'Component';
+  allowDuplicateSerial: Scalars['Boolean']['output'];
   assignedStations: Array<ComponentStation>;
   code: Scalars['String']['output'];
   componentSerialRule: ComponentSerialRule;
   componentSerials: Array<ComponentSerial>;
   createdAt: Scalars['DateTime']['output'];
+  dcwsSubmissionRequired: Scalars['Boolean']['output'];
   iconURL: Scalars['String']['output'];
   id: Scalars['UUID']['output'];
   name: Scalars['String']['output'];
   pcvComponents: Array<PcvComponent>;
   removedAt?: Maybe<Scalars['DateTime']['output']>;
-  requiresDcwsSubmission: Scalars['Boolean']['output'];
 };
 
 export type ComponentFilterInput = {
+  allowDuplicateSerial?: InputMaybe<BooleanOperationFilterInput>;
   and?: InputMaybe<Array<ComponentFilterInput>>;
   assignedStations?: InputMaybe<ListFilterInputTypeOfComponentStationFilterInput>;
   code?: InputMaybe<StringOperationFilterInput>;
   componentSerialRule?: InputMaybe<ComponentSerialRuleOperationFilterInput>;
   componentSerials?: InputMaybe<ListFilterInputTypeOfComponentSerialFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  dcwsSubmissionRequired?: InputMaybe<BooleanOperationFilterInput>;
   iconURL?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ComponentFilterInput>>;
   pcvComponents?: InputMaybe<ListFilterInputTypeOfPcvComponentFilterInput>;
   removedAt?: InputMaybe<DateTimeOperationFilterInput>;
-  requiresDcwsSubmission?: InputMaybe<BooleanOperationFilterInput>;
 };
 
 export type ComponentInput = {
+  allowDuplicateSerial: Scalars['Boolean']['input'];
   assignedStations: Array<ComponentStationInput>;
   code: Scalars['String']['input'];
   componentSerialRule: ComponentSerialRule;
   componentSerials: Array<ComponentSerialInput>;
   createdAt: Scalars['DateTime']['input'];
+  dcwsSubmissionRequired: Scalars['Boolean']['input'];
   iconURL: Scalars['String']['input'];
   id: Scalars['UUID']['input'];
   name: Scalars['String']['input'];
   pcvComponents: Array<PcvComponentInput>;
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  requiresDcwsSubmission: Scalars['Boolean']['input'];
 };
 
 export type ComponentSerial = {
@@ -344,8 +347,8 @@ export type ComponentSerialByKitQueryResultItem = {
   componentSerialId: Scalars['UUID']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   dcwsResponseCode?: Maybe<Scalars['String']['output']>;
+  dcwsSubmissionRequired: Scalars['Boolean']['output'];
   removedAt?: Maybe<Scalars['DateTime']['output']>;
-  requiresDcwsSubmission: Scalars['Boolean']['output'];
   serial1?: Maybe<Scalars['String']['output']>;
   serial2?: Maybe<Scalars['String']['output']>;
   stationCode?: Maybe<Scalars['String']['output']>;
@@ -424,6 +427,8 @@ export type ComponentSerialSortInput = {
 };
 
 export type ComponentSerialsByDateQueryInput = {
+  filterBy?: ComponentSerialsQueryFilter;
+  filterValue?: InputMaybe<Scalars['String']['input']>;
   fromDate: Scalars['DateTime']['input'];
   plantCode: Scalars['String']['input'];
   toDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -443,6 +448,7 @@ export type ComponentSerialsByDateQueryResult = {
   serial1: Scalars['String']['output'];
   serial2: Scalars['String']['output'];
   stationCode: Scalars['String']['output'];
+  stationSequence: Scalars['Int']['output'];
   status: Scalars['String']['output'];
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
   vin: Scalars['String']['output'];
@@ -458,15 +464,25 @@ export type ComponentSerialsByKitQueryResult = {
   kitNo: Scalars['String']['output'];
 };
 
+export enum ComponentSerialsQueryFilter {
+  All = 'ALL',
+  ComponentCode = 'COMPONENT_CODE',
+  LotNoOrSequence = 'LOT_NO_OR_SEQUENCE',
+  Serial1 = 'SERIAL1',
+  StationCode = 'STATION_CODE',
+  Vin = 'VIN'
+}
+
 export type ComponentSortInput = {
+  allowDuplicateSerial?: InputMaybe<SortEnumType>;
   code?: InputMaybe<SortEnumType>;
   componentSerialRule?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  dcwsSubmissionRequired?: InputMaybe<SortEnumType>;
   iconURL?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
   removedAt?: InputMaybe<SortEnumType>;
-  requiresDcwsSubmission?: InputMaybe<SortEnumType>;
 };
 
 export type ComponentStation = {
@@ -534,10 +550,10 @@ export type ComponentStationSortInput = {
 };
 
 /** A connection to a list of items. */
-export type ComponentStationsConnection = {
-  __typename?: 'ComponentStationsConnection';
+export type ComponentStationsProjectionConnection = {
+  __typename?: 'ComponentStationsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<ComponentStationsEdge>>;
+  edges?: Maybe<Array<ComponentStationsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<ComponentStation>>;
   /** Information to aid in pagination. */
@@ -545,8 +561,8 @@ export type ComponentStationsConnection = {
 };
 
 /** An edge in a connection. */
-export type ComponentStationsEdge = {
-  __typename?: 'ComponentStationsEdge';
+export type ComponentStationsProjectionEdge = {
+  __typename?: 'ComponentStationsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -554,10 +570,10 @@ export type ComponentStationsEdge = {
 };
 
 /** A connection to a list of items. */
-export type ComponentsConnection = {
-  __typename?: 'ComponentsConnection';
+export type ComponentsProjectionConnection = {
+  __typename?: 'ComponentsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<ComponentsEdge>>;
+  edges?: Maybe<Array<ComponentsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Component>>;
   /** Information to aid in pagination. */
@@ -565,12 +581,25 @@ export type ComponentsConnection = {
 };
 
 /** An edge in a connection. */
-export type ComponentsEdge = {
-  __typename?: 'ComponentsEdge';
+export type ComponentsProjectionEdge = {
+  __typename?: 'ComponentsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Component;
+};
+
+export type ComponentsQueryResult = {
+  __typename?: 'ComponentsQueryResult';
+  allowDuplicateSerial: Scalars['Boolean']['output'];
+  associatedStationCodes: Array<Scalars['String']['output']>;
+  code: Scalars['String']['output'];
+  componentSerialRule: ComponentSerialRule;
+  createdAt: Scalars['DateTime']['output'];
+  dcwsSubmissionRequired: Scalars['Boolean']['output'];
+  iconURL?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type CreateComponentSerialCommandInput = {
@@ -682,10 +711,10 @@ export type DcwsResponseSortInput = {
 };
 
 /** A connection to a list of items. */
-export type DcwsResponsesConnection = {
-  __typename?: 'DcwsResponsesConnection';
+export type DcwsResponsesProjectionConnection = {
+  __typename?: 'DcwsResponsesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<DcwsResponsesEdge>>;
+  edges?: Maybe<Array<DcwsResponsesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<DcwsResponse>>;
   /** Information to aid in pagination. */
@@ -693,8 +722,8 @@ export type DcwsResponsesConnection = {
 };
 
 /** An edge in a connection. */
-export type DcwsResponsesEdge = {
-  __typename?: 'DcwsResponsesEdge';
+export type DcwsResponsesProjectionEdge = {
+  __typename?: 'DcwsResponsesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -748,10 +777,10 @@ export type DealerSortInput = {
 };
 
 /** A connection to a list of items. */
-export type DealersConnection = {
-  __typename?: 'DealersConnection';
+export type DealersProjectionConnection = {
+  __typename?: 'DealersProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<DealersEdge>>;
+  edges?: Maybe<Array<DealersProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Dealer>>;
   /** Information to aid in pagination. */
@@ -759,8 +788,8 @@ export type DealersConnection = {
 };
 
 /** An edge in a connection. */
-export type DealersEdge = {
-  __typename?: 'DealersEdge';
+export type DealersProjectionEdge = {
+  __typename?: 'DealersProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -793,6 +822,7 @@ export type Hu_Part = {
 export type HandlingUnit = {
   __typename?: 'HandlingUnit';
   code: Scalars['String']['output'];
+  commodityCode: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['UUID']['output'];
   lot: Lot;
@@ -807,6 +837,7 @@ export type HandlingUnit = {
 export type HandlingUnitFilterInput = {
   and?: InputMaybe<Array<HandlingUnitFilterInput>>;
   code?: InputMaybe<StringOperationFilterInput>;
+  commodityCode?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   lot?: InputMaybe<LotFilterInput>;
@@ -821,7 +852,8 @@ export type HandlingUnitFilterInput = {
 
 export type HandlingUnitInfoPayload = {
   __typename?: 'HandlingUnitInfoPayload';
-  code?: Maybe<Scalars['String']['output']>;
+  code: Scalars['String']['output'];
+  commodityCode: Scalars['String']['output'];
   invoiceNo?: Maybe<Scalars['String']['output']>;
   lotNo?: Maybe<Scalars['String']['output']>;
   partCount: Scalars['Int']['output'];
@@ -837,6 +869,7 @@ export type HandlingUnitInfoPayload = {
 
 export type HandlingUnitInput = {
   code: Scalars['String']['input'];
+  commodityCode: Scalars['String']['input'];
   createdAt: Scalars['DateTime']['input'];
   id: Scalars['UUID']['input'];
   lot: LotInput;
@@ -912,26 +945,6 @@ export type HandlingUnitReceived = {
   removedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-/** A connection to a list of items. */
-export type HandlingUnitReceivedConnection = {
-  __typename?: 'HandlingUnitReceivedConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<HandlingUnitReceivedEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<HandlingUnitReceived>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type HandlingUnitReceivedEdge = {
-  __typename?: 'HandlingUnitReceivedEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: HandlingUnitReceived;
-};
-
 export type HandlingUnitReceivedFilterInput = {
   and?: InputMaybe<Array<HandlingUnitReceivedFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -950,6 +963,26 @@ export type HandlingUnitReceivedInput = {
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+/** A connection to a list of items. */
+export type HandlingUnitReceivedProjectionConnection = {
+  __typename?: 'HandlingUnitReceivedProjectionConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<HandlingUnitReceivedProjectionEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<HandlingUnitReceived>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type HandlingUnitReceivedProjectionEdge = {
+  __typename?: 'HandlingUnitReceivedProjectionEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: HandlingUnitReceived;
+};
+
 export type HandlingUnitReceivedSortInput = {
   createdAt?: InputMaybe<SortEnumType>;
   handlingUnit?: InputMaybe<HandlingUnitSortInput>;
@@ -960,6 +993,7 @@ export type HandlingUnitReceivedSortInput = {
 
 export type HandlingUnitSortInput = {
   code?: InputMaybe<SortEnumType>;
+  commodityCode?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lot?: InputMaybe<LotSortInput>;
@@ -970,10 +1004,10 @@ export type HandlingUnitSortInput = {
 };
 
 /** A connection to a list of items. */
-export type HandlingUnitsConnection = {
-  __typename?: 'HandlingUnitsConnection';
+export type HandlingUnitsProjectionConnection = {
+  __typename?: 'HandlingUnitsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<HandlingUnitsEdge>>;
+  edges?: Maybe<Array<HandlingUnitsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<HandlingUnit>>;
   /** Information to aid in pagination. */
@@ -981,8 +1015,8 @@ export type HandlingUnitsConnection = {
 };
 
 /** An edge in a connection. */
-export type HandlingUnitsEdge = {
-  __typename?: 'HandlingUnitsEdge';
+export type HandlingUnitsProjectionEdge = {
+  __typename?: 'HandlingUnitsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1291,10 +1325,10 @@ export type KitStatusEventTypeSortInput = {
 };
 
 /** A connection to a list of items. */
-export type KitStatusEventTypesConnection = {
-  __typename?: 'KitStatusEventTypesConnection';
+export type KitStatusEventTypesProjectionConnection = {
+  __typename?: 'KitStatusEventTypesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<KitStatusEventTypesEdge>>;
+  edges?: Maybe<Array<KitStatusEventTypesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<KitStatusEventType>>;
   /** Information to aid in pagination. */
@@ -1302,8 +1336,8 @@ export type KitStatusEventTypesConnection = {
 };
 
 /** An edge in a connection. */
-export type KitStatusEventTypesEdge = {
-  __typename?: 'KitStatusEventTypesEdge';
+export type KitStatusEventTypesProjectionEdge = {
+  __typename?: 'KitStatusEventTypesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1311,10 +1345,10 @@ export type KitStatusEventTypesEdge = {
 };
 
 /** A connection to a list of items. */
-export type KitStatusEventsConnection = {
-  __typename?: 'KitStatusEventsConnection';
+export type KitStatusEventsProjectionConnection = {
+  __typename?: 'KitStatusEventsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<KitStatusEventsEdge>>;
+  edges?: Maybe<Array<KitStatusEventsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<KitStatusEvent>>;
   /** Information to aid in pagination. */
@@ -1322,8 +1356,8 @@ export type KitStatusEventsConnection = {
 };
 
 /** An edge in a connection. */
-export type KitStatusEventsEdge = {
-  __typename?: 'KitStatusEventsEdge';
+export type KitStatusEventsProjectionEdge = {
+  __typename?: 'KitStatusEventsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1381,10 +1415,10 @@ export type KitVinSortInput = {
 };
 
 /** A connection to a list of items. */
-export type KitVinsConnection = {
-  __typename?: 'KitVinsConnection';
+export type KitVinsProjectionConnection = {
+  __typename?: 'KitVinsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<KitVinsEdge>>;
+  edges?: Maybe<Array<KitVinsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<KitVin>>;
   /** Information to aid in pagination. */
@@ -1392,8 +1426,8 @@ export type KitVinsConnection = {
 };
 
 /** An edge in a connection. */
-export type KitVinsEdge = {
-  __typename?: 'KitVinsEdge';
+export type KitVinsProjectionEdge = {
+  __typename?: 'KitVinsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1421,10 +1455,10 @@ export type KitsByCurrentKitStatusEdge = {
 };
 
 /** A connection to a list of items. */
-export type KitsConnection = {
-  __typename?: 'KitsConnection';
+export type KitsProjectionConnection = {
+  __typename?: 'KitsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<KitsEdge>>;
+  edges?: Maybe<Array<KitsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Kit>>;
   /** Information to aid in pagination. */
@@ -1432,8 +1466,8 @@ export type KitsConnection = {
 };
 
 /** An edge in a connection. */
-export type KitsEdge = {
-  __typename?: 'KitsEdge';
+export type KitsProjectionEdge = {
+  __typename?: 'KitsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1601,9 +1635,37 @@ export type Lot = {
 
 export type LotAddLotPartArgs = {
   bomQuantity: Scalars['Int']['input'];
+  commodityCode: Scalars['String']['input'];
   handlingUnitParts: Array<HandlingUnitPartInput>;
   partId: Scalars['UUID']['input'];
   shipmentQuantity: Scalars['Int']['input'];
+};
+
+export type LotBomHeader = {
+  __typename?: 'LotBomHeader';
+  customerPlant: Scalars['String']['output'];
+  kitCount: Scalars['String']['output'];
+  lotNumber: Scalars['String']['output'];
+  marketTerritory: Scalars['String']['output'];
+  orderStatus: Scalars['String']['output'];
+  plant: Scalars['String']['output'];
+  revisedTargetShipDate: Scalars['String']['output'];
+  vehicleLine: Scalars['String']['output'];
+};
+
+export type LotBomPart = {
+  __typename?: 'LotBomPart';
+  commodityName: Scalars['String']['output'];
+  kitPartType: Scalars['String']['output'];
+  netPartQty: Scalars['String']['output'];
+  partDescription: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+};
+
+export type LotBomResult = {
+  __typename?: 'LotBomResult';
+  bomHeader: LotBomHeader;
+  bomPartList: Array<LotBomPart>;
 };
 
 export type LotDto = {
@@ -1746,6 +1808,7 @@ export type LotOverviewQueryResult = {
 export type LotPart = {
   __typename?: 'LotPart';
   bomQuantity: Scalars['Int']['output'];
+  commodityCode: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   handlingUnitParts: Array<HandlingUnitPart>;
   id: Scalars['UUID']['output'];
@@ -1803,6 +1866,7 @@ export enum LotPartDiffType {
 export type LotPartFilterInput = {
   and?: InputMaybe<Array<LotPartFilterInput>>;
   bomQuantity?: InputMaybe<IntOperationFilterInput>;
+  commodityCode?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   handlingUnitParts?: InputMaybe<ListFilterInputTypeOfHandlingUnitPartFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
@@ -1818,6 +1882,7 @@ export type LotPartFilterInput = {
 
 export type LotPartInput = {
   bomQuantity: Scalars['Int']['input'];
+  commodityCode: Scalars['String']['input'];
   createdAt: Scalars['DateTime']['input'];
   handlingUnitParts: Array<HandlingUnitPartInput>;
   id: Scalars['UUID']['input'];
@@ -1883,6 +1948,7 @@ export type LotPartReceivedSortInput = {
 
 export type LotPartSortInput = {
   bomQuantity?: InputMaybe<SortEnumType>;
+  commodityCode?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   lot?: InputMaybe<LotSortInput>;
@@ -1946,10 +2012,10 @@ export type LotPartsQueryResultItem = {
 };
 
 /** A connection to a list of items. */
-export type LotPartsReceivedConnection = {
-  __typename?: 'LotPartsReceivedConnection';
+export type LotPartsReceivedProjectionConnection = {
+  __typename?: 'LotPartsReceivedProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<LotPartsReceivedEdge>>;
+  edges?: Maybe<Array<LotPartsReceivedProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<LotPartReceived>>;
   /** Information to aid in pagination. */
@@ -1957,8 +2023,8 @@ export type LotPartsReceivedConnection = {
 };
 
 /** An edge in a connection. */
-export type LotPartsReceivedEdge = {
-  __typename?: 'LotPartsReceivedEdge';
+export type LotPartsReceivedProjectionEdge = {
+  __typename?: 'LotPartsReceivedProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -1985,24 +2051,26 @@ export type LotSortInput = {
 };
 
 export type LotsByKitStatusQueryInput = {
-  kitStatusCode: KitStatusCode;
+  kitStatusCodes: Array<KitStatusCode>;
   plantCode: Scalars['String']['input'];
 };
 
 export type LotsByKitStatusQueryResult = {
   __typename?: 'LotsByKitStatusQueryResult';
-  eventDate: Scalars['DateTime']['output'];
+  kitStatusCode: KitStatusCode;
+  kitStatusSequence: Scalars['Int']['output'];
   lotNo: Scalars['String']['output'];
+  lotSequenceByPlant: Scalars['Int']['output'];
   model: Scalars['String']['output'];
   modelYear: Scalars['String']['output'];
   pcvCode: Scalars['String']['output'];
 };
 
 /** A connection to a list of items. */
-export type LotsConnection = {
-  __typename?: 'LotsConnection';
+export type LotsProjectionConnection = {
+  __typename?: 'LotsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<LotsEdge>>;
+  edges?: Maybe<Array<LotsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Lot>>;
   /** Information to aid in pagination. */
@@ -2010,8 +2078,8 @@ export type LotsConnection = {
 };
 
 /** An edge in a connection. */
-export type LotsEdge = {
-  __typename?: 'LotsEdge';
+export type LotsProjectionEdge = {
+  __typename?: 'LotsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2021,6 +2089,11 @@ export type LotsEdge = {
 export type Mutation = {
   __typename?: 'Mutation';
   assignKitVin: ResultOrOfAssignKitVinCommandResult;
+  /**
+   * Find all kits waiting for VINs and assign them
+   * This is done by calling the Ford API which will provide a VIN their system is ready.
+   */
+  assignVins: ResultOrOfListOfAssignVinsCommandResult;
   captureComponentSerial: ResultOrOfCreateComponentSerialCommandResult;
   /** Create a kit status event for a kit */
   createKitStatus: ResultOrOfCreateKitStatusCommandResult;
@@ -2041,8 +2114,6 @@ export type Mutation = {
   /** Given a lot if the kits don't have a VIN, process them */
   processKitVinByLot: ResultOrOfListOfAssignKitVinCommandResult;
   processPendingBuildStart: ResultOrOfProcessPendingBuildStartCommandResult;
-  /** Find all plan build kits that have not been assigned VINs and process them */
-  processPendingKitVins: ResultOrOfListOfAssignVinsCommandResult;
   processPendingPartnerStatus: ResultOrOfProcessPendingPartnerStatusCommandResult;
   processPendingSerials: ResultOrOfProcessPendingSerialsCommandResult;
   remapComponentSerialStations: ResultOrOfRemapComponentSerialStationsCommandResult;
@@ -2067,6 +2138,11 @@ export type Mutation = {
 
 export type MutationAssignKitVinArgs = {
   input: AssignKitVinCommandInput;
+};
+
+
+export type MutationAssignVinsArgs = {
+  input: AssignVinsCommnadInput;
 };
 
 
@@ -2136,11 +2212,6 @@ export type MutationProcessKitVinByLotArgs = {
 
 export type MutationProcessPendingBuildStartArgs = {
   input: ProcessPendingBuildStartCommandInput;
-};
-
-
-export type MutationProcessPendingKitVinsArgs = {
-  input: AssignVinsCommnadInput;
 };
 
 
@@ -2403,6 +2474,7 @@ export type ParsedShipmentFileQueryInput = {
 export type ParsedShipmentHandlingUnit = {
   __typename?: 'ParsedShipmentHandlingUnit';
   code: Scalars['String']['output'];
+  commodityCode: Scalars['String']['output'];
   parts: Array<ParsedShipmentHandlingUnitPart>;
 };
 
@@ -2583,10 +2655,10 @@ export type PartTypeSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PartTypesConnection = {
-  __typename?: 'PartTypesConnection';
+export type PartTypesProjectionConnection = {
+  __typename?: 'PartTypesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PartTypesEdge>>;
+  edges?: Maybe<Array<PartTypesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PartType>>;
   /** Information to aid in pagination. */
@@ -2594,8 +2666,8 @@ export type PartTypesConnection = {
 };
 
 /** An edge in a connection. */
-export type PartTypesEdge = {
-  __typename?: 'PartTypesEdge';
+export type PartTypesProjectionEdge = {
+  __typename?: 'PartTypesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2627,6 +2699,24 @@ export type PartnerKitStatusQueryResult = {
   plantCode: Scalars['String']['output'];
 };
 
+export type PartnerLotBomQueryInput = {
+  lotNo: Scalars['String']['input'];
+};
+
+export type PartnerLotBomQueryResult = {
+  __typename?: 'PartnerLotBomQueryResult';
+  lotBomResult: LotBomResult;
+};
+
+export type PartnerLotsByStatusQueryInput = {
+  partnerStatusCode: PartnerStatusCode;
+};
+
+export type PartnerLotsByStatusQueryResult = {
+  __typename?: 'PartnerLotsByStatusQueryResult';
+  lotNumbers: Array<Scalars['String']['output']>;
+};
+
 export enum PartnerStatusCode {
   Fpbc = 'FPBC',
   Fpbp = 'FPBP',
@@ -2634,6 +2724,7 @@ export enum PartnerStatusCode {
   Fpcr = 'FPCR',
   Fpgr = 'FPGR',
   Fpws = 'FPWS',
+  Kitc = 'KITC',
   Shpc = 'SHPC'
 }
 
@@ -2645,10 +2736,10 @@ export type PartnerStatusCodeOperationFilterInput = {
 };
 
 /** A connection to a list of items. */
-export type PartsConnection = {
-  __typename?: 'PartsConnection';
+export type PartsProjectionConnection = {
+  __typename?: 'PartsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PartsEdge>>;
+  edges?: Maybe<Array<PartsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Part>>;
   /** Information to aid in pagination. */
@@ -2656,12 +2747,22 @@ export type PartsConnection = {
 };
 
 /** An edge in a connection. */
-export type PartsEdge = {
-  __typename?: 'PartsEdge';
+export type PartsProjectionEdge = {
+  __typename?: 'PartsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Part;
+};
+
+export type PartsQueryResult = {
+  __typename?: 'PartsQueryResult';
+  commodityCode: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  originalPartNo: Scalars['String']['output'];
+  partDesc: Scalars['String']['output'];
+  partNo: Scalars['String']['output'];
+  partType: Scalars['String']['output'];
 };
 
 export type PcvComponent = {
@@ -2708,10 +2809,10 @@ export type PcvComponentSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvComponentsConnection = {
-  __typename?: 'PcvComponentsConnection';
+export type PcvComponentsProjectionConnection = {
+  __typename?: 'PcvComponentsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvComponentsEdge>>;
+  edges?: Maybe<Array<PcvComponentsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvComponent>>;
   /** Information to aid in pagination. */
@@ -2719,8 +2820,8 @@ export type PcvComponentsConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvComponentsEdge = {
-  __typename?: 'PcvComponentsEdge';
+export type PcvComponentsProjectionEdge = {
+  __typename?: 'PcvComponentsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2783,10 +2884,10 @@ export type PcvDriveSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvDrivesConnection = {
-  __typename?: 'PcvDrivesConnection';
+export type PcvDrivesProjectionConnection = {
+  __typename?: 'PcvDrivesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvDrivesEdge>>;
+  edges?: Maybe<Array<PcvDrivesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvDrive>>;
   /** Information to aid in pagination. */
@@ -2794,8 +2895,8 @@ export type PcvDrivesConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvDrivesEdge = {
-  __typename?: 'PcvDrivesEdge';
+export type PcvDrivesProjectionEdge = {
+  __typename?: 'PcvDrivesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2841,10 +2942,10 @@ export type PcvEngineSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvEnginesConnection = {
-  __typename?: 'PcvEnginesConnection';
+export type PcvEnginesProjectionConnection = {
+  __typename?: 'PcvEnginesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvEnginesEdge>>;
+  edges?: Maybe<Array<PcvEnginesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvEngine>>;
   /** Information to aid in pagination. */
@@ -2852,8 +2953,8 @@ export type PcvEnginesConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvEnginesEdge = {
-  __typename?: 'PcvEnginesEdge';
+export type PcvEnginesProjectionEdge = {
+  __typename?: 'PcvEnginesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2917,10 +3018,10 @@ export type PcvModelSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvModelsConnection = {
-  __typename?: 'PcvModelsConnection';
+export type PcvModelsProjectionConnection = {
+  __typename?: 'PcvModelsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvModelsEdge>>;
+  edges?: Maybe<Array<PcvModelsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvModel>>;
   /** Information to aid in pagination. */
@@ -2928,8 +3029,8 @@ export type PcvModelsConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvModelsEdge = {
-  __typename?: 'PcvModelsEdge';
+export type PcvModelsProjectionEdge = {
+  __typename?: 'PcvModelsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -2944,26 +3045,6 @@ export type PcvPaint = ICategory & {
   name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
   removedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-/** A connection to a list of items. */
-export type PcvPaintConnection = {
-  __typename?: 'PcvPaintConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<PcvPaintEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<PcvPaint>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type PcvPaintEdge = {
-  __typename?: 'PcvPaintEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: PcvPaint;
 };
 
 export type PcvPaintFilterInput = {
@@ -2986,6 +3067,26 @@ export type PcvPaintInput = {
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+/** A connection to a list of items. */
+export type PcvPaintProjectionConnection = {
+  __typename?: 'PcvPaintProjectionConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<PcvPaintProjectionEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PcvPaint>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type PcvPaintProjectionEdge = {
+  __typename?: 'PcvPaintProjectionEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PcvPaint;
+};
+
 export type PcvPaintSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
@@ -3002,26 +3103,6 @@ export type PcvSeries = ICategory & {
   name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
   removedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-/** A connection to a list of items. */
-export type PcvSeriesConnection = {
-  __typename?: 'PcvSeriesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<PcvSeriesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<PcvSeries>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type PcvSeriesEdge = {
-  __typename?: 'PcvSeriesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: PcvSeries;
 };
 
 export type PcvSeriesFilterInput = {
@@ -3042,6 +3123,26 @@ export type PcvSeriesInput = {
   name: Scalars['String']['input'];
   pcvs: Array<PcvInput>;
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+/** A connection to a list of items. */
+export type PcvSeriesProjectionConnection = {
+  __typename?: 'PcvSeriesProjectionConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<PcvSeriesProjectionEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PcvSeries>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type PcvSeriesProjectionEdge = {
+  __typename?: 'PcvSeriesProjectionEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PcvSeries;
 };
 
 export type PcvSeriesSortInput = {
@@ -3091,10 +3192,10 @@ export type PcvSubmodelSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvSubmodelsConnection = {
-  __typename?: 'PcvSubmodelsConnection';
+export type PcvSubmodelsProjectionConnection = {
+  __typename?: 'PcvSubmodelsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvSubmodelsEdge>>;
+  edges?: Maybe<Array<PcvSubmodelsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvSubmodel>>;
   /** Information to aid in pagination. */
@@ -3102,8 +3203,8 @@ export type PcvSubmodelsConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvSubmodelsEdge = {
-  __typename?: 'PcvSubmodelsEdge';
+export type PcvSubmodelsProjectionEdge = {
+  __typename?: 'PcvSubmodelsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -3149,10 +3250,10 @@ export type PcvTransmissionSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvTransmissionsConnection = {
-  __typename?: 'PcvTransmissionsConnection';
+export type PcvTransmissionsProjectionConnection = {
+  __typename?: 'PcvTransmissionsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvTransmissionsEdge>>;
+  edges?: Maybe<Array<PcvTransmissionsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<PcvTransmission>>;
   /** Information to aid in pagination. */
@@ -3160,8 +3261,8 @@ export type PcvTransmissionsConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvTransmissionsEdge = {
-  __typename?: 'PcvTransmissionsEdge';
+export type PcvTransmissionsProjectionEdge = {
+  __typename?: 'PcvTransmissionsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -3176,26 +3277,6 @@ export type PcvTrim = ICategory & {
   name: Scalars['String']['output'];
   pcvs: Array<Pcv>;
   removedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-/** A connection to a list of items. */
-export type PcvTrimConnection = {
-  __typename?: 'PcvTrimConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<PcvTrimEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<PcvTrim>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type PcvTrimEdge = {
-  __typename?: 'PcvTrimEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: PcvTrim;
 };
 
 export type PcvTrimFilterInput = {
@@ -3218,6 +3299,26 @@ export type PcvTrimInput = {
   removedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+/** A connection to a list of items. */
+export type PcvTrimProjectionConnection = {
+  __typename?: 'PcvTrimProjectionConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<PcvTrimProjectionEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PcvTrim>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type PcvTrimProjectionEdge = {
+  __typename?: 'PcvTrimProjectionEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PcvTrim;
+};
+
 export type PcvTrimSortInput = {
   code?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
@@ -3227,10 +3328,10 @@ export type PcvTrimSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PcvsConnection = {
-  __typename?: 'PcvsConnection';
+export type PcvsProjectionConnection = {
+  __typename?: 'PcvsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PcvsEdge>>;
+  edges?: Maybe<Array<PcvsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Pcv>>;
   /** Information to aid in pagination. */
@@ -3238,8 +3339,8 @@ export type PcvsConnection = {
 };
 
 /** An edge in a connection. */
-export type PcvsEdge = {
-  __typename?: 'PcvsEdge';
+export type PcvsProjectionEdge = {
+  __typename?: 'PcvsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -3259,6 +3360,11 @@ export type PendingComponentSerialsQueryResult = {
   serial1: Scalars['String']['output'];
   serial2: Scalars['String']['output'];
   vin: Scalars['String']['output'];
+};
+
+export type PendingImportLotsQueryQesult = {
+  __typename?: 'PendingImportLotsQueryQesult';
+  lotNumbers: Array<Scalars['String']['output']>;
 };
 
 export type PendingPartnerStatusUpdateKitsQueryInput = {
@@ -3337,10 +3443,10 @@ export type PlantSortInput = {
 };
 
 /** A connection to a list of items. */
-export type PlantsConnection = {
-  __typename?: 'PlantsConnection';
+export type PlantsProjectionConnection = {
+  __typename?: 'PlantsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<PlantsEdge>>;
+  edges?: Maybe<Array<PlantsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Plant>>;
   /** Information to aid in pagination. */
@@ -3348,8 +3454,8 @@ export type PlantsConnection = {
 };
 
 /** An edge in a connection. */
-export type PlantsEdge = {
-  __typename?: 'PlantsEdge';
+export type PlantsProjectionEdge = {
+  __typename?: 'PlantsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -3388,7 +3494,7 @@ export type ProcessPendingSerialsCommandResult = {
 
 export type Query = {
   __typename?: 'Query';
-  appSettings?: Maybe<AppSettingsConnection>;
+  appSettingsProjection?: Maybe<AppSettingsProjectionConnection>;
   basicKitInfo?: Maybe<BasicKitInfo>;
   bomById?: Maybe<Bom>;
   bomFile: ResultOrOfParsedBom;
@@ -3396,19 +3502,20 @@ export type Query = {
   bomList?: Maybe<BomListConnection>;
   bomOverview: BomOverviewQueryResult;
   bomPartsQuantity: Array<PartQuantityDto>;
-  boms?: Maybe<BomsConnection>;
+  bomsProjection?: Maybe<BomsProjectionConnection>;
   componentById?: Maybe<Component>;
   componentSerialsByDate?: Maybe<ResultOrOfListOfComponentSerialsByDateQueryResult>;
   componentSerialsByKit: ResultOrOfComponentSerialsByKitQueryResult;
-  componentStations?: Maybe<ComponentStationsConnection>;
-  components?: Maybe<ComponentsConnection>;
-  dcwsResponses?: Maybe<DcwsResponsesConnection>;
+  componentStationsProjection?: Maybe<ComponentStationsProjectionConnection>;
+  components: ResultOrOfIEnumerableOfComponentsQueryResult;
+  componentsProjection?: Maybe<ComponentsProjectionConnection>;
+  dcwsResponsesProjection?: Maybe<DcwsResponsesProjectionConnection>;
   dcwsServiceVersion: Scalars['String']['output'];
-  dealers?: Maybe<DealersConnection>;
+  dealersProjection?: Maybe<DealersProjectionConnection>;
   handlingUnitDetail?: Maybe<HandlingUnitInfoPayload>;
   handlingUnitOverviews: Array<HandlingUnitOverview>;
-  handlingUnitReceived?: Maybe<HandlingUnitReceivedConnection>;
-  handlingUnits?: Maybe<HandlingUnitsConnection>;
+  handlingUnitReceivedProjection?: Maybe<HandlingUnitReceivedProjectionConnection>;
+  handlingUnitsProjection?: Maybe<HandlingUnitsProjectionConnection>;
   info: Scalars['String']['output'];
   kitById?: Maybe<Kit>;
   kitByKitNo?: Maybe<Kit>;
@@ -3416,15 +3523,15 @@ export type Query = {
   kitList?: Maybe<KitListConnection>;
   kitOverview: ResultOrOfKitOverviewQueryResult;
   kitStatus?: Maybe<KitStatusDto>;
-  kitStatusEventTypes?: Maybe<KitStatusEventTypesConnection>;
-  kitStatusEvents?: Maybe<KitStatusEventsConnection>;
+  kitStatusEventTypesProjection?: Maybe<KitStatusEventTypesProjectionConnection>;
   kitStatusEventsByDate: Array<KitStatusEvent>;
+  kitStatusEventsProjection?: Maybe<KitStatusEventsProjectionConnection>;
   kitStatuses: ResultOrOfKitStatusesQueryResult;
-  kitVins?: Maybe<KitVinsConnection>;
-  kits?: Maybe<KitsConnection>;
+  kitVinsProjection?: Maybe<KitVinsProjectionConnection>;
   kitsByCurrentKitStatus?: Maybe<KitsByCurrentKitStatusConnection>;
   kitsByKitStatusCount: Array<ItemCountDto>;
   kitsByLot: Array<Kit>;
+  kitsProjection?: Maybe<KitsProjectionConnection>;
   lotByLotNo?: Maybe<Lot>;
   lotInfo?: Maybe<LotDto>;
   lotKitSerials: ResultOrOfIEnumerableOfLotKitSerialQueryResult;
@@ -3438,48 +3545,53 @@ export type Query = {
   lotPartInfo?: Maybe<LotPartDto>;
   lotParts: LotPartsQueryResult;
   lotPartsByShipOrBom: ResultOrOfLotPartsByShipOrBomQueryResult;
-  lotPartsReceived?: Maybe<LotPartsReceivedConnection>;
-  lots?: Maybe<LotsConnection>;
+  lotPartsReceivedProjection?: Maybe<LotPartsReceivedProjectionConnection>;
   lotsByKitStatus: Array<LotsByKitStatusQueryResult>;
+  lotsProjection?: Maybe<LotsProjectionConnection>;
   parseShimpentFile: ResultOrOfParsedShipment;
   parsedShipmentFile: ResultOrOfParsedShipment;
   partLotParts: ResultOrOfPartLotPartsQueryResult;
   partOverview: ResultOrOfPartOverviewQueryResult;
-  partTypes?: Maybe<PartTypesConnection>;
+  partTypesProjection?: Maybe<PartTypesProjectionConnection>;
   partnerKitStatus: ResultOrOfPartnerKitStatusQueryResult;
   partnerKitVin: ResultOrOfPartnerGetVinQueryResult;
-  parts?: Maybe<PartsConnection>;
-  pcvComponents?: Maybe<PcvComponentsConnection>;
-  pcvDrives?: Maybe<PcvDrivesConnection>;
-  pcvEngines?: Maybe<PcvEnginesConnection>;
-  pcvModels?: Maybe<PcvModelsConnection>;
-  pcvPaint?: Maybe<PcvPaintConnection>;
-  pcvSeries?: Maybe<PcvSeriesConnection>;
-  pcvSubmodels?: Maybe<PcvSubmodelsConnection>;
-  pcvTransmissions?: Maybe<PcvTransmissionsConnection>;
-  pcvTrim?: Maybe<PcvTrimConnection>;
-  pcvs?: Maybe<PcvsConnection>;
+  partnerLotBom: ResultOrOfPartnerLotBomQueryResult;
+  partnerLotsByStatus: ResultOrOfPartnerLotsByStatusQueryResult;
+  parts: ResultOrOfListOfPartsQueryResult;
+  partsProjection?: Maybe<PartsProjectionConnection>;
+  pcvComponentsProjection?: Maybe<PcvComponentsProjectionConnection>;
+  pcvDrivesProjection?: Maybe<PcvDrivesProjectionConnection>;
+  pcvEnginesProjection?: Maybe<PcvEnginesProjectionConnection>;
+  pcvModelsProjection?: Maybe<PcvModelsProjectionConnection>;
+  pcvPaintProjection?: Maybe<PcvPaintProjectionConnection>;
+  pcvSeriesProjection?: Maybe<PcvSeriesProjectionConnection>;
+  pcvSubmodelsProjection?: Maybe<PcvSubmodelsProjectionConnection>;
+  pcvTransmissionsProjection?: Maybe<PcvTransmissionsProjectionConnection>;
+  pcvTrimProjection?: Maybe<PcvTrimProjectionConnection>;
   pcvsByPlant: GetPcvsByPlantQueryResult;
+  pcvsProjection?: Maybe<PcvsProjectionConnection>;
   pendingComponentSerials?: Maybe<ResultOrOfIEnumerableOfPendingComponentSerialsQueryResult>;
+  pendingImportLots: ResultOrOfPendingImportLotsQueryQesult;
   pendingPartnerStatusUpdateKits: ResultOrOfPendingPartnerStatusUpdateKitsQueryResult;
   pendingVinAssignments: ResultOrOfPendingVinAssignmentsQueryResult;
   pingDcwsService: Scalars['Boolean']['output'];
-  plants?: Maybe<PlantsConnection>;
+  plantsProjection?: Maybe<PlantsProjectionConnection>;
   recentBomFiles: Array<RecentBomFilesQueryResult>;
   recentComponentSerials: ResultOrOfListOfRecentComponentSerialsQueryResult;
   recentLotPartsReceived: Array<LotPartReceivedDto>;
   recentShipmentFiles: Array<RecentShipmentFilesQueryResult>;
   serverConfigSettings: ApiServerOptions;
   shipmentFileText: ResultOrOfShipmentFileTextQueryResult;
-  shipmentInvoices?: Maybe<ShipmentInvoicesConnection>;
+  shipmentInvoicesProjection?: Maybe<ShipmentInvoicesProjectionConnection>;
   shipmentOverview?: Maybe<ResultOrOfShipmentOverviewQueryResult>;
-  shipments?: Maybe<ShipmentsConnection>;
-  stations?: Maybe<StationsConnection>;
+  shipmentsProjection?: Maybe<ShipmentsProjectionConnection>;
+  stationsProjection?: Maybe<StationsProjectionConnection>;
+  stationsV2: ResultOrOfIEnumerableOfStationsQueryResult;
   vinAllocation: VinAllocationQueryResult;
 };
 
 
-export type QueryAppSettingsArgs = {
+export type QueryAppSettingsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3529,7 +3641,7 @@ export type QueryBomPartsQuantityArgs = {
 };
 
 
-export type QueryBomsArgs = {
+export type QueryBomsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3554,7 +3666,7 @@ export type QueryComponentSerialsByKitArgs = {
 };
 
 
-export type QueryComponentStationsArgs = {
+export type QueryComponentStationsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3565,6 +3677,11 @@ export type QueryComponentStationsArgs = {
 
 
 export type QueryComponentsArgs = {
+  plantCode?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryComponentsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3574,7 +3691,7 @@ export type QueryComponentsArgs = {
 };
 
 
-export type QueryDcwsResponsesArgs = {
+export type QueryDcwsResponsesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3584,7 +3701,7 @@ export type QueryDcwsResponsesArgs = {
 };
 
 
-export type QueryDealersArgs = {
+export type QueryDealersProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3604,7 +3721,7 @@ export type QueryHandlingUnitOverviewsArgs = {
 };
 
 
-export type QueryHandlingUnitReceivedArgs = {
+export type QueryHandlingUnitReceivedProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3614,7 +3731,7 @@ export type QueryHandlingUnitReceivedArgs = {
 };
 
 
-export type QueryHandlingUnitsArgs = {
+export type QueryHandlingUnitsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3660,23 +3777,13 @@ export type QueryKitStatusArgs = {
 };
 
 
-export type QueryKitStatusEventTypesArgs = {
+export type QueryKitStatusEventTypesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitStatusEventTypeSortInput>>;
   where?: InputMaybe<KitStatusEventTypeFilterInput>;
-};
-
-
-export type QueryKitStatusEventsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<KitStatusEventSortInput>>;
-  where?: InputMaybe<KitStatusEventFilterInput>;
 };
 
 
@@ -3688,28 +3795,28 @@ export type QueryKitStatusEventsByDateArgs = {
 };
 
 
+export type QueryKitStatusEventsProjectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<KitStatusEventSortInput>>;
+  where?: InputMaybe<KitStatusEventFilterInput>;
+};
+
+
 export type QueryKitStatusesArgs = {
   input: KitStatusesQueryInput;
 };
 
 
-export type QueryKitVinsArgs = {
+export type QueryKitVinsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<KitVinSortInput>>;
   where?: InputMaybe<KitVinFilterInput>;
-};
-
-
-export type QueryKitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<KitSortInput>>;
-  where?: InputMaybe<KitFilterInput>;
 };
 
 
@@ -3732,6 +3839,16 @@ export type QueryKitsByKitStatusCountArgs = {
 
 export type QueryKitsByLotArgs = {
   lotNo: Scalars['String']['input'];
+};
+
+
+export type QueryKitsProjectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<KitSortInput>>;
+  where?: InputMaybe<KitFilterInput>;
 };
 
 
@@ -3786,7 +3903,7 @@ export type QueryLotPartsByShipOrBomArgs = {
 };
 
 
-export type QueryLotPartsReceivedArgs = {
+export type QueryLotPartsReceivedProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3796,18 +3913,18 @@ export type QueryLotPartsReceivedArgs = {
 };
 
 
-export type QueryLotsArgs = {
+export type QueryLotsByKitStatusArgs = {
+  input: LotsByKitStatusQueryInput;
+};
+
+
+export type QueryLotsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<LotSortInput>>;
   where?: InputMaybe<LotFilterInput>;
-};
-
-
-export type QueryLotsByKitStatusArgs = {
-  input: LotsByKitStatusQueryInput;
 };
 
 
@@ -3831,7 +3948,7 @@ export type QueryPartOverviewArgs = {
 };
 
 
-export type QueryPartTypesArgs = {
+export type QueryPartTypesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3851,7 +3968,17 @@ export type QueryPartnerKitVinArgs = {
 };
 
 
-export type QueryPartsArgs = {
+export type QueryPartnerLotBomArgs = {
+  request: PartnerLotBomQueryInput;
+};
+
+
+export type QueryPartnerLotsByStatusArgs = {
+  request: PartnerLotsByStatusQueryInput;
+};
+
+
+export type QueryPartsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3861,7 +3988,7 @@ export type QueryPartsArgs = {
 };
 
 
-export type QueryPcvComponentsArgs = {
+export type QueryPcvComponentsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3871,7 +3998,7 @@ export type QueryPcvComponentsArgs = {
 };
 
 
-export type QueryPcvDrivesArgs = {
+export type QueryPcvDrivesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3881,7 +4008,7 @@ export type QueryPcvDrivesArgs = {
 };
 
 
-export type QueryPcvEnginesArgs = {
+export type QueryPcvEnginesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3891,7 +4018,7 @@ export type QueryPcvEnginesArgs = {
 };
 
 
-export type QueryPcvModelsArgs = {
+export type QueryPcvModelsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3901,7 +4028,7 @@ export type QueryPcvModelsArgs = {
 };
 
 
-export type QueryPcvPaintArgs = {
+export type QueryPcvPaintProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3911,7 +4038,7 @@ export type QueryPcvPaintArgs = {
 };
 
 
-export type QueryPcvSeriesArgs = {
+export type QueryPcvSeriesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3921,7 +4048,7 @@ export type QueryPcvSeriesArgs = {
 };
 
 
-export type QueryPcvSubmodelsArgs = {
+export type QueryPcvSubmodelsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3931,7 +4058,7 @@ export type QueryPcvSubmodelsArgs = {
 };
 
 
-export type QueryPcvTransmissionsArgs = {
+export type QueryPcvTransmissionsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3941,7 +4068,7 @@ export type QueryPcvTransmissionsArgs = {
 };
 
 
-export type QueryPcvTrimArgs = {
+export type QueryPcvTrimProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -3951,18 +4078,18 @@ export type QueryPcvTrimArgs = {
 };
 
 
-export type QueryPcvsArgs = {
+export type QueryPcvsByPlantArgs = {
+  input: GetPcvsByPlantQueryInput;
+};
+
+
+export type QueryPcvsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<PcvSortInput>>;
   where?: InputMaybe<PcvFilterInput>;
-};
-
-
-export type QueryPcvsByPlantArgs = {
-  input: GetPcvsByPlantQueryInput;
 };
 
 
@@ -3981,7 +4108,7 @@ export type QueryPendingVinAssignmentsArgs = {
 };
 
 
-export type QueryPlantsArgs = {
+export type QueryPlantsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4016,7 +4143,7 @@ export type QueryShipmentFileTextArgs = {
 };
 
 
-export type QueryShipmentInvoicesArgs = {
+export type QueryShipmentInvoicesProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4031,7 +4158,7 @@ export type QueryShipmentOverviewArgs = {
 };
 
 
-export type QueryShipmentsArgs = {
+export type QueryShipmentsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4041,13 +4168,18 @@ export type QueryShipmentsArgs = {
 };
 
 
-export type QueryStationsArgs = {
+export type QueryStationsProjectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<StationSortInput>>;
   where?: InputMaybe<StationFilterInput>;
+};
+
+
+export type QueryStationsV2Args = {
+  plantCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -4192,6 +4324,15 @@ export type ResultOrOfDcwsResponse = {
   payload?: Maybe<DcwsResponse>;
 };
 
+export type ResultOrOfIEnumerableOfComponentsQueryResult = {
+  __typename?: 'ResultOrOfIEnumerableOfComponentsQueryResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<Array<Maybe<ComponentsQueryResult>>>;
+};
+
 export type ResultOrOfIEnumerableOfLotKitSerialQueryResult = {
   __typename?: 'ResultOrOfIEnumerableOfLotKitSerialQueryResult';
   errorMessage: Scalars['String']['output'];
@@ -4208,6 +4349,15 @@ export type ResultOrOfIEnumerableOfPendingComponentSerialsQueryResult = {
   isFailure: Scalars['Boolean']['output'];
   isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<Array<Maybe<PendingComponentSerialsQueryResult>>>;
+};
+
+export type ResultOrOfIEnumerableOfStationsQueryResult = {
+  __typename?: 'ResultOrOfIEnumerableOfStationsQueryResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<Array<Maybe<StationsQueryResult>>>;
 };
 
 export type ResultOrOfImportBomResult = {
@@ -4271,6 +4421,15 @@ export type ResultOrOfListOfComponentSerialsByDateQueryResult = {
   isFailure: Scalars['Boolean']['output'];
   isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<Array<Maybe<ComponentSerialsByDateQueryResult>>>;
+};
+
+export type ResultOrOfListOfPartsQueryResult = {
+  __typename?: 'ResultOrOfListOfPartsQueryResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<Array<Maybe<PartsQueryResult>>>;
 };
 
 export type ResultOrOfListOfRecentComponentSerialsQueryResult = {
@@ -4397,6 +4556,33 @@ export type ResultOrOfPartnerKitStatusQueryResult = {
   isFailure: Scalars['Boolean']['output'];
   isSuccess: Scalars['Boolean']['output'];
   payload?: Maybe<PartnerKitStatusQueryResult>;
+};
+
+export type ResultOrOfPartnerLotBomQueryResult = {
+  __typename?: 'ResultOrOfPartnerLotBomQueryResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<PartnerLotBomQueryResult>;
+};
+
+export type ResultOrOfPartnerLotsByStatusQueryResult = {
+  __typename?: 'ResultOrOfPartnerLotsByStatusQueryResult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<PartnerLotsByStatusQueryResult>;
+};
+
+export type ResultOrOfPendingImportLotsQueryQesult = {
+  __typename?: 'ResultOrOfPendingImportLotsQueryQesult';
+  errorMessage: Scalars['String']['output'];
+  errors: Array<Error>;
+  isFailure: Scalars['Boolean']['output'];
+  isSuccess: Scalars['Boolean']['output'];
+  payload?: Maybe<PendingImportLotsQueryQesult>;
 };
 
 export type ResultOrOfPendingPartnerStatusUpdateKitsQueryResult = {
@@ -4694,10 +4880,10 @@ export type ShipmentInvoiceSortInput = {
 };
 
 /** A connection to a list of items. */
-export type ShipmentInvoicesConnection = {
-  __typename?: 'ShipmentInvoicesConnection';
+export type ShipmentInvoicesProjectionConnection = {
+  __typename?: 'ShipmentInvoicesProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<ShipmentInvoicesEdge>>;
+  edges?: Maybe<Array<ShipmentInvoicesProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<ShipmentInvoice>>;
   /** Information to aid in pagination. */
@@ -4705,8 +4891,8 @@ export type ShipmentInvoicesConnection = {
 };
 
 /** An edge in a connection. */
-export type ShipmentInvoicesEdge = {
-  __typename?: 'ShipmentInvoicesEdge';
+export type ShipmentInvoicesProjectionEdge = {
+  __typename?: 'ShipmentInvoicesProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -4751,10 +4937,10 @@ export type ShipmentSortInput = {
 };
 
 /** A connection to a list of items. */
-export type ShipmentsConnection = {
-  __typename?: 'ShipmentsConnection';
+export type ShipmentsProjectionConnection = {
+  __typename?: 'ShipmentsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<ShipmentsEdge>>;
+  edges?: Maybe<Array<ShipmentsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Shipment>>;
   /** Information to aid in pagination. */
@@ -4762,8 +4948,8 @@ export type ShipmentsConnection = {
 };
 
 /** An edge in a connection. */
-export type ShipmentsEdge = {
-  __typename?: 'ShipmentsEdge';
+export type ShipmentsProjectionEdge = {
+  __typename?: 'ShipmentsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
@@ -4841,10 +5027,10 @@ export type StationSortInput = {
 };
 
 /** A connection to a list of items. */
-export type StationsConnection = {
-  __typename?: 'StationsConnection';
+export type StationsProjectionConnection = {
+  __typename?: 'StationsProjectionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<StationsEdge>>;
+  edges?: Maybe<Array<StationsProjectionEdge>>;
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<Station>>;
   /** Information to aid in pagination. */
@@ -4852,12 +5038,23 @@ export type StationsConnection = {
 };
 
 /** An edge in a connection. */
-export type StationsEdge = {
-  __typename?: 'StationsEdge';
+export type StationsProjectionEdge = {
+  __typename?: 'StationsProjectionEdge';
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Station;
+};
+
+export type StationsQueryResult = {
+  __typename?: 'StationsQueryResult';
+  associatedComponentCodes: Array<Scalars['String']['output']>;
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  name: Scalars['String']['output'];
+  plantCode: Scalars['String']['output'];
+  removedAt?: Maybe<Scalars['DateTime']['output']>;
+  sequence: Scalars['Int']['output'];
 };
 
 export type StatusEventDto = {
@@ -5003,8 +5200,3 @@ export type ParseBomFileTextMutationVariables = Exact<{
 
 
 export type ParseBomFileTextMutation = { __typename?: 'Mutation', parseBomFileText: { __typename?: 'ResultOrOfParsedBOM', isFailure: boolean, isSuccess: boolean, errors: Array<{ __typename?: 'Error', description: string }>, payload?: { __typename?: 'ParsedBOM', bomFileCreatedAt: any, filename: string, kittingPlantCode: string, plantCode: string, sequenceNumber: number, lots: Array<{ __typename?: 'ParsedBOMLot', lotNo: string }> } | null } };
-
-export type PlantsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PlantsQuery = { __typename?: 'Query', plants?: { __typename?: 'PlantsConnection', nodes?: Array<{ __typename?: 'Plant', code: string, name: string, kittingPlantCode: string, createdAt: any }> | null } | null };
