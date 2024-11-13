@@ -2,8 +2,6 @@
 import {
   ImportShipmentMutation,
   ImportShipmentMutationVariables,
-  PlantsQuery,
-  PlantsQueryVariables,
   ImoprtBomMutation,
   ImoprtBomMutationVariables,
   ParseBomFileMutation,
