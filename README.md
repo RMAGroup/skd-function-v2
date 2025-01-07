@@ -72,3 +72,8 @@ docker run -d \
   --name azurite \
   mcr.microsoft.com/azure-storage/azurite
 ```
+
+Run act locally
+```sh
+act -j build-and-deploy -W .github/workflows/main_skd-function-prod.yml
+```
