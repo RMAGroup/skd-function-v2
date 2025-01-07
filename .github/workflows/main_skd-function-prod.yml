@@ -7,8 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # Path to your web app project
-  NODE_VERSION: '20.x' # Node.js version to use
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
 
 jobs:
   build-and-deploy:
@@ -17,28 +16,22 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v3
 
-      - name: 'Install Bun'
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          export PATH="/root/.bun/bin:$PATH"
+      - name: 'Setup Bun'
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
-      - name: 'Install Dependencies with Bun'
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          bun install
-          popd
+      - name: 'Install Dependencies'
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        run: bun install
 
-      - name: 'Build Project with Bun'
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          bun run build --if-present
-          popd
+      - name: 'Build Project'
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        run: bun run tsc
 
       - name: 'Zip Artifact'
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          zip -r functionapp.zip .
-          popd
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        run: zip -r functionapp.zip .
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1.5.2
