@@ -24,7 +24,7 @@ export async function Bom(blob: Buffer, context: InvocationContext): Promise<voi
 
         const parsedBom = await service.parseBomFileText({ filename: context.triggerMetadata.name as string, text: blob.toString() });
 
-        context.log(`parsed bom file ${parsedBom.payload.plantCode}  ${parsedBom.payload.sequenceNumber}  ${parsedBom.payload.kittingPlantCode} Lots: ${parsedBom.payload.lots.length}`);
+        context.log(`parsed bom file ${parsedBom.payload.plantCode}  ${parsedBom.payload.sequenceNumber}  Lots: ${parsedBom.payload.lots.length}`);
 
         // mport
         const textFile: TextFile = { filename: context.triggerMetadata.name as string, text: blob.toString() };

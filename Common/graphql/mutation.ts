@@ -67,7 +67,6 @@ mutation parseBomFile($file: Upload!) {
       plantCode
       filename
       sequenceNumber
-      kittingPlantCode
       lots {
         lotNo
       }
@@ -91,7 +90,6 @@ mutation parseBomFileText($filename: String!, $text: String!) {
     payload {
       bomFileCreatedAt
       filename
-      kittingPlantCode
       plantCode
       sequenceNumber
       lots {
