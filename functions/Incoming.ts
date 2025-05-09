@@ -30,6 +30,11 @@ export async function Incoming(blob: Buffer, context: InvocationContext): Promis
         blobService.saveBlob(ContainerName.IncomingArchive, filename, fileText)
 
         // otherwise, move the file to the appropriate container based on the file type
+
+
+        /******  switch off processingof BOM and SHIP files *******/
+        
+        /*
         switch (fileType) {
             case FileType.BOM: {
                 blobService.saveBlob(ContainerName.Bom, filename, fileText)
@@ -43,6 +48,7 @@ export async function Incoming(blob: Buffer, context: InvocationContext): Promis
                 blobService.saveBlob(ContainerName.UnknownFileType, filename, fileText)
                 break;
         }
+        */
 
         // if exists in incoming-archive container, delete it
 
